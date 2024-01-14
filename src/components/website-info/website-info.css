@@ -1,0 +1,49 @@
+.website-info img, .site-favicon {
+    margin: 0!important;
+    padding: 0;
+    border: none!important;
+    box-shadow: none;
+    background: 0 0;
+}
+
+.website-info img {
+    width: -moz-fit-content;
+    width: fit-content;
+    height: 32px;
+}
+
+.website-info, .site-name {
+    display: flex;
+    font-weight: 600;
+    font-size: 12px;
+    font-kerning: none;
+}
+
+.website-info {
+    width: -webkit-fill-available;
+    display:flex;
+    column-gap: 4px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.site-name {
+    width: -webkit-fill-available;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-items: top;
+    margin-bottom: 0 !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+
+.site-favicon {
+    max-width: 20px;
+    width: 50%;
+    height: 50%;
+    max-height: 20px;
+    margin: 12px;
+    border-radius: 4px;
+}

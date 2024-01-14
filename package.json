@@ -1,13 +1,21 @@
 {
   "name": "digests-pwa",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@shoelace-style/react": "^3.0.0",
+    "@shoelace-style/shoelace": "^2.12.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "colorthief": "^2.4.0",
     "react": "^18.2.0",
+    "react-content-loader": "^6.2.1",
     "react-dom": "^18.2.0",
+    "react-infinite-scroller": "^1.2.6",
+    "react-lazy-load-image-component": "^1.6.0",
+    "react-pull-to-refresh": "^2.0.1",
+    "react-responsive-masonry": "^2.1.7",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
@@ -34,5 +42,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://rss.bumpyclock.com"
 }

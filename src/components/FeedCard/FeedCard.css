@@ -1,0 +1,201 @@
+sl-card {
+    --padding:0;
+    --border-radius:23px;
+}
+.card {
+    overflow: hidden;
+    position: relative;
+    padding: 0;
+    row-gap: 0;
+    background: var(--background-color-secondary);
+    border: var(--border-color);
+    border-radius: 24px;
+    box-shadow: var(--box-shadow-standard);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    max-width: 450px;
+    margin-bottom: 12px;
+    break-inside: avoid;
+    -webkit-backdrop-filter: var(--blur);
+    backdrop-filter: var(--blur);
+    transition: all .25s ease-in-out;
+  }
+
+  
+  .card::part(base){
+    background-color: transparent;
+    border: none;
+  }
+  .card .card-bg .noise {
+    background-image: url(http://www.transparenttextures.com/patterns/noisy.png);
+        position: absolute;
+    background-size: cover;
+    border-radius: 24px;
+    background-position: center center;
+    z-index: -1;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: .2;
+    transition: all .25s ease-in-out;
+  }
+  .card .card-bg img {
+    position: absolute;
+    bottom: -20%;
+    left: -20%;
+    width: 140%;
+    height: 120%;
+    filter: blur(60px) brightness(1.5);
+    z-index: -2;
+    opacity: .5;
+    transform: scale(1.4);
+    transition:all .25s ease-in-out;
+  }
+  @media screen and (prefers-color-scheme:dark) {
+    .card .card-bg img {
+      filter: blur(60px) brightness(.5)
+    }
+  }
+  .card .image-container img {
+    border-radius: 24px;
+    transform: scale(1);
+    transition: transform .25s ease-in-out
+  }
+  .card:hover .image-container img {
+    border-radius: 24px 24px 0 0;
+    transform: scale(1.1);
+    transition: transform .25s ease-in-out
+  }
+  .card:hover .card-bg img {
+    opacity: .65;
+    filter: blur(60px) brightness(1.1)
+  }
+  .card:hover {
+    background: var(--background-color-hover);
+    box-shadow: var(--box-shadow-hover)
+  }
+  .card:active .card-bg {
+    background: var(--active-color);
+    filter: blur(90px) brightness(1.1);
+    box-shadow: var(--box-shadow-hover);
+    transform: scale(1.15);
+    transition: var(--transition-standard)
+  }
+  .card .image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-height: 320px;
+    top: 0;
+    left: 0;
+    transition: transform .25s ease-in-out;
+    overflow: hidden;
+    border-radius: 24px 24px 0 0
+  }
+  .card .image-container .loading {
+    padding-bottom: 66.5492958%;
+    background: linear-gradient(#f2f2f2 66%,rgba(242,242,242,0))
+  }
+  .card .image-container .loading:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    margin-top: -16px;
+    margin-left: -16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 32px;
+    animation: scaleout 1.2s infinite ease-in-out
+  }
+  .card .image-container img {
+    width: 100%;
+    height: auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+    object-fit: contain;
+    transform-origin: center;
+    border-radius: 24px
+  }
+  .card:hover .image-container {
+    border-radius: 24px 24px 0 0
+  }
+  .card .text-content {
+    display: flex;
+    row-gap:4px;
+    flex-direction: column;
+    padding: 8px 24px 12px 24px;
+    align-items: flex-start;
+  }
+  .card:hover .text-content {
+    filter: brightness(1.2)
+  }
+  .card h3 {
+    margin: 0;
+    margin-bottom: 8px;
+    font-size: 18px;
+    line-height: 1.33;
+    font-weight: 600
+  }
+  .card p {
+    margin: 0;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.33
+  }
+  .card a {
+    text-decoration: none;
+    color: var(--color);
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: inline-block;
+    transition: var(--transition-fast)
+  }
+  .card:hover a {
+    text-decoration: steelblue wavy underline
+  }
+  .card button {
+    background-color: #2a6496;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 12px;
+    padding: 8px 12px;
+    text-transform: uppercase
+  }
+
+
+  .description  {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 400
+  }
+
+  .shimmer-skeleton {
+    width: 100%;
+    height: 200px;
+    background: #f6f7f8;
+    background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+    background-repeat: no-repeat;
+    background-size: 800px 200px;
+    animation: shimmer 1s linear infinite forwards;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -800px 0;
+    }
+    100% {
+        background-position: 800px 0;
+    }
+}

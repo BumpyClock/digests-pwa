@@ -1,0 +1,44 @@
+.feed-container {
+    column-gap: 12px;
+    margin: 12px;
+    overflow: auto;
+
+}
+
+/* For mobile devices */
+@media (max-width: 600px) {
+    .feed-container {
+        column-count: 1;
+    }
+}
+
+/* For tablet devices */
+@media (min-width: 601px) and (max-width: 900px) {
+    .feed-container {
+        column-count: 2;
+    }
+}
+
+/* For small desktops */
+@media (min-width: 901px) and (max-width: 1200px) {
+    .feed-container {
+        column-count: 3;
+    }
+}
+
+/* For large desktops */
+@media (min-width: 1201px) {
+    .feed-container {
+        column-count: 4;
+    }
+}
+@media (min-width: 1900px) {
+    .feed-container {
+        column-count: 5;
+    }
+}
+@media (min-width: 2200px) {
+    .feed-container {
+        column-count: 6;
+    }
+}
