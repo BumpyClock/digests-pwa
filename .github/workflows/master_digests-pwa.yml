@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on:  digest-pwa-runner
+    runs-on: digest-pwa-runner
 
     steps:
       - uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
           path: release.zip
 
   deploy:
-    runs-on:  digest-pwa-runner
+    runs-on: digest-pwa-runner
     needs: build
     environment:
       name: 'Production'
