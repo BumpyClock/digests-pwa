@@ -10,10 +10,8 @@ import SlAlert from "@shoelace-style/shoelace/dist/react/alert";
 import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
 import Feed from "./components/Feed/Feed.js";
 import PullToRefresh from "react-pull-to-refresh";
-import { render } from "@testing-library/react";
 
 function App() {
-  const [urlInput, setUrlInput] = useState("");
   const [feedItems, setFeedItems] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [feedDetails, setFeedDetails] = useState([]);
@@ -127,6 +125,7 @@ function App() {
         alertRef.current.show();
         throw new Error("Server response wasn't ok: ", response.status);
       }
+        console.log("🚀 ~ fetchRSS ~ feedDetails:", feedDetails)
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
