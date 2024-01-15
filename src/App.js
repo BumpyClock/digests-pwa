@@ -10,6 +10,8 @@ import SlAlert from "@shoelace-style/shoelace/dist/react/alert";
 import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
 import Feed from "./components/Feed/Feed.js";
 import PullToRefresh from "react-pull-to-refresh";
+import axios from 'axios';
+
 
 function App() {
   const [feedItems, setFeedItems] = useState([]);
@@ -35,26 +37,25 @@ function App() {
   const alertRef = useRef();
 
   
-
-  const createRequestOptions = useCallback((urls) => {
-    return {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ urls }),
-    };
-  }, []);
+const createRequestOptions = useCallback((urls) => {
+  return {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: { urls: urls }, // send the urls array inside an object
+  };
+}, []);
 
   const fetchRSS = useCallback(async () => {
     try {
       const apiUrl = "https://rss.bumpyclock.com";
       const requestUrl = `${apiUrl}/parse`;
       const requestOptions = createRequestOptions(feedUrls);
-      const response = await fetch(requestUrl, requestOptions);
-      const fetchedFeedData = await response.json();
+      const response = await axios(requestUrl, requestOptions);
+      const fetchedFeedData = response.data;
 
-      if (response.ok) {
+      if (response.status ===200) {
         setErrorMessage(""); // No error
         alertRef.current.hide();
 
@@ -119,16 +120,16 @@ function App() {
 
         setFeedDetails(feedDetails);
         setFeedItems(items);
-      } else {
+      }  else {
         console.error("API response: ", JSON.stringify(fetchedFeedData));
         setErrorMessage("Server response wasn't ok: " + response.status);
         alertRef.current.show();
         throw new Error("Server response wasn't ok: ", response.status);
       }
-        console.log("🚀 ~ fetchRSS ~ feedDetails:", feedDetails)
+      console.log("🚀 ~ fetchRSS ~ feedDetails:", feedDetails)
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
-    }
+    }// eslint-disable-next-line 
   }, [createRequestOptions]);
 
   useEffect(() => {
