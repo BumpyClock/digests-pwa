@@ -5,11 +5,11 @@ import React, {
   useMemo,
 } from "react";
 import "@shoelace-style/shoelace/dist/themes/light.css";
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
-import Feed from "./components/Feed/Feed.js";
+import SlButton from '@shoelace-style/shoelace/dist/react/button';
+import SlIcon from '@shoelace-style/shoelace/dist/react/icon';import Feed from "./components/Feed/Feed.js";
 import PullToRefresh from "react-pull-to-refresh";
 import axios from 'axios';
-
+import Settings from "./pages/settings.js";
 
 function App() {
   const [feedItems, setFeedItems] = useState([]);
@@ -27,10 +27,12 @@ function App() {
     ],
     []
   );
-  let feedUrls = [
+  const [feedUrls, setFeedUrls] = useState([
     "https://engadget.com/rss.xml",
     "https://www.theverge.com/rss/index.xml",
-  ];
+  ]);
+
+  const [showSettings, setShowSettings] = useState(false);
 
 
   
@@ -142,15 +144,21 @@ const createRequestOptions = useCallback((urls) => {
   return (
     <div className="App">
       <header>
-        <h1>RSS Reader</h1>
-      </header>
+        <h1>Digests</h1>
+<SlButton variant="default" size="large" circle onClick={() => setShowSettings(!showSettings)} style={{cursor: 'pointer', position: 'absolute', right: '20px', top: '20px'}}>
+  <SlIcon slot="icon" name="gear" />
+</SlButton>      </header>
       <main>
-    
-          <SlIcon slot="icon" name="info-circle" />
-          {errorMessage}
-        <PullToRefresh onRefresh={handleRefresh}>
-          <div id="feedContainer">{renderFeeds()}</div>
-        </PullToRefresh>
+        {showSettings ? (
+          <Settings feedUrls={feedUrls} setFeedUrls={setFeedUrls} />
+        ) : (
+          <>
+            {errorMessage}
+            <PullToRefresh onRefresh={handleRefresh}>
+              <div id="feedContainer">{renderFeeds()}</div>
+            </PullToRefresh>
+          </>
+        )}
       </main>
     </div>
   );
