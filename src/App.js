@@ -1,12 +1,10 @@
 import React, {
   useState,
-  useRef,
   useCallback,
   useEffect,
   useMemo,
 } from "react";
 import "@shoelace-style/shoelace/dist/themes/light.css";
-import SlAlert from "@shoelace-style/shoelace/dist/react/alert";
 import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
 import Feed from "./components/Feed/Feed.js";
 import PullToRefresh from "react-pull-to-refresh";
@@ -34,7 +32,6 @@ function App() {
     "https://www.theverge.com/rss/index.xml",
   ];
 
-  const alertRef = useRef();
 
   
 const createRequestOptions = useCallback((urls) => {
@@ -57,7 +54,6 @@ const createRequestOptions = useCallback((urls) => {
 
       if (response.status ===200) {
         setErrorMessage(""); // No error
-        alertRef.current.hide();
 
         const feedDetails = [];
         const items = [];
@@ -123,7 +119,6 @@ const createRequestOptions = useCallback((urls) => {
       }  else {
         console.error("API response: ", JSON.stringify(fetchedFeedData));
         setErrorMessage("Server response wasn't ok: " + response.status);
-        alertRef.current.show();
         throw new Error("Server response wasn't ok: ", response.status);
       }
       console.log("🚀 ~ fetchRSS ~ feedDetails:", feedDetails)
@@ -150,10 +145,9 @@ const createRequestOptions = useCallback((urls) => {
         <h1>RSS Reader</h1>
       </header>
       <main>
-        <SlAlert ref={alertRef}>
+    
           <SlIcon slot="icon" name="info-circle" />
           {errorMessage}
-        </SlAlert>
         <PullToRefresh onRefresh={handleRefresh}>
           <div id="feedContainer">{renderFeeds()}</div>
         </PullToRefresh>
