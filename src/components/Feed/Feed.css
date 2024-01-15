@@ -1,7 +1,13 @@
+#feedContainer {
+       margin: auto;
+    overflow: auto;
+    padding: 24px;
+}
 .feed-container {
     column-gap: 12px;
-    margin: 12px;
+    margin: auto;
     overflow: auto;
+    padding:64px;
 
 }
 

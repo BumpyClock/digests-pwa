@@ -90,7 +90,7 @@ return (
     </header>
     <main>
       {showSettings ? (
-        <Settings feedUrls={feedUrls} setFeedUrls={setFeedUrls} />
+        <Settings feedUrls={feedUrls} setFeedUrls={setFeedUrls} feedDetails={feedDetails} />
       ) : (
         <>
           <div id="feedContainer">{renderFeeds()}</div>

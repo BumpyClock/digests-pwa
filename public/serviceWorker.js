@@ -84,8 +84,7 @@ async function fetchRSS(feedUrls) {
   } catch (error) {
     console.error("There was a problem with the fetch operation:", error);
   }
-  console.log("🚀 ~ fetchRSS ~ feedDetails:", feedDetails);
-  console.log("🚀 ~ feed.items.forEach ~ items:", items);
+ 
   return { feedDetails, items };
 }
 

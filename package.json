@@ -17,6 +17,7 @@
     "react-pull-to-refresh": "^2.0.1",
     "react-responsive-masonry": "^2.1.7",
     "react-scripts": "5.0.1",
+    "tinycolor2": "^1.6.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -51,9 +52,12 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-private-property-in-object": "^7.23.4",
+    "@svgr/webpack": "^8.0.1",
     "axios": "^1.6.5",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-normalize": "^10.0.1",
+    "postcss-preset-env": "^9.3.0",
     "svgo": "^2.8.0",
-    "uuid": "^7.0.3",
-    "@svgr/webpack": "^8.0.1"
+    "uuid": "^7.0.3"
   }
 }

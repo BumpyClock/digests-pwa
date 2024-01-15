@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import FeedCard from '../FeedCard/FeedCard.js';
 import './Feed.css';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import InfiniteScroll from 'react-infinite-scroller';
+import { debounce } from 'lodash';
 
 const MemoizedFeedCard = React.memo(FeedCard);
 
@@ -29,9 +30,9 @@ const Feed = ({ feedItems, feedDetails }) => {
   const [stepSize, setStepSize] = useState(getStepSize());
 
   useEffect(() => {
-    const handleResize = () => {
+    const handleResize = debounce(() => {
       setStepSize(getStepSize());
-    };
+    }, 300);
 
     window.addEventListener('resize', handleResize);
     return () => {
@@ -59,7 +60,7 @@ const Feed = ({ feedItems, feedDetails }) => {
       return;
     }
 
-    setItems(prevItems => prevItems.concat(newItems));
+    setItems(prevItems => [...prevItems, ...newItems]);
   }, [items, feedItems, stepSize]);
 
   return (

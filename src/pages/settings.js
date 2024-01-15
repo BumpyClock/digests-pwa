@@ -1,8 +1,8 @@
-// Settings.js
 import React, { useEffect, useRef } from 'react';
 import { SlButton, SlInput, SlIcon } from '@shoelace-style/shoelace/dist/react/';
+import './settings.css';
 
-function Settings({ feedUrls, setFeedUrls }) {
+function Settings({ feedUrls, setFeedUrls, feedDetails }) {
   const [newFeedUrl, setNewFeedUrl] = React.useState('');
   const inputRef = useRef();
 
@@ -22,20 +22,25 @@ function Settings({ feedUrls, setFeedUrls }) {
   };
 
   return (
-    <div>
+    <div className="settings">
       <h2>Settings</h2>
       <SlInput ref={inputRef} type="text" value={newFeedUrl} placeholder="New feed URL" />
       <SlButton onClick={handleAddFeed}>Add Feed</SlButton>
-      <ul>
-        {feedUrls.map(url => (
-          <li key={url}>
-            {url} 
-            <SlButton onClick={() => handleRemoveFeed(url)}>
+      <div id="subscribed-feeds-list">
+        {feedDetails.map((detail, index) => (
+          <div key={feedUrls[index]} className="list-item">
+            <div className="website-info">
+              <img className="site-favicon" src={detail.favicon} alt={`${detail.siteTitle || detail.feedTitle} Favicon`} />
+              <h3>{detail.siteTitle || detail.feedTitle}</h3>
+              <p className="feed-url">{feedUrls[index]}</p>
+            </div>
+            <button className="remove-feed-button" onClick={() => handleRemoveFeed(feedUrls[index])}>
               <SlIcon name="x-circle"></SlIcon>
-            </SlButton>
-          </li>
+              <p className="unsubscribe-button">Unsubscribe</p>
+            </button>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
