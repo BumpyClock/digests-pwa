@@ -7,24 +7,20 @@ import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
 import ColorThief from "colorthief";
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 
-const FeedCard = ({ item }) => {
-  let thumbnailUrl = item.thumbnail;
-  if (Array.isArray(item.thumbnail)) {
-    thumbnailUrl = item.thumbnail.find(
-      (thumbnail) => thumbnail.url || thumbnail.link
-    )?.url;
-  }
-
-  const [dominantColor, setDominantColor] = useState("rgba(0,0,0,0.5)"); // Default color
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+const useImageLoader = (src) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [loadedImage, setLoadedImage] = useState(null);
+  const [dominantColor, setDominantColor] = useState("rgba(0,0,0,0.5)");
 
   useEffect(() => {
-    if (thumbnailUrl) {
+    if (src) {
       const img = new Image();
       img.crossOrigin = "Anonymous";
-      img.src = thumbnailUrl;
-      img.onload = () => {
-        setIsImageLoaded(true);
+      img.src = src;
+
+      const onLoad = () => {
+        setIsLoaded(true);
+        setLoadedImage(img);
         try {
           const colorThief = new ColorThief();
           const color = colorThief.getColor(img);
@@ -33,37 +29,58 @@ const FeedCard = ({ item }) => {
           console.error("Error getting dominant color", error);
         }
       };
-      img.onerror = () => {
-        setIsImageLoaded(true);
+
+      const onError = () => {
+        setIsLoaded(true);
         console.error("Error loading image");
         setDominantColor("rgba(0,0,0,0.5)"); // Set to default color on error
       };
-    }
-  }, [thumbnailUrl]);
 
-  if (!isImageLoaded) {
+      img.onload = onLoad;
+      img.onerror = onError;
+
+      return () => {
+        img.onload = null;
+        img.onerror = null;
+      };
+    }
+  }, [src]);
+
+  return { isLoaded, loadedImage, dominantColor };
+};
+
+const FeedCard = ({ item }) => {
+  let thumbnailUrl = item.thumbnail;
+  if (Array.isArray(item.thumbnail)) {
+    thumbnailUrl = item.thumbnail.find(
+      (thumbnail) => thumbnail.url || thumbnail.link
+    )?.url;
+  }
+
+  const { isLoaded, loadedImage, dominantColor } = useImageLoader(thumbnailUrl);
+
+  if (!isLoaded) {
     return <FeedCardLoader />;
   }
 
   return (
-    <SlAnimation name="fade-in" duration={500} play={isImageLoaded}>
+    <SlAnimation name="fade-in" duration={500} play={isLoaded}>
       <SlCard
         className="card"
         style={{
           boxShadow: `0 4px 8px 4px ${dominantColor}`,
-          opacity: isImageLoaded ? 1 : 0,
+          opacity: isLoaded ? 1 : 0,
           transition: "opacity 0.5s",
         }}
       >
         <div className="image-container">
           <img
-            src={thumbnailUrl}
+            src={loadedImage.src}
             alt={item.siteTitle}
-            onLoad={() => setIsImageLoaded(true)}
           />
         </div>
         <div className="card-bg">
-          <img src={thumbnailUrl} alt={item.siteTitle} />
+          <img src={loadedImage.src} alt={item.siteTitle} />
           <div className="noise"></div>
         </div>
         <div className="text-content">
@@ -91,4 +108,4 @@ const FeedCard = ({ item }) => {
   );
 };
 
-export default FeedCard;
+export default React.memo(FeedCard);

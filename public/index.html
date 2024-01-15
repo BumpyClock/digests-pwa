@@ -6,9 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
-      name="description"
-      content="Web site created using create-react-app"
+      name="Digests"
+      content="Get your daily dose of news with Digests."
     />
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/serviceWorker.js')
+            .then(function(registration) {
+              // Registration was successful
+              console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(err) {
+              // registration failed :(
+              console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+      }
+    </script>
+    <script type="module">
+      import { registerIconLibrary } from './dist/utilities/icon-library.js';
+    
+      registerIconLibrary('my-icons', {
+        resolver: name => `/assets/icons/${name}.svg`,
+        mutator: svg => svg.setAttribute('fill', 'currentColor')
+      });
+    </script>
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -24,7 +46,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Digests</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

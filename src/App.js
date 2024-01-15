@@ -4,16 +4,17 @@ import React, {
   useEffect,
   useMemo,
 } from "react";
-import "@shoelace-style/shoelace/dist/themes/light.css";
+import '@shoelace-style/shoelace/dist/themes/light.css';
 import SlButton from '@shoelace-style/shoelace/dist/react/button';
 import SlIcon from '@shoelace-style/shoelace/dist/react/icon';import Feed from "./components/Feed/Feed.js";
-import PullToRefresh from "react-pull-to-refresh";
-import axios from 'axios';
+
 import Settings from "./pages/settings.js";
+import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
+
+setBasePath('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/');
 
 function App() {
   const [feedItems, setFeedItems] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
   const [feedDetails, setFeedDetails] = useState([]);
   const errorMessages = useMemo(
     () => [
@@ -33,135 +34,71 @@ function App() {
   ]);
 
   const [showSettings, setShowSettings] = useState(false);
+  const toggleSettings = useCallback(() => {
+    setShowSettings(show => !show);
+  }, []);
 
 
-  
-const createRequestOptions = useCallback((urls) => {
-  return {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: { urls: urls }, // send the urls array inside an object
+  useEffect(() => {// Inside handleRefresh and the useEffect hook
+    navigator.serviceWorker.ready.then((registration) => {
+      const messageChannel = new MessageChannel();
+      messageChannel.port1.onmessage = event => {
+        if (event.data && event.data.type === 'RSS_DATA') {
+          setFeedDetails(event.data.payload.feedDetails);
+          setFeedItems(event.data.payload.items);
+        }
+      };
+      registration.active.postMessage({
+        type: 'FETCH_RSS',
+        payload: { urls: feedUrls },
+      }, [messageChannel.port2]);
+    });
+    
+}, []);
+
+// Listen for messages from the service worker
+
+useEffect(() => {
+  const handleMessage = (event) => {
+    if (event.data && event.data.type === 'RSS_DATA') {
+      setFeedDetails(event.data.payload.feedDetails);
+      setFeedItems(event.data.payload.items);
+      console.log(`Received ${event.data.payload.items.length} feed items`);
+      console.log(`Received ${event.data.payload.feedDetails.length} feed details`);
+    }
+  };
+
+  navigator.serviceWorker.addEventListener('message', handleMessage);
+
+  return () => {
+    navigator.serviceWorker.removeEventListener('message', handleMessage);
   };
 }, []);
 
-  const fetchRSS = useCallback(async () => {
-    try {
-      const apiUrl = "https://rss.bumpyclock.com";
-      const requestUrl = `${apiUrl}/parse`;
-      const requestOptions = createRequestOptions(feedUrls);
-      const response = await axios(requestUrl, requestOptions);
-      const fetchedFeedData = response.data;
 
-      if (response.status ===200) {
-        setErrorMessage(""); // No error
+const renderFeeds = useCallback(() => {
+  return <Feed feedItems={feedItems} />;
+}, [feedItems]);
 
-        const feedDetails = [];
-        const items = [];
-
-        for (const feed of fetchedFeedData.feeds) {
-          const isErrorTitle = errorMessages.some((msg) =>
-            feed.siteTitle.includes(msg)
-          );
-          if (isErrorTitle) {
-            feed.siteTitle = feed.feedTitle;
-            console.log("no site title");
-          } else {
-            feed.feedUrl = feed.siteTitle;
-          }
-
-          feedDetails.push({
-            siteTitle: feed.siteTitle,
-            feedTitle: feed.feedTitle,
-            feedUrl: feed.feedUrl,
-            description: feed.description,
-            author: feed.podcastInfo ? feed.podcastInfo.author : "",
-            lastUpdated: feed.lastUpdated,
-            lastRefreshed: feed.lastRefreshed,
-            favicon: feed.favicon,
-          });
-
-          if (Array.isArray(feed.items)) {
-            feed.items.forEach((item) => {
-              items.push({
-                id: item.id,
-                title: item.title,
-                siteTitle: isErrorTitle ? feed.feedTitle : feed.siteTitle,
-                feedTitle: feed.feedTitle,
-                thumbnail: item.thumbnail,
-                link: item.link,
-                feedUrl: feed.feedUrl,
-                favicon: feed.favicon,
-                author: item.author,
-                published: item.published,
-                created: item.created,
-                category: item.category,
-                content: item.content,
-                media: item.media,
-                enclosures: item.enclosures,
-                podcastInfo: {
-                  author: item.podcastInfo ? item.podcastInfo.author : "",
-                  image: item.podcastInfo ? item.podcastInfo.image : "",
-                  categories: item.podcastInfo
-                    ? item.podcastInfo.categories
-                    : [],
-                },
-              });
-            });
-          } else {
-            console.log("feed.items is not an array: ", JSON.stringify(feed));
-          }
-        }
-
-        items.sort((a, b) => b.published - a.published);
-
-        setFeedDetails(feedDetails);
-        setFeedItems(items);
-      }  else {
-        console.error("API response: ", JSON.stringify(fetchedFeedData));
-        setErrorMessage("Server response wasn't ok: " + response.status);
-        throw new Error("Server response wasn't ok: ", response.status);
-      }
-      console.log("🚀 ~ fetchRSS ~ feedDetails:", feedDetails)
-    } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
-    }// eslint-disable-next-line 
-  }, [createRequestOptions]);
-
-  useEffect(() => {
-    fetchRSS();
-  }, [fetchRSS]);
-
-  const handleRefresh = useCallback(() => {
-    fetchRSS();
-  }, [fetchRSS]);
-
-  const renderFeeds = () => {
-    return <Feed feedItems={feedItems} />;
-  };
-
-  return (
-    <div className="App">
-      <header>
-        <h1>Digests</h1>
-<SlButton variant="default" size="large" circle onClick={() => setShowSettings(!showSettings)} style={{cursor: 'pointer', position: 'absolute', right: '20px', top: '20px'}}>
-  <SlIcon slot="icon" name="gear" />
-</SlButton>      </header>
-      <main>
-        {showSettings ? (
-          <Settings feedUrls={feedUrls} setFeedUrls={setFeedUrls} />
-        ) : (
-          <>
-            {errorMessage}
-            <PullToRefresh onRefresh={handleRefresh}>
-              <div id="feedContainer">{renderFeeds()}</div>
-            </PullToRefresh>
-          </>
-        )}
-      </main>
-    </div>
-  );
+return (
+  <div className="App">
+    <header>
+      <h1>Digests</h1>
+      <SlButton variant="default" size="large" circle onClick={toggleSettings} style={{cursor: 'pointer', position: 'absolute', right: '20px', top: '20px'}}>
+        <SlIcon slot="icon" name="gear" />
+      </SlButton>
+    </header>
+    <main>
+      {showSettings ? (
+        <Settings feedUrls={feedUrls} setFeedUrls={setFeedUrls} />
+      ) : (
+        <>
+          <div id="feedContainer">{renderFeeds()}</div>
+        </>
+      )}
+    </main>
+  </div>
+);
 }
 
 export default App;

@@ -15,7 +15,7 @@ sl-card {
     display: flex;
     flex-direction: column;
     height: auto;
-    max-width: 450px;
+    max-width: 550px;
     margin-bottom: 12px;
     break-inside: avoid;
     -webkit-backdrop-filter: var(--blur);
