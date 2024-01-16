@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './DropShadow.css';
+import tinycolor from 'tinycolor2';
+
 
 const easeInQuad = (x) => x * x;
 
@@ -42,10 +44,10 @@ function renderBoxShadows(state) {
     const x = getX(i).toFixed(0);
     const y = getY(i).toFixed(0);
     const blur = getBlur(i).toFixed(0);
-    const rgb = state.shadowRgb;
+    const hsl = state.shadowHsl;
     const alpha = getAlpha(i).toFixed(2);
-
-    boxShadows.push({ x, y, blur, rgb, alpha });
+  
+    boxShadows.push({ x, y, blur, hsl, alpha }); // Add HSL to the object
   }
 
   return boxShadows;
@@ -53,16 +55,25 @@ function renderBoxShadows(state) {
 
 function renderCssShadows(state) {
   const boxShadows = renderBoxShadows(state);
-  return boxShadows.map(({ x, y, blur, rgb, alpha }) => 
-    `${x}px ${y}px ${blur}px rgba(${rgb.join(", ")}, ${alpha})`
+  return boxShadows.map(({ x, y, blur, hsl, alpha }) => 
+    `${x}px ${y}px ${blur}px hsla(${hsl.h}, ${hsl.s * 100}%, ${hsl.l * 100}%, ${alpha})`
   ).join(", ");
 }
 
+function lowerLuminance(color, percent) {
+  const hsl = color.toHsl();
+  hsl.l -= hsl.l * (percent / 100);
+  hsl.l = Math.max(0, hsl.l); // Ensure luminance is not less than 0
+  return tinycolor(hsl);
+}
+
 function DropShadow({ color, elevation, shadowStyle, layerAmount, opacity, blur, horizontalDistance }) {
-  // console.log("🚀 ~ DropShadow ~ elevation:", elevation)
-  // console.log("🚀 ~ DropShadow ~ color:", color)
-  const colorArray = color.replace(/[^\d,]/g, '').split(',').map(Number);
-  // console.log("🚀 ~ DropShadow ~ colorArray:", colorArray)
+  let parsedColor = tinycolor(color);
+  if (!parsedColor.isValid()) {
+    parsedColor.set('black');
+  }
+  parsedColor = lowerLuminance(parsedColor, 20); // Lower the luminance by 20%
+  const hsl = parsedColor.toHsl();
   const state = {
     shadowStyle: shadowStyle || "soft",
     layerAmount: layerAmount || 5,
@@ -70,7 +81,7 @@ function DropShadow({ color, elevation, shadowStyle, layerAmount, opacity, blur,
     blur: blur || elevation,
     verticalDistance: elevation,
     horizontalDistance: horizontalDistance || 0,
-    shadowRgb: colorArray.slice(0, 3), // Only take the RGB values, ignore the A in RGBA
+    shadowHsl: hsl,
   };
 
   const shadowStyleProps = {
