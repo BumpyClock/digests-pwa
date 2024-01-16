@@ -25,12 +25,16 @@ const useImageLoader = (src) => {
       const onLoad = () => {
         setIsLoaded(true);
         setLoadedImage(img);
+       if(img === null || img === 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') {
+          setDominantColor("rgba(0,0,0,0.12)");
+        };
         try {
           const colorThief = new ColorThief();
           const color = colorThief.getColor(img);
           setDominantColor(`rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.12)`);
         } catch (error) {
-          console.error("Error getting dominant color", error);
+          console.error("Error getting dominant color", error, src);
+          console.log("image address is " + img.src);
         }
       };
 
@@ -79,7 +83,7 @@ const FeedCard = ({ item }) => {
     <SlAnimation name="fade-in" duration={500} play={isLoaded}>
       <div style={{ position: 'relative' }}> 
 
-        <DropShadow color={dominantColor} elevation={2} />
+        <DropShadow color={dominantColor} elevation={16} />
         <SlCard
           className="card"
           style={{
