@@ -1,8 +1,7 @@
 import React, {
   useState,
   useCallback,
-  useEffect,
-  useMemo,
+  useEffect
 } from "react";
 import '@shoelace-style/shoelace/dist/themes/light.css';
 import SlButton from '@shoelace-style/shoelace/dist/react/button';
@@ -16,18 +15,7 @@ setBasePath('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/')
 function App() {
   const [feedItems, setFeedItems] = useState([]);
   const [feedDetails, setFeedDetails] = useState([]);
-  const errorMessages = useMemo(
-    () => [
-      "Error",
-      "error",
-      "ERROR",
-      "404",
-      "Not Found",
-      "not found",
-      "NOT FOUND",
-    ],
-    []
-  );
+
   const [feedUrls, setFeedUrls] = useState([
     "https://engadget.com/rss.xml",
     "https://www.theverge.com/rss/index.xml",
@@ -54,7 +42,7 @@ function App() {
       }, [messageChannel.port2]);
     });
     
-}, []);
+}, [feedUrls]);
 
 // Listen for messages from the service worker
 

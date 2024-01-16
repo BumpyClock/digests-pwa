@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import SlCard from "@shoelace-style/shoelace/dist/react/card";
-import SlButton from "@shoelace-style/shoelace/dist/react/button";
 import WebsiteInfo from "../website-info/website-info.js";
 import "./FeedCard.css";
 import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
@@ -99,7 +98,7 @@ const FeedCard = ({ item }) => {
             onMouseUp={() => setMouseDown(false)}> 
 
 <DropShadow color={dominantColor} elevation={elevation} />
-<a href={item.link} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank">
+<a href={item.link} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank" rel="noreferrer">
 
            <SlCard
           className="card"
