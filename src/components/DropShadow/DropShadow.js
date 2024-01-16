@@ -72,7 +72,7 @@ function DropShadow({ color, elevation, shadowStyle, layerAmount, opacity, blur,
   if (!parsedColor.isValid()) {
     parsedColor.set('black');
   }
-  parsedColor = lowerLuminance(parsedColor, 20); // Lower the luminance by 20%
+  parsedColor = lowerLuminance(parsedColor, 20);
   const hsl = parsedColor.toHsl();
   const state = {
     shadowStyle: shadowStyle || "soft",

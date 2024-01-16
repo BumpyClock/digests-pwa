@@ -23,6 +23,13 @@ sl-card {
     transition: all .25s ease-in-out;
   }
 
+  .card .date {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    opacity: .65;
+  }
+
   
   .card::part(base){
     background-color: transparent;
@@ -43,11 +50,11 @@ sl-card {
   }
   .card .card-bg img {
     position: absolute;
-    bottom: -20%;
-    left: -20%;
-    width: 140%;
-    height: 120%;
-    filter: blur(60px) brightness(1.5);
+    bottom: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
+    filter: blur(60px) brightness(1.2);
     z-index: -2;
     opacity: .5;
     transform: scale(1.4);
@@ -72,16 +79,12 @@ sl-card {
     opacity: .65;
     filter: blur(60px) brightness(1.1)
   }
-  .card:hover {
-    background: var(--background-color-hover);
-    box-shadow: var(--box-shadow-hover)
-  }
-  .card:active .card-bg {
+
+  .card:active .card-bg img{
     background: var(--active-color);
-    filter: blur(90px) brightness(1.1);
-    box-shadow: var(--box-shadow-hover);
-    transform: scale(1.15);
-    transition: var(--transition-standard)
+    filter: blur(90px) brightness(.9);
+       transform: scale(1);
+    transition: all .25s ease-in-out;
   }
   .card .image-container {
     position: relative;
@@ -135,7 +138,7 @@ sl-card {
   }
   .card h3 {
     margin: 0;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     font-size: 18px;
     line-height: 1.33;
     font-weight: 600
@@ -176,7 +179,7 @@ sl-card {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-bottom: 10px;
+    margin-bottom: 24px !important;
     font-size: 14px;
     font-weight: 400
   }

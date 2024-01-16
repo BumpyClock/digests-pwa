@@ -25,9 +25,10 @@ const useImageLoader = (src) => {
       const onLoad = () => {
         setIsLoaded(true);
         setLoadedImage(img);
-       if(img === null || img === 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') {
+       if(img === null || img.src.includes('data:image/gif')) {
           setDominantColor("rgba(0,0,0,0.12)");
-        };
+        }
+        else {
         try {
           const colorThief = new ColorThief();
           const color = colorThief.getColor(img);
@@ -35,7 +36,7 @@ const useImageLoader = (src) => {
         } catch (error) {
           console.error("Error getting dominant color", error, src);
           console.log("image address is " + img.src);
-        }
+        }}
       };
 
       const onError = () => {
@@ -66,6 +67,16 @@ const useImageLoader = (src) => {
 
 
 const FeedCard = ({ item }) => {
+  const [hover, setHover] = useState(false);
+  const [mouseDown, setMouseDown] = useState(false);
+  let elevation;
+  if (mouseDown) {
+    elevation = 8;
+  } else if (hover) {
+    elevation = 24;
+  } else {
+    elevation = 16;
+  }
   let thumbnailUrl = item.thumbnail;
   if (Array.isArray(item.thumbnail)) {
     thumbnailUrl = item.thumbnail.find(
@@ -81,10 +92,16 @@ const FeedCard = ({ item }) => {
 
   return (
     <SlAnimation name="fade-in" duration={500} play={isLoaded}>
-      <div style={{ position: 'relative' }}> 
+      <div style={{ position: 'relative' }}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => { setHover(false); setMouseDown(false); }}
+            onMouseDown={() => setMouseDown(true)}
+            onMouseUp={() => setMouseDown(false)}> 
 
-        <DropShadow color={dominantColor} elevation={16} />
-        <SlCard
+<DropShadow color={dominantColor} elevation={elevation} />
+<a href={item.link} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank">
+
+           <SlCard
           className="card"
           style={{
             opacity: isLoaded ? 1 : 0,
@@ -110,20 +127,19 @@ const FeedCard = ({ item }) => {
           feedTitle={item.feedTitle}
         />
         <h3>{item.title}</h3>
-        {item.content && <p className="description">{item.content}</p>}
         <div className="date">
           {new Date(item.published).toLocaleString()}
         </div>
+        {item.content && <p className="description">{item.content}</p>}
+        
         {!thumbnailUrl && item.description && (
           <div className="description long-description">
             {item.description}
           </div>
         )}
-        <SlButton variant="text" href={item.link}>
-          Read More
-        </SlButton>
+       
       </div>
-    </SlCard>
+    </SlCard></a>
     </div>
   </SlAnimation>
 );
