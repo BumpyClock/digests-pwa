@@ -6,6 +6,7 @@ import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
 import ColorThief from "colorthief";
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import DropShadow from "../DropShadow/DropShadow.js"; // Import DropShadow
+import ReaderView from "../ReaderView/ReaderView.js";
 
 
 
@@ -31,7 +32,7 @@ const useImageLoader = (src) => {
         try {
           const colorThief = new ColorThief();
           const color = colorThief.getColor(img);
-          setDominantColor(`rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.12)`);
+          setDominantColor(`rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6)`);
         } catch (error) {
           console.error("Error getting dominant color", error, src);
           console.log("image address is " + img.src);
@@ -68,6 +69,8 @@ const useImageLoader = (src) => {
 const FeedCard = ({ item }) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
+  const [showReaderView, setShowReaderView] = useState(false);
+
   let elevation;
   if (mouseDown) {
     elevation = 8;
@@ -95,16 +98,17 @@ const FeedCard = ({ item }) => {
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => { setHover(false); setMouseDown(false); }}
             onMouseDown={() => setMouseDown(true)}
-            onMouseUp={() => setMouseDown(false)}> 
+            onMouseUp={() => setMouseDown(false)}
+            onClick={() => setShowReaderView(!showReaderView)}> 
 
 <DropShadow color={dominantColor} elevation={elevation} />
-<a href={item.link} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank" rel="noreferrer">
 
            <SlCard
           className="card"
           style={{
             opacity: isLoaded ? 1 : 0,
             transition: "opacity 0.5s",
+            border: `1px solid ${dominantColor}`
           }}
         >
       {!isError && (
@@ -138,8 +142,9 @@ const FeedCard = ({ item }) => {
         )}
        
       </div>
-    </SlCard></a>
+    </SlCard>
     </div>
+    {showReaderView && <ReaderView url={item.link} onClose={() => setShowReaderView(false)} />}
   </SlAnimation>
 );
 };

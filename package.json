@@ -4,11 +4,14 @@
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@mozilla/readability": "^0.5.0",
     "@shoelace-style/react": "^3.0.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "colorthief": "^2.4.0",
+    "dompurify": "^3.0.8",
+    "jsdom": "^23.2.0",
     "react": "^18.2.0",
     "react-content-loader": "^6.2.1",
     "react-dom": "^18.2.0",
@@ -17,6 +20,7 @@
     "react-pull-to-refresh": "^2.0.1",
     "react-responsive-masonry": "^2.1.7",
     "react-scripts": "5.0.1",
+    "stream-http": "^3.2.0",
     "tinycolor2": "^1.6.0",
     "web-vitals": "^2.1.4"
   },
