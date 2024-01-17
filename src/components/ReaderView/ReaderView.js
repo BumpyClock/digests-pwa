@@ -33,6 +33,7 @@ function updateReadingProgress(progressCircle, pageText) {
 
 const ReaderView = ({ url, onClose }) => {
       const [article, setArticle] = useState(null);
+       // eslint-disable-next-line
   const [isVisible, setIsVisible] = useState(true);
   const progressCircleRef = useRef(null);
   const pageTextRef = useRef(null);
