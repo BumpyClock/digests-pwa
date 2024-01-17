@@ -75,7 +75,7 @@ const FeedCard = ({ item }) => {
   if (mouseDown) {
     elevation = 8;
   } else if (hover) {
-    elevation = 24;
+    elevation = 32;
   } else {
     elevation = 16;
   }
