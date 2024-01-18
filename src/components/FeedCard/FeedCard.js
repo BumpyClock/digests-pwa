@@ -54,8 +54,8 @@ const useImageLoader = (src) => {
       }
 
       return () => {
-        img.onload = null;
-        img.onerror = null;
+        img.onload = "";
+        img.onerror = "";
       };
     }
   }, [src]);
@@ -96,52 +96,58 @@ const FeedCard = ({ item }) => {
             onMouseLeave={() => { setHover(false); setMouseDown(false); }}
             onMouseDown={() => setMouseDown(true)}
             onMouseUp={() => setMouseDown(false)}> 
-
-<DropShadow color={dominantColor} elevation={elevation} />
-<a href={item.link} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank" rel="noreferrer">
-
-           <SlCard
-          className="card"
-          style={{
-            opacity: isLoaded ? 1 : 0,
-            transition: "opacity 0.5s",
-          }}
-        >
-      {!isError && (
-        <div className="image-container">
-          <img
-            src={loadedImage.src}
-            alt={item.siteTitle}
-          />
-        </div>
-      )}
-      <div className="card-bg">
-        <img src={loadedImage.src} alt={item.siteTitle} />
-        <div className="noise"></div>
+  
+        <DropShadow color={dominantColor} elevation={elevation} />
+        <a href={item.link} style={{
+  
+   textDecoration
+  
+  : 'none', color: 'inherit' }} target="_blank" rel="noreferrer">
+  
+          <SlCard
+            className="card"
+            style={{
+              opacity: isLoaded ? 1 : 0,
+              transition: "opacity 0.5s",
+            }}
+          >
+            {loadedImage && loadedImage.src && (
+              <div className="image-container">
+                <img
+                  src={loadedImage.src}
+                  alt={item.siteTitle}
+                />
+              </div>
+            )}
+            {loadedImage && loadedImage.src && (
+              <div className="card-bg">
+                <img src={loadedImage.src} alt={item.siteTitle} />
+                <div className="noise"></div>
+              </div>
+            )}
+            <div className="text-content" style={{ padding: isError ? '' : '12px 24px' }}>
+              <WebsiteInfo
+                favicon={item.favicon}
+                siteTitle={item.siteTitle}
+                feedTitle={item.feedTitle}
+              />
+              <h3>{item.title}</h3>
+              <div className="date">
+                {new Date(item.published).toLocaleString()}
+              </div>
+              {item.content && <p className="description">{item.content}</p>}
+              
+              {!thumbnailUrl && item.description && (
+                <div className="description long-description">
+                  {item.description}
+                </div>
+              )}
+             
+            </div>
+          </SlCard></a>
       </div>
-      <div className="text-content" style={{ padding: isError ? '' : '12px 24px' }}>
-        <WebsiteInfo
-          favicon={item.favicon}
-          siteTitle={item.siteTitle}
-          feedTitle={item.feedTitle}
-        />
-        <h3>{item.title}</h3>
-        <div className="date">
-          {new Date(item.published).toLocaleString()}
-        </div>
-        {item.content && <p className="description">{item.content}</p>}
-        
-        {!thumbnailUrl && item.description && (
-          <div className="description long-description">
-            {item.description}
-          </div>
-        )}
-       
-      </div>
-    </SlCard></a>
-    </div>
-  </SlAnimation>
-);
+    </SlAnimation>
+  );
 };
 
 export default React.memo(FeedCard);
