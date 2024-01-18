@@ -25,18 +25,19 @@ const useImageLoader = (src) => {
       const onLoad = () => {
         setIsLoaded(true);
         setLoadedImage(img);
-       if(img === null || img.src.includes('data:image/gif')) {
+        if (img === null || img.src.includes('data:image/gif')) {
           setDominantColor("rgba(0,0,0,0.12)");
         }
         else {
-        try {
-          const colorThief = new ColorThief();
-          const color = colorThief.getColor(img);
-          setDominantColor(`rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6)`);
-        } catch (error) {
-          console.error("Error getting dominant color", error, src);
-          console.log("image address is " + img.src);
-        }}
+          try {
+            const colorThief = new ColorThief();
+            const color = colorThief.getColor(img);
+            setDominantColor(`rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6)`);
+          } catch (error) {
+            console.error("Error getting dominant color", error, src);
+            console.log("image address is " + img.src);
+          }
+        }
       };
 
       const onError = () => {
@@ -55,12 +56,12 @@ const useImageLoader = (src) => {
       }
 
       return () => {
-        img.onload = "";
-        img.onerror = "";
+        img.onload = null;
+        img.onerror = null;
       };
     }
   }, [src]);
-   // Generate drop shadow
+  // Generate drop shadow
 
   return { isLoaded, isError, loadedImage, dominantColor };
 };
@@ -95,56 +96,60 @@ const FeedCard = ({ item }) => {
   return (
     <SlAnimation name="fade-in" duration={500} play={isLoaded}>
       <div style={{ position: 'relative' }}
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => { setHover(false); setMouseDown(false); }}
-            onMouseDown={() => setMouseDown(true)}
-            onMouseUp={() => setMouseDown(false)}> 
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => { setHover(false); setMouseDown(false); }}
+        onMouseDown={() => setMouseDown(true)}
+        onMouseUp={() => setMouseDown(false)}
+        onClick={() => setShowReaderView(!showReaderView)}>
 
-<DropShadow color={dominantColor} elevation={elevation} />
-<a href={item.link} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank" rel="noreferrer">
+        <DropShadow color={dominantColor} elevation={elevation} />
 
-           <SlCard
+        <SlCard
           className="card"
           style={{
             opacity: isLoaded ? 1 : 0,
             transition: "opacity 0.5s",
+            border: `1px solid ${dominantColor}`
           }}
         >
-      {!isError && (
-        <div className="image-container">
-          <img
-            src={loadedImage.src}
-            alt={item.siteTitle}
-          />
-        </div>
-      )}
-      <div className="card-bg">
-        <img src={loadedImage.src} alt={item.siteTitle} />
-        <div className="noise"></div>
-      </div>
-      <div className="text-content" style={{ padding: isError ? '' : '12px 24px' }}>
-        <WebsiteInfo
-          favicon={item.favicon}
-          siteTitle={item.siteTitle}
-          feedTitle={item.feedTitle}
-        />
-        <h3>{item.title}</h3>
-        <div className="date">
-          {new Date(item.published).toLocaleString()}
-        </div>
-        {item.content && <p className="description">{item.content}</p>}
-        
-        {!thumbnailUrl && item.description && (
-          <div className="description long-description">
-            {item.description}
+          {loadedImage && !isError && (
+            <div className="image-container">
+              <img
+                src={loadedImage.src}
+                alt={item.siteTitle}
+              />
+            </div>
+          )}
+          {loadedImage && (
+            <div className="card-bg">
+              <img src={loadedImage.src} alt={item.siteTitle} />
+              <div className="noise"></div>
+            </div>
+          )}
+          <div className="text-content" style={{ padding: isError ? '' : '12px 24px' }}>
+            <WebsiteInfo
+              favicon={item.favicon}
+              siteTitle={item.siteTitle}
+              feedTitle={item.feedTitle}
+            />
+            <h3>{item.title}</h3>
+            <div className="date">
+              {new Date(item.published).toLocaleString()}
+            </div>
+            {item.content && <p className="description">{item.content}</p>}
+
+            {!thumbnailUrl && item.description && (
+              <div className="description long-description">
+                {item.description}
+              </div>
+            )}
+
           </div>
-        )}
-       
+        </SlCard>
       </div>
-    </SlCard></a>
-    </div>
-  </SlAnimation>
-);
+      {showReaderView && <ReaderView url={item.link} onClose={() => setShowReaderView(false)} />}
+    </SlAnimation>
+  );
 };
 
 export default React.memo(FeedCard);
