@@ -16,11 +16,14 @@ function App() {
   const [feedItems, setFeedItems] = useState([]);
   const [feedDetails, setFeedDetails] = useState([]);
 
-  const [feedUrls, setFeedUrls] = useState([
-    "https://engadget.com/rss.xml",
-    "https://www.theverge.com/rss/index.xml",
-  ]);
+const [feedUrls, setFeedUrls] = useState(() => {
+  const savedFeedUrls = localStorage.getItem('feedUrls');
+  return savedFeedUrls ? (console.log("Found existing feed configuration, loading those"), JSON.parse(savedFeedUrls)) : (console.log("No feeds found, starting with a couple of default feeds"), ["https://engadget.com/rss.xml", "https://www.theverge.com/rss/index.xml"]);
+});
 
+useEffect(() => {
+  localStorage.setItem('feedUrls', JSON.stringify(feedUrls));
+}, [feedUrls]);
   const [showSettings, setShowSettings] = useState(false);
   const toggleSettings = useCallback(() => {
     setShowSettings(show => !show);
