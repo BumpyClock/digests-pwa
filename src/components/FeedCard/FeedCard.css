@@ -20,7 +20,7 @@ sl-card {
     break-inside: avoid;
     -webkit-backdrop-filter: var(--blur);
     backdrop-filter: var(--blur);
-    transition: all .25s ease-in-out;
+    transition: all .25s ease-in-out !important;
   }
 
   .card .date {
@@ -64,6 +64,12 @@ sl-card {
     .card .card-bg img {
       filter: blur(60px) brightness(.5)
     }
+  }
+
+  .card:hover {
+    transform: scale(1.025);
+    transition: all .25s ease-in-out;
+    z-index:2;
   }
   .card .image-container img {
     border-radius: 24px;

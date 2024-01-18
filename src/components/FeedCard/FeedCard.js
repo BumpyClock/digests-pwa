@@ -6,6 +6,7 @@ import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
 import ColorThief from "colorthief";
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import DropShadow from "../DropShadow/DropShadow.js"; // Import DropShadow
+import ReaderView from "../ReaderView/ReaderView.js";
 
 
 
@@ -31,7 +32,7 @@ const useImageLoader = (src) => {
         try {
           const colorThief = new ColorThief();
           const color = colorThief.getColor(img);
-          setDominantColor(`rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.12)`);
+          setDominantColor(`rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6)`);
         } catch (error) {
           console.error("Error getting dominant color", error, src);
           console.log("image address is " + img.src);
@@ -68,11 +69,13 @@ const useImageLoader = (src) => {
 const FeedCard = ({ item }) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
+  const [showReaderView, setShowReaderView] = useState(false);
+
   let elevation;
   if (mouseDown) {
     elevation = 8;
   } else if (hover) {
-    elevation = 24;
+    elevation = 32;
   } else {
     elevation = 16;
   }
@@ -96,58 +99,52 @@ const FeedCard = ({ item }) => {
             onMouseLeave={() => { setHover(false); setMouseDown(false); }}
             onMouseDown={() => setMouseDown(true)}
             onMouseUp={() => setMouseDown(false)}> 
-  
-        <DropShadow color={dominantColor} elevation={elevation} />
-        <a href={item.link} style={{
-  
-   textDecoration
-  
-  : 'none', color: 'inherit' }} target="_blank" rel="noreferrer">
-  
-          <SlCard
-            className="card"
-            style={{
-              opacity: isLoaded ? 1 : 0,
-              transition: "opacity 0.5s",
-            }}
-          >
-            {loadedImage && loadedImage.src && (
-              <div className="image-container">
-                <img
-                  src={loadedImage.src}
-                  alt={item.siteTitle}
-                />
-              </div>
-            )}
-            {loadedImage && loadedImage.src && (
-              <div className="card-bg">
-                <img src={loadedImage.src} alt={item.siteTitle} />
-                <div className="noise"></div>
-              </div>
-            )}
-            <div className="text-content" style={{ padding: isError ? '' : '12px 24px' }}>
-              <WebsiteInfo
-                favicon={item.favicon}
-                siteTitle={item.siteTitle}
-                feedTitle={item.feedTitle}
-              />
-              <h3>{item.title}</h3>
-              <div className="date">
-                {new Date(item.published).toLocaleString()}
-              </div>
-              {item.content && <p className="description">{item.content}</p>}
-              
-              {!thumbnailUrl && item.description && (
-                <div className="description long-description">
-                  {item.description}
-                </div>
-              )}
-             
-            </div>
-          </SlCard></a>
+
+<DropShadow color={dominantColor} elevation={elevation} />
+<a href={item.link} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank" rel="noreferrer">
+
+           <SlCard
+          className="card"
+          style={{
+            opacity: isLoaded ? 1 : 0,
+            transition: "opacity 0.5s",
+          }}
+        >
+      {!isError && (
+        <div className="image-container">
+          <img
+            src={loadedImage.src}
+            alt={item.siteTitle}
+          />
+        </div>
+      )}
+      <div className="card-bg">
+        <img src={loadedImage.src} alt={item.siteTitle} />
+        <div className="noise"></div>
       </div>
-    </SlAnimation>
-  );
+      <div className="text-content" style={{ padding: isError ? '' : '12px 24px' }}>
+        <WebsiteInfo
+          favicon={item.favicon}
+          siteTitle={item.siteTitle}
+          feedTitle={item.feedTitle}
+        />
+        <h3>{item.title}</h3>
+        <div className="date">
+          {new Date(item.published).toLocaleString()}
+        </div>
+        {item.content && <p className="description">{item.content}</p>}
+        
+        {!thumbnailUrl && item.description && (
+          <div className="description long-description">
+            {item.description}
+          </div>
+        )}
+       
+      </div>
+    </SlCard></a>
+    </div>
+  </SlAnimation>
+);
 };
 
 export default React.memo(FeedCard);

@@ -1,14 +1,96 @@
 
+:root {
+  --font-family: "Lato","Open Sans","Noto Sans","GeistVariableVF","Roboto",sans-serif;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --box-shadow-standard: 0px 10px 15px -3px rgba(0, 0, 0, 0.1),0px 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --box-shadow-hover: 0px 20px 25px -5px rgba(0, 0, 0, 0.1),0px 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --blur: blur(0.65em);
+  --light-background-color: rgba(245, 245, 245, 1);
+  --light-new-tab-background-color: #f9f9fb;
+  --light-theme-search-box-color: #e0e0e05a;
+  --light-theme-search-box-color-active: #fff;
+  --light-new-tab-background-color-secondary: #ffffffe8;
+  --light-background-color-hover: rgba(245, 245, 245, 0.9);
+  --light-active-color: rgba(245, 245, 245, 0.7);
+  --light-foreground-color: #1a1a1a;
+  --light-accent-color: #007bff;
+  --light-border-color: #e6e6e6;
+  --light-critical-color: red;
+  --light-success-color: green;
+  --dark-background-color: rgba(0, 0, 0, 1);
+  --dark-new-tab-background-color: #2b2a33;
+  --dark-theme-search-box-color: rgba(0, 0, 0, 0.5);
+  --dark-theme-search-box-color-active: rgba(0, 0, 0, 0.8);
+  --dark-new-tab-background-color-secondary: #42414d;
+  --dark-background-color-hover: rgba(18, 17, 17, 0.9);
+  --dark-foreground-color: rgba(255, 255, 255, 0.9);
+  --dark-active-color: rgba(0, 0, 0, 0.7);
+  --dark-accent-color: #708ea5;
+  --dark-border-color: #000;
+  --dark-critical-color: coral;
+  --dark-success-color: lightgreen;
+  --sepia-background-color: #f4e7d8;
+  --sepia-foreground-color: #5c4a3d;
+  --sepia-accent-color: #d8bfaa;
+  --sepia-border-color: #d8bfaa;
+  --progress-background: #eee;
+  --progress-foreground-light: #007bff;
+  --progress-foreground-dark: #fff;
+  --progress-foreground-sepia: #704214;
+  --transition-fast: all 0.3s cubic-bezier(0, 0.105, 0.035, 1.57);
+  --transition-standard: all 0.25s ease-in-out;
+  --transition-slow: all 0.5s ease-in-out
+}
+@media (prefers-color-scheme:dark) {
+  body {
+    --background-color: var(--dark-new-tab-background-color);
+    --background-color-secondary: var(--dark-new-tab-background-color-secondary);
+    --background-color-hover: var(--dark-background-color-hover);
+    --color: var(--dark-foreground-color);
+    --search-box-color: var(--dark-theme-search-box-color);
+    --search-box-color-active: var(--dark-theme-search-box-color-active);
+    --accent-color: var(--dark-accent-color);
+    --border-color: var(--dark-border-color);
+    --reading-progress-container-background-color: var(--dark-background-color-hover);
+    --reading-progress-color: var(--dark-accent-color);
+    --progress-background: var(--dark-background-color);
+    --success-color: var(--dark-success-color);
+    --critical-color: var(--dark-critical-color)
+  }
+}
+@media (prefers-color-scheme:light) {
+  body {
+    --background-color: var(--light-new-tab-background-color);
+    --background-color-secondary: var(--light-new-tab-background-color-secondary);
+    --background-color-hover: var(--light-background-color-hover);
+    --color: var(--light-foreground-color);
+    --accent-color: var(--light-accent-color);
+    --border-color: var(--light-border-color);
+    --reading-progress-container-background-color: var(--light-background-color-hover);
+    --reading-progress-color: var(--light-accent-color);
+    --search-box-color: var(--light-theme-search-box-color);
+    --search-box-color-active: var(--light-theme-search-box-color-active);
+    --success-color: var(--light-success-color);
+    --critical-color: var(--light-critical-color)
+  }
+}
 body {
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--color);
+  transition: var(--transition-standard);
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
