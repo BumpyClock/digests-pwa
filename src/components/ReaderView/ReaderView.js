@@ -125,8 +125,9 @@ const ReaderView = ({ url, onClose }) => {
   onClose();
   document.body.style.overflow = ''; // Re-enable scrolling
 }}></SlIconButton>
-                                  <h1 className="reader-view-title"><span id="website-info-placeholder"></span>{article.title}</h1>
-                  <p className="reader-view-reading-time">{estimateReadingTime(article.textContent)} minutes</p>
+<a href={url} target="_blank" rel="noopener noreferrer">
+  <h1 className="reader-view-title">{article.title}</h1>
+</a>                  <p className="reader-view-reading-time">{estimateReadingTime(article.textContent)} minutes</p>
                   <hr className="solid" />
                 </div>
                 <div className="reader-view-page-text">
