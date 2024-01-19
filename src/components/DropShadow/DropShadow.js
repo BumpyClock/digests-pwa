@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './DropShadow.css';
 import tinycolor from 'tinycolor2';
 
+const upperBound = 0.4; // Set the upper bound for saturation and luminance
 
 const easeInQuad = (x) => x * x;
 
@@ -60,41 +61,53 @@ function renderCssShadows(state) {
   ).join(", ");
 }
 
-function lowerLuminance(color, percent) {
+function makeVibrant(color, percent) {
   const hsl = color.toHsl();
-  hsl.l -= hsl.l * (percent / 100);
-  hsl.l = Math.max(0, hsl.l); // Ensure luminance is not less than 0
+
+  if (hsl.l <= 0.2) { // if the color is already dark
+    hsl.l += (1 - hsl.l) * (percent / 100); // Lighten the color
+  } else {
+    hsl.s = Math.min(upperBound, hsl.s * (1 + percent / 100)); // Increase saturation
+    hsl.l = Math.min(upperBound, hsl.l * (1 + percent / 100)); // Increase luminance
+  }
   return tinycolor(hsl);
 }
 
 function DropShadow({ color, elevation, shadowStyle, layerAmount, opacity, blur, horizontalDistance }) {
-  let parsedColor = tinycolor(color);
-  if (!parsedColor.isValid()) {
-    parsedColor.set('black');
+  try {
+    let parsedColor = tinycolor(color);
+    if (!parsedColor.isValid()) {
+      throw new Error('Invalid color');
+    }
+    parsedColor = makeVibrant(parsedColor, 5);
+    const hsl = parsedColor.toHsl();
+    const state = {
+      shadowStyle: shadowStyle || "soft",
+      layerAmount: layerAmount || 5,
+      opacity: opacity || 0.3,
+      blur: blur || elevation,
+      verticalDistance: elevation,
+      horizontalDistance: horizontalDistance || 0,
+      shadowHsl: hsl,
+    };
+
+    const shadowStyleProps = {
+      boxShadow: renderCssShadows(state)
+    };
+
+    return <div className="drop-shadow" style={shadowStyleProps}></div>;
+  } catch (error) {
+    console.error('Error in DropShadow:', error);
+    return null; // or render some fallback UI
   }
-  parsedColor = lowerLuminance(parsedColor, 10);
-  const hsl = parsedColor.toHsl();
-  const state = {
-    shadowStyle: shadowStyle || "soft",
-    layerAmount: layerAmount || 5,
-    opacity: opacity || 0.3,
-    blur: blur || elevation,
-    verticalDistance: elevation,
-    horizontalDistance: horizontalDistance || 0,
-    shadowHsl: hsl,
-  };
-
-  const shadowStyleProps = {
-    boxShadow: renderCssShadows(state)
-  };
-  // console.log("🚀 ~ DropShadow ~ shadowStyleProps:", shadowStyleProps)
-
-  return <div className="drop-shadow" style={shadowStyleProps}></div>;
 }
 
 DropShadow.propTypes = {
-  color: PropTypes.string.isRequired,
-  elevation: PropTypes.number.isRequired,
+  color: PropTypes.shape({
+    r: PropTypes.number,
+    g: PropTypes.number,
+    b: PropTypes.number
+  }).isRequired,  elevation: PropTypes.number.isRequired,
   shadowStyle: PropTypes.string,
   layerAmount: PropTypes.number,
   opacity: PropTypes.number,

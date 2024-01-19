@@ -51,6 +51,7 @@ async function fetchRSS(feedUrls) {
               siteTitle: isErrorTitle ? feed.feedTitle : feed.siteTitle,
               feedTitle: feed.feedTitle,
               thumbnail: item.thumbnail,
+              thumbnailColor: item.thumbnailColor,
               link: item.link,
               feedUrl: feed.feedUrl,
               favicon: feed.favicon,

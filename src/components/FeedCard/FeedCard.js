@@ -3,7 +3,6 @@ import SlCard from "@shoelace-style/shoelace/dist/react/card";
 import WebsiteInfo from "../website-info/website-info.js";
 import "./FeedCard.css";
 import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
-import ColorThief from "colorthief";
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import DropShadow from "../DropShadow/DropShadow.js"; // Import DropShadow
 import ReaderView from "../ReaderView/ReaderView.js";
@@ -14,37 +13,21 @@ const useImageLoader = (src) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
   const [loadedImage, setLoadedImage] = useState(null);
-  const [dominantColor, setDominantColor] = useState("rgba(0,0,0,0.12)");
 
   useEffect(() => {
     if (src) {
       const img = new Image();
-      img.crossOrigin = "Anonymous";
       img.src = src;
 
       const onLoad = () => {
         setIsLoaded(true);
-        setLoadedImage(img);
-        if (img === null || img.src.includes('data:image/gif')) {
-          setDominantColor("rgba(0,0,0,0.12)");
-        }
-        else {
-          try {
-            const colorThief = new ColorThief();
-            const color = colorThief.getColor(img);
-            setDominantColor(`rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6)`);
-          } catch (error) {
-            console.error("Error getting dominant color", error, src);
-            console.log("image address is " + img.src);
-          }
-        }
+        setLoadedImage(img);   
       };
 
       const onError = () => {
         setIsLoaded(true);
         setIsError(true);
-        console.error("Error loading image");
-        setDominantColor("rgba(0,0,0,0.12)"); // Set to default color on error
+        console.error("Error loading image", src);
       };
 
       img.onload = onLoad;
@@ -60,10 +43,13 @@ const useImageLoader = (src) => {
         img.onerror = null;
       };
     }
+    else {
+      setIsLoaded(true);
+      setIsError(true);
+    }
   }, [src]);
-  // Generate drop shadow
 
-  return { isLoaded, isError, loadedImage, dominantColor };
+  return { isLoaded, isError, loadedImage };
 };
 
 
@@ -71,6 +57,8 @@ const FeedCard = ({ item }) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [showReaderView, setShowReaderView] = useState(false);
+  const { isLoaded, isError, loadedImage } = useImageLoader(item.thumbnail);
+
 
   let elevation;
   if (mouseDown) {
@@ -85,12 +73,12 @@ const FeedCard = ({ item }) => {
     thumbnailUrl = item.thumbnail.find(
       (thumbnail) => thumbnail.url || thumbnail.link
     )?.url;
+  } else if (!item.thumbnail) {
+    thumbnailUrl = null;
   }
 
-  const { isLoaded, isError, loadedImage, dominantColor } = useImageLoader(thumbnailUrl);
-
   if (!isLoaded) {
-    return <FeedCardLoader />;
+    return <FeedCardLoader id={item.id} />;
   }
 
   return (
@@ -102,14 +90,12 @@ const FeedCard = ({ item }) => {
         onMouseUp={() => setMouseDown(false)}
         onClick={() => setShowReaderView(!showReaderView)}>
 
-        <DropShadow color={dominantColor} elevation={elevation} />
-
-        <SlCard
-          className="card"
+<DropShadow color={item.thumbnailColor || {r: 0, g: 0, b: 0}} elevation={elevation} />        <SlCard
+          className="card" id={item.id}
           style={{
             opacity: isLoaded ? 1 : 0,
             transition: "opacity 0.5s",
-            border: `1px solid ${dominantColor}`
+            border: `1px solid ${item.thumbnailColor}`
           }}
         >
           {loadedImage && !isError && (
@@ -120,7 +106,7 @@ const FeedCard = ({ item }) => {
               />
             </div>
           )}
-          {loadedImage && (
+          {loadedImage && !isError && (
             <div className="card-bg">
               <img src={loadedImage.src} alt={item.siteTitle} />
               <div className="noise"></div>
