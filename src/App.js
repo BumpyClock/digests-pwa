@@ -76,8 +76,8 @@ return (
     <header>
       <h1>Digests</h1>
       <SlButton variant="default" size="large" circle onClick={toggleSettings} style={{cursor: 'pointer', position: 'absolute', right: '20px', top: '20px'}}>
-        <SlIcon slot="icon" name="gear" />
-      </SlButton>
+  <SlIcon name={showSettings ? "x" : "gear"} />
+</SlButton>
     </header>
     <main>
       {showSettings ? (
