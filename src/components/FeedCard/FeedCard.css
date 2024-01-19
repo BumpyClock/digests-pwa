@@ -67,7 +67,7 @@ sl-card {
   }
 
   .card:hover {
-    transform: scale(1.025);
+    transform: scale(1.015);
     transition: all .25s ease-in-out;
     z-index:2;
   }
@@ -84,6 +84,9 @@ sl-card {
   .card:hover .card-bg img {
     opacity: .65;
     filter: blur(60px) brightness(1.1)
+  }
+  .card:active{
+    transform: scale(1);
   }
 
   .card:active .card-bg img{

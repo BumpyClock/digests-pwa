@@ -6,12 +6,12 @@ const ShimmerSkeleton = ({ style }) => (
   <div className="shimmer-skeleton" style={style}></div>
 );
 
-const FeedCardLoader = () => {
+const FeedCardLoader = ({ id }) => {
   const skeletonStyle = { height: '20px', marginTop: '10px' };
 
   return (
     <div className="card-wrapper">
-      <SlCard className="card">
+      <SlCard className="card" id={id}>
         <div className="image-container shimmer-skeleton"></div>
         <div className='card-bg'>
           <ShimmerSkeleton />
