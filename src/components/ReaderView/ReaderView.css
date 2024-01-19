@@ -84,6 +84,12 @@
     font-family: var(--font-family);
     font-weight: 500
   }
+
+  .reader-view-modal h1{
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-skip-ink: none;
+  }
   .reader-view-modal a {
     clear: both;
     color: var(--accent-color);
