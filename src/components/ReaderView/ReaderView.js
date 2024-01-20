@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
-import SlIcon from '@shoelace-style/shoelace/dist/react/icon';
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
 import WebsiteInfo from "../website-info/website-info.js";

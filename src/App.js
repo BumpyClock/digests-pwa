@@ -4,8 +4,6 @@ import React, {
   useEffect
 } from "react";
 import '@shoelace-style/shoelace/dist/themes/light.css';
-import SlButton from '@shoelace-style/shoelace/dist/react/button';
-import SlIcon from '@shoelace-style/shoelace/dist/react/icon';
 import Feed from "./components/Feed/Feed.js";
 import SlSpinner from '@shoelace-style/shoelace/dist/react/spinner';
 import Settings from "./pages/settings.js";
