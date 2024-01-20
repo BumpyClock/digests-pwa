@@ -102,7 +102,7 @@ function App() {
       </header>
       <main>
       {isLoading ? (
-        <div><SlSpinner /><p>Getting your feeds</p></div>
+        <div><SlSpinner /><p>Preparing your Digest</p></div>
          // Show loading spinner while waiting for data
       ) : showSettings ? (
         <Settings feedUrls={feedUrls} setFeedUrls={setFeedUrls} feedDetails={feedDetails} refreshInterval={refreshInterval} setRefreshInterval={setRefreshInterval} />
