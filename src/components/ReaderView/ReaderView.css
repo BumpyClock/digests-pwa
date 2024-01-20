@@ -63,13 +63,15 @@
   }
   .reader-view-modal .noise {
     position: absolute;
-    background-image: url("./images/noisy-background.jpg");
+    background-image: url("../assets/images/noise.svg");
     background-repeat: repeat;
     background-size: 2000px 2000px;
     width: 100%;
     height: 100%;
     z-index: -1;
-    opacity: .04
+    mix-blend-mode: multiply;
+
+    opacity: .04;
   }
   .reader-view-modal.visible {
     opacity: 1;
@@ -85,11 +87,7 @@
     font-weight: 500
   }
 
-  .reader-view-modal h1{
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-decoration-skip-ink: none;
-  }
+  
   .reader-view-modal a {
     clear: both;
     color: var(--accent-color);
@@ -164,14 +162,27 @@
   .reader-view-reading-time p {
     margin: 0
   }
-  .reader-view-close {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    font-size: 2rem;
+  .reader-view-header-button {
+    font-size: 24px;
     font-weight: 900;
     color: var(--foreground-color);
     cursor: pointer
+  }
+  .reader-view-header-button:hover {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--accent-color);
+    cursor: pointer
+  }
+  .reader-view-header-button-container{
+    position:absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 12px;
+    top:24px;
+    right:24px;
+
   }
 
   

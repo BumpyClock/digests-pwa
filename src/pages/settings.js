@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import {
   SlButton,
   SlInput,
-  SlIcon,
 } from "@shoelace-style/shoelace/dist/react/";
 import "./settings.css";
 

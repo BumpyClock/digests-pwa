@@ -20,6 +20,11 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css"
+/>
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -40,14 +45,8 @@
         });
       }
     </script>
-    <script type="module">
-      import { registerIconLibrary } from './dist/utilities/icon-library.js';
-    
-      registerIconLibrary('my-icons', {
-        resolver: name => `/assets/icons/${name}.svg`,
-        mutator: svg => svg.setAttribute('fill', 'currentColor')
-      });
-    </script>
+   
+  </script>
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback,useRef } from 'react';
 import FeedCard from '../FeedCard/FeedCard.js';
 import './Feed.css';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
@@ -6,31 +6,59 @@ import { debounce } from 'lodash';
 
 const MemoizedFeedCard = React.memo(FeedCard);
 
-const getStepSize = () => {
-  const width = window.innerWidth;
-  if (width <= 350) {
-    return 4;
-  } else if (width <= 750) {
-    return 8;
-  } else if (width <= 900) {
-    return 12;
-  } else if (width <= 1200) {
-    return 16;
-  } else if (width <= 1900) {
-    return 20;
-  } else {
-    return 25;
-  }
+const useEventListener = (eventName, handler, element = window) => {
+  const savedHandler = useRef();
+
+  useEffect(() => {
+    savedHandler.current = handler;
+  }, [handler]);
+
+  useEffect(() => {
+    const isSupported = element && element.addEventListener;
+    if (!isSupported) return;
+
+    const eventListener = event => savedHandler.current(event);
+    element.addEventListener(eventName, eventListener);
+
+    return () => {
+      element.removeEventListener(eventName, eventListener);
+    };
+  }, [eventName, element]);
 };
+
+
 
 const Feed = ({ feedItems, feedDetails }) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
+
+  const getStepSize = useCallback(() => {
+    const width = window.innerWidth;
+    if (width <= 350) {
+      return 4;
+    } else if (width <= 750) {
+      return 8;
+    } else if (width <= 900) {
+      return 12;
+    } else if (width <= 1200) {
+      return 16;
+    } else if (width <= 1900) {
+      return 20;
+    } else {
+      return 25;
+    }
+  }, []);
+
   const [stepSize, setStepSize] = useState(getStepSize());
 
-  const handleResize = useCallback(debounce(() => {
-    setStepSize(getStepSize());
-  }, 300), []);
+const debouncedSetStepSize = debounce(() => setStepSize(getStepSize()), 300);
+
+const handleResize = useCallback(() => {
+  debouncedSetStepSize();
+}, [debouncedSetStepSize]);
+
+  useEventListener('resize', handleResize);
+
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -48,7 +76,7 @@ const Feed = ({ feedItems, feedDetails }) => {
   }, [feedItems, stepSize]);
 
   const fetchMoreData = useCallback(() => {
-    if (items.length >= feedItems.length) {
+    if (!hasMore || items.length >= feedItems.length) {
       setHasMore(false);
       return;
     }
@@ -60,7 +88,7 @@ const Feed = ({ feedItems, feedDetails }) => {
     }
 
     setItems(prevItems => [...prevItems, ...newItems]);
-  }, [items, feedItems, stepSize]);
+  }, [items, feedItems, stepSize, hasMore]);
 
   useEffect(() => {
     const handleScroll = debounce(() => {

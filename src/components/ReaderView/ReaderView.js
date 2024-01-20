@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
+import SlIcon from '@shoelace-style/shoelace/dist/react/icon';
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
 import WebsiteInfo from "../website-info/website-info.js";
@@ -132,14 +133,26 @@ const ReaderView = ({ url, item, onClose }) => {
                 <>
                   <div className="reader-view-page-content" ref={pageTextRef}>
                     <div className="reader-view-header">
+                      <div className="reader-view-header-button-container">
                       <SlIconButton
-                        name="x"
-                        class="reader-view-close"
-                        onClick={() => {
-                          onClose();
-                          document.body.style.overflow = ""; // Re-enable scrolling
-                        }}
-                      ></SlIconButton>
+  library="iconoir" 
+  name="open-new-window"
+  class="reader-view-header-button"
+  onClick={() => {
+    window.open(url, '_blank');
+  }}
+/>
+<SlIconButton
+  library="iconoir" 
+  name="xmark"
+  class="reader-view-header-button"
+  onClick={() => {
+    onClose();
+    document.body.style.overflow = ""; // Re-enable scrolling
+  }}
+/>
+                       
+                      </div>
                       <WebsiteInfo
   favicon={item.favicon}
   siteTitle={item.siteTitle}

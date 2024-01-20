@@ -10,6 +10,14 @@ import Feed from "./components/Feed/Feed.js";
 import SlSpinner from '@shoelace-style/shoelace/dist/react/spinner';
 import Settings from "./pages/settings.js";
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
+import SlIconButton from '@shoelace-style/shoelace/dist/react/icon-button';
+import {registerIconLibrary} from '@shoelace-style/shoelace/dist/utilities/icon-library';
+
+// Register the icon iconoir library globally
+registerIconLibrary('iconoir', {
+  resolver: name => `https://cdn.jsdelivr.net/gh/lucaburgio/iconoir@latest/icons/regular/${name}.svg`
+  });
+
 
 setBasePath('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/');
 
@@ -27,7 +35,7 @@ function App() {
     return savedFeedUrls ? (console.log("Found existing feed configuration, loading those"), JSON.parse(savedFeedUrls)) : (console.log("No feeds found, starting with a couple of default feeds"), ["https://engadget.com/rss.xml", "https://www.theverge.com/rss/index.xml"]);
   });
 
-  function refreshRSSData() {
+  const refreshRSSData = useCallback(() => {
     navigator.serviceWorker.ready.then((registration) => {
       const messageChannel = new MessageChannel();
       messageChannel.port1.onmessage = event => {
@@ -42,7 +50,7 @@ function App() {
         payload: { urls: feedUrls },
       }, [messageChannel.port2]);
     });
-  }
+  }, [feedUrls]);
 
   useEffect(() => {
     localStorage.setItem('feedUrls', JSON.stringify(feedUrls));
@@ -56,7 +64,7 @@ function App() {
   useEffect(() => {// Inside handleRefresh and the useEffect hook
     refreshRSSData();
 
-  }, [feedUrls]);
+  }, [feedUrls, refreshRSSData]);
 
   useEffect(() => {
     console.log(`Setting refresh interval to ${refreshInterval} minutes`);
@@ -69,7 +77,7 @@ function App() {
     localStorage.setItem('refreshInterval', refreshInterval.toString());
 
     return () => clearInterval(intervalId);
-  }, [refreshInterval]);
+  }, [refreshInterval, refreshRSSData]);
 
   // Listen for messages from the service worker
   useEffect(() => {
@@ -96,9 +104,22 @@ function App() {
     <div className="App">
       <header>
         <h1>Digests</h1>
-        <SlButton variant="default" size="large" circle onClick={toggleSettings} style={{ cursor: 'pointer', position: 'absolute', right: '20px', top: '20px' }}>
-          <SlIcon name={showSettings ? "x" : "gear"} />
-        </SlButton>
+  <SlIconButton
+  name={showSettings ? "xmark" : "settings"}
+  size="large"
+  library="iconoir"
+  style={{
+    cursor: 'pointer',
+    position: 'absolute',
+    right: '20px',
+    top: '20px',
+    fontSize: '2rem',
+  }}
+  onClick={(event) => {
+    toggleSettings();
+    event.currentTarget.blur();
+  }}
+/>
       </header>
       <main>
       {isLoading ? (
