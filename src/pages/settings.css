@@ -1,5 +1,14 @@
 
+:root {
+  --spacing: 24px;
+}
+
+
+
+
+
 .settings-container {
+  padding: var(--spacing);
     max-width: 1200px;
     margin: 0 auto;
     padding: 24px
@@ -8,6 +17,10 @@
   .settings-container h2 {
     margin-bottom: 1rem;
     font-family: var(--font-family)
+  }
+  .settings h2 {
+    font-size: var(--font-size-large);
+    color: var(--accent-color);
   }
   .settings-container ul {
     list-style-type: none;
@@ -57,6 +70,11 @@
     transition: var(--transition-standard)
   }
   .list-item .remove-feed-button {
+    position: absolute;
+    visibility: hidden;
+    bottom: 0;
+    width: -webkit-fill-available;
+    width: 100%;
     font-size: small;
    
     height: fit-content;
@@ -71,6 +89,14 @@
 
   }
   #subscribed-feeds-list {
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    row-gap: var(--spacing);
+    column-gap: var(--spacing);
+    margin: var(--spacing) auto;
+    padding: 0;
     width: 100%;
     row-gap: 24px;
     column-gap: 24px;
@@ -256,4 +282,10 @@
   .error-message {
     color: red;
     /* other styling as needed */
+  }
+
+  @media (max-width: 600px) {
+    #subscribed-feeds-list {
+      flex-direction: column;
+    }
   }
