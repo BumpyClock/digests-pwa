@@ -7,9 +7,8 @@
 }
 
 .website-info img {
-    width: -moz-fit-content;
-    width: fit-content;
-    height: 32px;
+    width: auto;
+    height: 32px !important;
 }
 
 .website-info, .site-name {
@@ -22,10 +21,11 @@
 .website-info {
     width: -webkit-fill-available;
     display:flex;
-    column-gap: 4px;
+    column-gap: 8px;
     justify-content: center;
     align-items: center;
     flex-direction: row;
+    margin-bottom:8px;
 }
 
 .site-name {
@@ -34,7 +34,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     align-items: top;
-    margin-bottom: 0 !important;
+    margin: 0 !important;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
 }

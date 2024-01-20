@@ -6,6 +6,8 @@ import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import DropShadow from "../DropShadow/DropShadow.js"; // Import DropShadow
 import ReaderView from "../ReaderView/ReaderView.js";
+import SlRelativeTime from '@shoelace-style/shoelace/dist/react/relative-time';
+
 
 
 
@@ -120,8 +122,7 @@ const FeedCard = ({ item }) => {
             />
             <h3>{item.title}</h3>
             <div className="date">
-              {new Date(item.published).toLocaleString()}
-            </div>
+<SlRelativeTime date={new Date(item.published)} />            </div>
             {item.content && <p className="description">{item.content}</p>}
 
             {!thumbnailUrl && item.description && (
@@ -133,8 +134,7 @@ const FeedCard = ({ item }) => {
           </div>
         </SlCard>
       </div>
-      {showReaderView && <ReaderView url={item.link} onClose={() => setShowReaderView(false)} />}
-    </SlAnimation>
+{showReaderView && <ReaderView url={item.link} item={item} onClose={() => setShowReaderView(false)} />}    </SlAnimation>
   );
 };
 

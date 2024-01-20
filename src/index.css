@@ -94,3 +94,82 @@ code {
     monospace;
 }
 
+button {
+  padding: var(--spacing-small) var(--spacing-medium);
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+button:hover {
+  background-color: var(--accent-color-lighter);
+}
+
+button:active {
+  background-color: var(--accent-color-darker);
+}
+
+input, textarea, select {
+  padding: var(--spacing-small);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: var(--font-size-regular);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.App {
+  padding: 2rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+/* For mobile devices */
+@media (max-width: 600px) {
+  .App {
+    padding: 2rem;
+  }
+}
+
+/* For tablet devices */
+@media (min-width: 601px) and (max-width: 900px) {
+  .App {
+    padding: 2rem;
+  }
+}
+
+/* For small desktops */
+@media (min-width: 901px) and (max-width: 1200px) {
+  .App {
+    padding: 4rem;
+  }
+}
+
+/* For large desktops */
+@media (min-width: 1201px) {
+  .App {
+    padding: 4rem;
+  }
+}
+@media (min-width: 1900px) {
+  .App {
+    padding: 4rem;
+  }
+}
+@media (min-width: 2200px) {
+  .App {
+    padding: 64px;
+  }
+}
