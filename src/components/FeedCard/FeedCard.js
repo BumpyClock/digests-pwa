@@ -7,6 +7,8 @@ import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import DropShadow from "../DropShadow/DropShadow.js"; // Import DropShadow
 import ReaderView from "../ReaderView/ReaderView.js";
 import SlRelativeTime from '@shoelace-style/shoelace/dist/react/relative-time';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 
 
@@ -86,35 +88,41 @@ const FeedCard = ({ item }) => {
 
   return (
     <SlAnimation name="fade-in" duration={500} play={isLoaded}>
-      <div style={{ position: 'relative' }}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => { setHover(false); setMouseDown(false); }}
-        onMouseDown={() => setMouseDown(true)}
-        onMouseUp={() => setMouseDown(false)}
-        onClick={() => setShowReaderView(!showReaderView)}>
+    <div style={{ position: 'relative' }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => { setHover(false); setMouseDown(false); }}
+      onMouseDown={() => setMouseDown(true)}
+      onMouseUp={() => setMouseDown(false)}
+      onClick={() => setShowReaderView(!showReaderView)}>
 
-<DropShadow color={item.thumbnailColor || {r: 0, g: 0, b: 0}} elevation={elevation} />        <SlCard
-          className="card" id={item.id}
-          style={{
-            opacity: isLoaded ? 1 : 0,
-            transition: "opacity 0.5s",
-            border: `1px solid ${item.thumbnailColor}`
-          }}
-        >
-          {loadedImage && !isError && (
-            <div className="image-container">
-              <img
-                src={loadedImage.src}
-                alt={item.siteTitle}
-              />
-            </div>
-          )}
-          {loadedImage && !isError && (
-            <div className="card-bg">
-              <img src={loadedImage.src} alt={item.siteTitle} />
-              <div className="noise"></div>
-            </div>
-          )}
+      <DropShadow color={item.thumbnailColor || {r: 0, g: 0, b: 0}} elevation={elevation} />
+      <SlCard
+        className="card" id={item.id}
+        style={{
+          opacity: isLoaded ? 1 : 0,
+          transition: "opacity 0.5s",
+          border: `1px solid ${item.thumbnailColor}`
+        }}
+      >
+        {loadedImage && !isError && (
+          <div className="image-container">
+            <LazyLoadImage
+              src={loadedImage.src}
+              alt={item.siteTitle}
+              effect="blur"
+            />
+          </div>
+        )}
+        {loadedImage && !isError && (
+          <div className="card-bg">
+            <LazyLoadImage
+              src={loadedImage.src}
+              alt={item.siteTitle}
+              effect="blur"
+            />
+            <div className="noise"></div>
+          </div>
+        )}
           <div className="text-content" style={{ padding: isError ? '' : '12px 24px' }}>
             <WebsiteInfo
               favicon={item.favicon}
