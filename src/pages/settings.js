@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import {
   SlButton,
   SlInput,
+  SlIcon,
 } from "@shoelace-style/shoelace/dist/react/";
 import "./settings.css";
 
@@ -10,14 +11,14 @@ function Settings({
   setFeedUrls,
   feedDetails,
   refreshInterval,
-  setRefreshInterval
+  setRefreshInterval,
 }) {
   const [newFeedUrl, setNewFeedUrl] = React.useState("");
   const inputRef = useRef();
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.addEventListener("sl-change", e =>
+      inputRef.current.addEventListener("sl-change", (e) =>
         setNewFeedUrl(e.target.value)
       );
     }
@@ -28,22 +29,28 @@ function Settings({
     setNewFeedUrl("");
   };
 
-  const handleRemoveFeed = url => {
-    setFeedUrls(feedUrls.filter(feedUrl => feedUrl !== url));
+  const handleRemoveFeed = (url) => {
+    setFeedUrls(feedUrls.filter((feedUrl) => feedUrl !== url));
   };
 
   return (
     <div className="settings">
       <h2>Settings</h2>
-      <SlInput
-        ref={inputRef}
-        type="text"
-        value={newFeedUrl}
-        placeholder="New feed URL"
-      />
-      <SlButton onClick={handleAddFeed}>Add Feed</SlButton>
+      <div className="subscription-form">
+        
+        <SlInput
+          ref={inputRef}
+          type="text"
+          value={newFeedUrl}
+          placeholder="New feed URL"
+          clearable
+        >
+          <SlIcon library="iconoir" name="rss-feed" slot="prefix"></SlIcon>
+        </SlInput>
+        <SlButton onClick={handleAddFeed}>Add Feed</SlButton>
+      </div>
       <div id="subscribed-feeds-list">
-        {feedDetails.map((detail, index) =>
+        {feedDetails.map((detail, index) => (
           <div key={feedUrls[index]} className="list-item">
             <div className="website-info">
               <img
@@ -51,12 +58,8 @@ function Settings({
                 src={detail.favicon}
                 alt={`${detail.siteTitle || detail.feedTitle} Favicon`}
               />
-              <h3>
-                {detail.siteTitle || detail.feedTitle}
-              </h3>
-              <p className="feed-url">
-                {feedUrls[index]}
-              </p>
+              <h3>{detail.siteTitle || detail.feedTitle}</h3>
+              <p className="feed-url">{feedUrls[index]}</p>
             </div>
             <button
               className="remove-feed-button"
@@ -65,15 +68,20 @@ function Settings({
               <p className="unsubscribe-button">Unsubscribe</p>
             </button>
           </div>
-        )}
+        ))}
       </div>
-
-      <SlInput
-        type="number"
-        label="Refresh Interval (minutes):"
-        value={refreshInterval}
-        onChange={e => setRefreshInterval(e.target.value)}
-      />
+      <div className="settings-section">
+        <div className="infoContainer">
+          <h3>Refresh Interval</h3>
+          <p>How often should Digests check for new items?</p>
+        </div>
+        <SlInput
+          type="number"
+          label="Refresh Interval (minutes):"
+          value={refreshInterval}
+          onChange={(e) => setRefreshInterval(e.target.value)}
+        />
+      </div>
     </div>
   );
 }

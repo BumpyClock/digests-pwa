@@ -19,7 +19,9 @@
   }
   .subscription-form {
     display: flex;
-    margin-bottom: 2rem
+    margin-bottom: 2rem;
+    column-gap: 8px;
+    justify-content: center;
   }
   .subscription-form input {
     flex-grow: 1;
@@ -103,7 +105,7 @@
     border: 1px solid #ccc; /* Add border */
     width: 240px;
     justify-content: flex-start;
-    height: 240px;
+    max-height: 240px;
     transition: var(--transition-standard);
   }
   #subscribed-feeds-list .list-item:hover {
@@ -120,6 +122,10 @@
     background-size: 2000px 2000px;
     z-index: -1;
     opacity: .04
+  }
+
+  .list-item p{
+    margin-bottom: 24px;
   }
   #subscribed-feeds-list .list-item .background-image-container {
     width: 130%;
@@ -184,4 +190,43 @@
     height: fit-content;
     border-radius: 7px;
     object-fit: contain
+  }
+
+  .settings-section {
+    display: flex;
+    padding: 24px;
+    box-shadow: var(--box-shadow-standard);
+    border-radius: 12px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    background-color: var(--background-color-secondary);
+    transition: var(--transition-fast);
+    max-width: 1200px;
+  }
+  .settings-section:hover {
+    box-shadow: var(--box-shadow-hover);
+    transform: scale(1.01)
+  }
+  .settings-section .infoContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0;
+    row-gap: 8px
+  }
+  .settings-section .infoContainer h3 {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--color);
+    margin: 0;
+  }
+  .settings-section .infoContainer p {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color);
+    opacity: .7;
+    margin: 0;
   }
