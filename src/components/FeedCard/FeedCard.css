@@ -50,14 +50,12 @@ sl-card {
   }
   .card .card-bg img {
     position: absolute;
-    bottom: -5%;
-    left: -5%;
-    width: 110%;
-    height: 110%;
-    filter: blur(60px) brightness(1.2);
+    width: 100%;
+    height: auto;
+    filter: blur(60px) brightness(.9);
     z-index: -2;
-    opacity: .5;
-    transform: scale(1.4);
+    opacity: .35;
+    transform: scale(1.4) rotate(180deg);
     transition:all .25s ease-in-out;
   }
   @media screen and (prefers-color-scheme:dark) {
@@ -82,8 +80,8 @@ sl-card {
     transition: transform .25s ease-in-out
   }
   .card:hover .card-bg img {
-    opacity: .65;
-    filter: blur(60px) brightness(1.1)
+    opacity: .35;
+    filter: blur(60px) brightness(1.1);
   }
   .card:active{
     transform: scale(1);

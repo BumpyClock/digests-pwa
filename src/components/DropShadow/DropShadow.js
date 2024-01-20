@@ -84,7 +84,7 @@ function DropShadow({ color, elevation, shadowStyle, layerAmount, opacity, blur,
     const state = {
       shadowStyle: shadowStyle || "soft",
       layerAmount: layerAmount || 5,
-      opacity: opacity || 0.3,
+      opacity: opacity || 0.2,
       blur: blur || elevation,
       verticalDistance: elevation,
       horizontalDistance: horizontalDistance || 0,
