@@ -230,3 +230,8 @@
     opacity: .7;
     margin: 0;
   }
+
+  .error-message {
+    color: red;
+    /* other styling as needed */
+  }
