@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 const errorMessages = ["Error: no title", "Error: no link"]; // Add your error messages here
 
 function createRequestOptions(feedUrls) {
