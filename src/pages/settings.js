@@ -17,13 +17,13 @@ function Settings({
   const [urlError, setUrlError] = useState("");
   const inputRef = useRef();
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.addEventListener("sl-change", (e) =>
-        setNewFeedUrl(e.target.value)
-      );
-    }
-  }, []);
+useEffect(() => {
+  if (inputRef.current) {
+    inputRef.current.addEventListener("input", (e) =>
+      setNewFeedUrl(e.target.value)
+    );
+  }
+}, []);
 
   const isValidUrl = (url) => {
     const pattern = new RegExp('^(https?:\\/\\/)', 'i'); // Check if starts with http:// or https://
