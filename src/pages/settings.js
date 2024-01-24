@@ -71,7 +71,7 @@ function Settings({
                 src={detail.favicon}
                 alt={`${detail.siteTitle || detail.feedTitle} Favicon`}
               />
-              <h3>{detail.siteTitle || detail.feedTitle}</h3>
+              <h3>{ detail.feedTitle || detail.siteTitle }</h3>
               <p className="feed-url">{feedUrls[index]}</p>
             </div>
             <button

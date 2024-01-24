@@ -30,7 +30,7 @@ async function fetchRSS(feedUrls) {
           feed.siteTitle = feed.feedTitle;
           console.log("no site title");
         } else {
-          feed.feedUrl = feed.siteTitle;
+          feed.siteTitle = feed.feedUrl;
         }
 
         feedDetails.push({
