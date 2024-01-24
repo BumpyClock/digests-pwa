@@ -43,7 +43,7 @@ const ReaderView = ({ url, item, onClose }) => {
     const fetchArticle = async () => {
       try {
         const response = await axios.post(
-          `https://rss.bumpyclock.com/getreaderview`,
+          `https://api.bumpyclock.com/getreaderview`,
           {
             headers: {
               "Content-Type": "application/json"

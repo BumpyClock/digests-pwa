@@ -15,7 +15,7 @@ async function fetchRSS(feedUrls) {
   let feedDetails = [];
   let items = [];
   try {
-    const apiUrl = "https://rss.bumpyclock.com";
+    const apiUrl = "https://api.bumpyclock.com";
     const requestUrl = `${apiUrl}/parse`;
     const requestOptions = createRequestOptions(feedUrls);
     const response = await fetch(requestUrl, requestOptions);

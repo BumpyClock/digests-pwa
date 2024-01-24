@@ -26,7 +26,7 @@ useEffect(() => {
 }, []);
 
   const isValidUrl = (url) => {
-    const pattern = new RegExp('^(https?:\\/\\/)', 'i'); // Check if starts with http:// or https://
+    const pattern = new RegExp('^(https?:\\/\\/)', 'i'); 
     return pattern.test(url);
   };
 
@@ -37,7 +37,7 @@ useEffect(() => {
     }
     setFeedUrls([...feedUrls, newFeedUrl]);
     setNewFeedUrl("");
-    setUrlError(""); // Clear any existing error
+    setUrlError(""); 
   };
 
   
@@ -72,7 +72,7 @@ useEffect(() => {
                 alt={`${detail.siteTitle || detail.feedTitle} Favicon`}
               />
               <h3>{ detail.feedTitle || detail.siteTitle }</h3>
-              <p className="feed-url">{feedUrls[index]}</p>
+              <p className="feed-url">{detail.feedUrl}</p>
             </div>
             <button
               className="remove-feed-button"
