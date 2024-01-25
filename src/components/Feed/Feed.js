@@ -31,7 +31,18 @@ const useEventListener = (eventName, handler, element = window) => {
 const Feed = ({ feedItems, feedDetails }) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-
+const getGutterSize = () => {
+  const width = window.innerWidth;
+  if (width <= 650) {
+    return '12px';
+  } else if (width <= 1050) {
+    return '24px';
+  } else if (width <= 1250) {
+    return '36px';
+  } else {
+    return '36px';
+  }
+};
   const getStepSize = useCallback(() => {
     const width = window.innerWidth;
     if (width <= 350) {
@@ -48,14 +59,19 @@ const Feed = ({ feedItems, feedDetails }) => {
       return 25;
     }
   }, []);
+  const [gutterSize, setGutterSize] = useState(getGutterSize());
 
   const [stepSize, setStepSize] = useState(getStepSize());
 
 const debouncedSetStepSize = debounce(() => setStepSize(getStepSize()), 300);
+const debouncedSetGutterSize = debounce(() => setGutterSize(getGutterSize()), 300);
 
 const handleResize = useCallback(() => {
   debouncedSetStepSize();
-}, [debouncedSetStepSize]);
+  debouncedSetGutterSize();
+
+}, [debouncedSetStepSize, debouncedSetGutterSize]);
+
 
   useEventListener('resize', handleResize);
 
@@ -112,9 +128,9 @@ const handleResize = useCallback(() => {
 
   return (
     <ResponsiveMasonry
-      columnsCountBreakPoints={{350: 1, 750: 2, 900: 3,1201:4,1901:5,2201:6}}
+      columnsCountBreakPoints={{550: 1, 750: 2, 1201: 3,1401:4,1901:5,2201:6}}
     >
-      <Masonry gutter="24px">
+      <Masonry gutter={gutterSize}>
         {items.map((item) => (
           <div key={item.id}>
             <MemoizedFeedCard item={item} />
