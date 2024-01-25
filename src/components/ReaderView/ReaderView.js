@@ -76,9 +76,36 @@ const ReaderView = ({ url, item, onClose }) => {
     };
   }, [url]); // Effect runs when URL changes
 
+  const handleGlobalScroll = useCallback((event) => {
+  if (modalRef.current && articleRef.current) {
+    event.preventDefault();
+    const { scrollTop, scrollHeight, clientHeight } = articleRef.current;
+    const wheel = event.deltaY < 0 ? -1 : 1;
+    const newScrollTop = scrollTop + (wheel * 30); // 30 is the scroll speed, adjust as needed
+
+    // Prevent scrolling beyond the content
+    if (newScrollTop < 0) {
+      articleRef.current.scrollTop = 0;
+    } else if (newScrollTop > scrollHeight - clientHeight) {
+      articleRef.current.scrollTop = scrollHeight - clientHeight;
+    } else {
+      articleRef.current.scrollTop = newScrollTop;
+    }
+  }
+}, []);
+
+
   const handleScroll = useCallback(() => {
     updateReadingProgress(progressCircleRef.current, articleRef.current);
   }, []);
+
+  useEffect(() => {
+  window.addEventListener('wheel', handleGlobalScroll, { passive: false });
+
+  return () => {
+    window.removeEventListener('wheel', handleGlobalScroll);
+  };
+}, [handleGlobalScroll]);
 
   useEffect(() => {
     const articleElement = articleRef.current;
