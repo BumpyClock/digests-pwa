@@ -248,7 +248,7 @@
   background-color: #f4e7d8
 }
 
-@media (max-width: 650px) {
+@media (max-width: 750px) {
   .reader-view-modal {
     width: 100%;
     height: 100%;
