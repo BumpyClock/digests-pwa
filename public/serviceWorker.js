@@ -1,4 +1,45 @@
 /* eslint-disable no-restricted-globals */
+
+// version 1/27/23
+// Activate the new service worker and take control of the pages
+const CACHE_NAME = '232701'; // Change this when you update your files
+// ...
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll([
+        '/',
+        '/index.html',
+        '/static/js/bundle.js',
+      ]);
+    })
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter((cacheName) => CACHE_NAME !== cacheName)
+          .map((cacheName) => caches.delete(cacheName))
+      );
+    })
+  ).then(() => {
+    return self.clients.claim();
+  });
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
+  );
+});
+
+
 const errorMessages = ["Error: no title", "Error: no link"]; // Add your error messages here
 
 function createRequestOptions(feedUrls) {
