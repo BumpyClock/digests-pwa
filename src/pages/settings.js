@@ -30,15 +30,23 @@ useEffect(() => {
     return pattern.test(url);
   };
 
-  const handleAddFeed = () => {
-    if (!newFeedUrl || !isValidUrl(newFeedUrl)) {
-      setUrlError("Invalid URL. It must start with http:// or https://");
+ const handleAddFeed = () => {
+  // Split the newFeedUrl by comma or semicolon
+  const urls = newFeedUrl.split(/[,;]/).map(url => url.trim());
+
+  // Validate each URL
+  for (const url of urls) {
+    if (!url || !isValidUrl(url)) {
+      setUrlError(`Invalid URL: ${url}. It must start with http:// or https://`);
       return;
     }
-    setFeedUrls([...feedUrls, newFeedUrl]);
-    setNewFeedUrl("");
-    setUrlError(""); 
-  };
+  }
+
+  // If all URLs are valid, add them to the feedUrls
+  setFeedUrls([...feedUrls, ...urls]);
+  setNewFeedUrl("");
+  setUrlError("");
+};
 
   
 
