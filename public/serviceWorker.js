@@ -2,7 +2,7 @@
 
 // version 1/27/23
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '232701'; // Change this when you update your files
+const CACHE_NAME = '232801'; // Change this when you update your files
 // ...
 
 self.addEventListener('install', (event) => {
