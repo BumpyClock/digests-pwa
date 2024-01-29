@@ -4,9 +4,11 @@ import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
 import WebsiteInfo from "../website-info/website-info.js";
+import DropShadow from "../DropShadow/DropShadow.js"; // Import DropShadow
 import "./ReaderView.css";
 
 function estimateReadingTime(text) {
+  if (!text) return 0;
   const wordsPerMinute = 183; // Adjust this value based on your preferred reading speed
   const words = text.trim().split(/\s+/).length;
   const readingTimeInMinutes = Math.ceil(words / wordsPerMinute);
@@ -150,6 +152,8 @@ const ReaderView = ({ url, item, onClose }) => {
 
   return (
     <SlAnimation name="fade-in" duration={500} play={article !== null}>
+              <DropShadow color={item.thumbnailColor || { r: 0, g: 0, b: 0 }} elevation={5} />
+
         <div className="reader-view-modal visible" ref={modalRef}>
           <div className="reader-view-content" ref={articleRef}>
             {isLoading ? (
