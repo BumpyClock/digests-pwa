@@ -13,7 +13,7 @@
   --light-theme-search-box-color: #e0e0e05a;
   --light-theme-search-box-color-active: #fff;
   --light-new-tab-background-color-secondary: #ffffffe8;
-  --light-background-color-hover: rgba(245, 245, 245, 0.9);
+  --light-background-color-hover: rgba(0, 0, 0, 0.05);
   --light-active-color: rgba(245, 245, 245, 0.7);
   --light-foreground-color: #1a1a1a;
   --light-accent-color: #007bff;
@@ -25,11 +25,11 @@
   --dark-theme-search-box-color: rgba(0, 0, 0, 0.5);
   --dark-theme-search-box-color-active: rgba(0, 0, 0, 0.8);
   --dark-new-tab-background-color-secondary: #42414d;
-  --dark-background-color-hover: rgba(18, 17, 17, 0.9);
+  --dark-background-color-hover: rgba(18, 17, 17, 0.05);
   --dark-foreground-color: rgba(255, 255, 255, 0.9);
   --dark-active-color: rgba(0, 0, 0, 0.7);
   --dark-accent-color: #708ea5;
-  --dark-border-color: #000;
+  --dark-border-color: #ffffff0e;
   --dark-critical-color: coral;
   --dark-success-color: lightgreen;
   --sepia-background-color: #f4e7d8;
@@ -125,7 +125,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 .App {
-  padding: 2rem;
+  /* padding: 24px; */
 }
 
 .text-center {
@@ -139,47 +139,109 @@ input:focus, textarea:focus, select:focus {
 /* For mobile devices */
 @media (max-width: 600px) {
   .App {
-    padding: 2rem;
+    /* padding: 24; */
   }
 }
 
 /* For tablet devices */
 @media (min-width: 601px) and (max-width: 900px) {
   .App {
-    padding: 2rem;
+    /* padding: 48px; */
   }
 }
 
 /* For small desktops */
 @media (min-width: 901px) and (max-width: 1200px) {
   .App {
-    padding: 4rem;
+    /* padding: 36px; */
   }
 }
 
 /* For large desktops */
 @media (min-width: 1201px) {
   .App {
-    padding: 4rem;
+    /* padding: 36px; */
   }
 }
 @media (min-width: 1900px) {
   .App {
-    padding: 4rem;
+    /* padding: 96px; */
   }
 }
 @media (min-width: 2200px) {
   .App {
-    padding: 64px;
+    /* padding: 128px; */
   }
 }
 
-.titleBar {
-  position: fixed;
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:24px 12px;
+  position: sticky;
   left: env(titlebar-area-x, 0);
   top: env(titlebar-area-y, 0);
   width: env(titlebar-area-width, 100%);
-  height: env(titlebar-area-height, 40px);
+  height: env(titlebar-area-height, 24px);
   -webkit-app-region: drag;
+  background-color: var(--background-color);
+  border-bottom: var(--border-color) 1px solid;
+  z-index: 2000;
   app-region: drag;
+}
+
+.title-bar-small {
+  height: 24px;
+  overflow: hidden;
+  transition: all 0.1s ease-in-out;
+  padding: 12px 12px;
+}
+
+.title-bar-small h1 {
+  font-size: 18px !important;
+  transition: all 0.1s ease-in-out;
+}
+.title-bar-shadow {
+  box-shadow: 0 4px 4px -4px rgba(128, 128, 128, 0.2); /* Adjust as needed */
+}
+
+.title-bar .title {
+  font-size: 28px;
+  font-weight: 400;
+   padding: 0;
+  line-height: 1.8;
+  text-align: center;
+  color: var(--color);
+}
+
+.title-bar .button-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100px;
+  height: 100%;
+  column-gap: 8px;
+  margin-right:48px;
+
+}
+
+.content-container {
+  margin: 0px auto;
+  max-width: 2400px;
+}
+
+ .feed-view {
+  padding: 24px;
+  margin: 24px auto;
+
+}
+
+
+
+.date {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  opacity: .65;
 }

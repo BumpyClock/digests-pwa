@@ -26,7 +26,7 @@ const useImageLoader = (src) => {
 
       const onLoad = () => {
         setIsLoaded(true);
-        setLoadedImage(img);   
+        setLoadedImage(img);
       };
 
       const onError = () => {
@@ -88,41 +88,41 @@ const FeedCard = ({ item }) => {
 
   return (
     <SlAnimation name="fade-in" duration={500} play={isLoaded}>
-    <div style={{ position: 'relative' }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => { setHover(false); setMouseDown(false); }}
-      onMouseDown={() => setMouseDown(true)}
-      onMouseUp={() => setMouseDown(false)}
-      onClick={() => setShowReaderView(!showReaderView)}>
+      <div style={{ position: 'relative' }}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => { setHover(false); setMouseDown(false); }}
+        onMouseDown={() => setMouseDown(true)}
+        onMouseUp={() => setMouseDown(false)}
+        onClick={() => setShowReaderView(!showReaderView)}>
 
-      <DropShadow color={item.thumbnailColor || {r: 0, g: 0, b: 0}} elevation={elevation} />
-      <SlCard
-        className="card" id={item.id}
-        style={{
-          opacity: isLoaded ? 1 : 0,
-          transition: "opacity 0.5s",
-          border: `1px solid ${item.thumbnailColor}`
-        }}
-      >
-        {loadedImage && !isError && (
-          <div className="image-container">
-            <LazyLoadImage
-              src={loadedImage.src}
-              alt={item.siteTitle}
-              effect="blur"
-            />
-          </div>
-        )}
-        {loadedImage && !isError && (
-          <div className="card-bg">
-            <LazyLoadImage
-              src={loadedImage.src}
-              alt={item.siteTitle}
-              effect="blur"
-            />
-            <div className="noise"></div>
-          </div>
-        )}
+        <DropShadow color={item.thumbnailColor || { r: 0, g: 0, b: 0 }} elevation={elevation} />
+        <SlCard
+          className="card" id={item.id}
+          style={{
+            opacity: isLoaded ? 1 : 0,
+            transition: "opacity 0.5s",
+            border: `1px solid ${item.thumbnailColor}`
+          }}
+        >
+          {loadedImage && !isError && (
+            <div className="image-container">
+              <LazyLoadImage
+                src={loadedImage.src}
+                alt={item.siteTitle}
+                effect="blur"
+              />
+            </div>
+          )}
+          {loadedImage && !isError && (
+            <div className="card-bg">
+              <LazyLoadImage
+                src={loadedImage.src}
+                alt={item.siteTitle}
+                effect="blur"
+              />
+              <div className="noise"></div>
+            </div>
+          )}
           <div className="text-content" style={{ padding: isError ? '' : '12px 24px' }}>
             <WebsiteInfo
               favicon={item.favicon}
@@ -131,7 +131,8 @@ const FeedCard = ({ item }) => {
             />
             <h3>{item.title}</h3>
             <div className="date">
-<SlRelativeTime date={new Date(item.published)} />            </div>
+              <SlRelativeTime date={new Date(item.published)} />       
+                   </div>
             {item.content && <p className="description">{item.content}</p>}
 
             {!thumbnailUrl && item.description && (
@@ -143,7 +144,7 @@ const FeedCard = ({ item }) => {
           </div>
         </SlCard>
       </div>
-{showReaderView && <ReaderView url={item.link} item={item} onClose={() => setShowReaderView(false)} />}    </SlAnimation>
+      {showReaderView && <ReaderView url={item.link} item={item} onClose={() => setShowReaderView(false)} />}    </SlAnimation>
   );
 };
 
