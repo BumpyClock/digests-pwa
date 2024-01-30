@@ -126,6 +126,7 @@
 .reader-view-title-link {
     text-decoration: none;
     color: inherit;
+    width: -moz-fit-content;
     width: fit-content;
 }
 
