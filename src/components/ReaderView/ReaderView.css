@@ -1,11 +1,5 @@
 
-.reader-view-page-content {
-    position: relative;
-    border-radius: 7px;
-    padding:2rem 4rem;
-    /* background-color: white; */
 
-  }
   .reader-view-modal hr.solid {
     border-top: 1px solid #bbb
   }
@@ -76,120 +70,8 @@
     opacity: 1;
     position: fixed
   }
-  .reader-view-modal h1,
-  .reader-view-modal h2,
-  .reader-view-modal h3,
-  .reader-view-modal h4,
-  .reader-view-modal h5,
-  .reader-view-modal h6 {
-    font-family: var(--font-family);
-    font-weight: 500
-  }
-
-  
-  .reader-view-modal a {
-    clear: both;
-    color: var(--accent-color);
-    text-decoration: underline;
-    display: contents
-  }
-  .reader-view-modal img,
-  .reader-view-modal video {
-    max-width: 100%;
-    height: 100%;
-    aspect-ratio: auto;
-    display: block;
-    margin: 12px auto;
-    border-radius: 7px;
-    stroke-width: 1px;
-    stroke: #000;
-    object-fit: contain;
-  }
-  .reader-view-modal p {
-    margin: 1.33em 0
-  }
-  .reader-view-modal figcaption {
-    font-size: 14px;
-    text-align: center;
-    color: var(--color);
-    opacity: .7;
-    margin-bottom: 1rem
-  }
-  .reader-view-modal .close-button {
-    align-self: flex-end;
-    background-color: #333;
-    color: #fff;
-    padding: .5rem 1rem;
-    cursor: pointer;
-    border: none
-  }
-  .reader-view-content {
-    border-radius: 8px;
-    position: relative;
-    max-height: 90vh;
-    max-width: 1000px;
-    overflow-y: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    margin: auto;
-    box-shadow: var(--box-shadow-standard);
-    background-color: var(--background-color)
-  }
-  .reader-view-content::-webkit-scrollbar {
-    display: none
-  }
-  .reader-view-title {
-    font-size: 28px;
-    margin: 0;
-    margin-bottom: 8px;
-    line-height: 1.2;
-    font-weight: 600;
-    color: var(--color)
-  }
-  .reader-view-author {
-    font-size: 16px;
-    margin: 0;
-    font-weight: 400
-  }
-  .reader-view-reading-time {
-    font-size: 14px;
-    margin: 8px 0!important;
-    margin-bottom: 4px;
-    font-weight: var(--font-weight-medium)!important;
-    opacity: .7
-  }
-  .reader-view-reading-time p {
-    margin: 0
-  }
-  .reader-view-header {
-    position: sticky;
-    top: 0px;
-    padding-top:24px;
-    background-color: var(--background-color);
-  }
-  .reader-view-header-button {
-    font-size: 24px;
-    font-weight: 900;
-    color: var(--color);
-    cursor: pointer
-  }
-  .reader-view-header-button:hover {
-    font-size: 24px;
-    font-weight: 900;
-    color: var(--accent-color);
-    cursor: pointer
-  }
-  .reader-view-header-button-container{
-    position:absolute;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    column-gap: 12px;
-    top:24px;
-    right:0px;
-
-  }
-
+ 
+ 
   
 .progress-indicator-container {
   display: flex;

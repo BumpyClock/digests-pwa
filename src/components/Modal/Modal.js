@@ -1,35 +1,38 @@
-import React, { useEffect, useRef, useCallback } from "react";
+// Modal.js
+import React, { useEffect, useRef } from "react";
+import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import "./Modal.css"; // Your CSS file for Modal styling
 
-const Modal = ({ children, onClose }) => {
+const Modal = ({ children, visible, onClose }) => {
   const modalRef = useRef(null);
+  const childRef = useRef(null);
 
-  const handleClickOutside = useCallback((event) => {
-    if (modalRef.current && !modalRef.current.contains(event.target)) {
-      onClose();
-    }
-  }, [onClose]);
+  useEffect(
+    () => {
+      function handleClickOutside(event) {
+        if (modalRef.current && !modalRef.current.contains(event.target)) {
+          onClose();
+        }
+      }
 
-  useEffect(() => {
-    // Disable background scrolling
-    document.body.style.overflow = "hidden";
-
-    // Event listener for click outside
-    document.addEventListener("mousedown", handleClickOutside);
-
-    // Cleanup function
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-
-      // Re-enable background scrolling
-      document.body.style.overflow = "";
-    };
-  }, [handleClickOutside]);
+      // Bind the event listener
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    },
+    [onClose]
+  );
 
   return (
-    <div className="modal-container" ref={modalRef}>
-      {children}
-    </div>
+    <SlAnimation name="fade-in" duration={500} play={children !== null}>
+      <div className="modal-container visible" ref={modalRef}>
+        <div className="modal-container-content" ref={childRef}>
+          {" "}{children}
+        </div>
+      </div>
+    </SlAnimation>
   );
 };
 
