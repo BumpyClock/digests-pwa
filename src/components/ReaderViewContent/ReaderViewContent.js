@@ -1,7 +1,7 @@
 import React from 'react';
 import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
 import WebsiteInfo from "../website-info/website-info.js";
-import "./ReaderView.css";
+import "./ReaderViewContent.css";
 
 function estimateReadingTime(text) {
   if (!text) return 0;
