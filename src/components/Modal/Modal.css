@@ -7,10 +7,6 @@
     width: 100%;
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(90px);
-    font-family: var(--font-family);
-    line-height: 1.8;
-    font-weight: var(--font-weight-medium);
-    font-size: 20px;
     margin: 0 auto;
     overflow-y: auto;
     background-color: rgba(0,0,0,.7);
@@ -22,8 +18,7 @@
     opacity: 0;
     transition: all .25s ease-in-out;
     -webkit-overflow-scroll: auto;
-   
-    
+    -ms-overflow-style: auto;    
   }
   .modal-container .noise {
     position: absolute;
@@ -47,6 +42,7 @@
     box-shadow: var(--box-shadow-standard);
     background-color: var(--background-color);
     border-radius: 8px;
+    scrollbar-width: none;
   }
   
   /* Adjustments for smaller screens */

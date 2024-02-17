@@ -34,6 +34,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     align-items: top;
+    font-size: .8rem !important;
+    font-weight: 600 !important;
     margin: 0 !important;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
