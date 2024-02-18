@@ -53,7 +53,7 @@ import "./ReaderViewContent.css";
             />
           </div>
         </div>
-        <div
+        {/* <div
           id="progress-ring"
           className="progress-indicator-container"
         >
@@ -76,7 +76,7 @@ import "./ReaderViewContent.css";
               strokeDashoffset="100"
             ></circle>
           </svg>
-        </div>
+        </div> */}
       </>
     );
   };

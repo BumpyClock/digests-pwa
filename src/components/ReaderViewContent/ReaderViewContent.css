@@ -48,6 +48,59 @@
     font-size: 1.15rem;
 }
 
+.reader-view-page-text {
+  padding: 0 4rem;
+
+}
+
+.reader-view-page-content blockquote {
+
+  opacity: .8;
+  background: var(--reading-progress-container-background-color);
+  border-left: 8px solid var(--border-color);
+  box-shadow: inset 0 0 0 1px var(--border-color);
+  border-radius: 7px;
+  margin: 1.5em 12px;
+  padding: 1.5em 1.5rem;
+  quotes: "\201C""\201D""\2018""\2019";
+
+}
+
+.reader-view-page-content blockquote p{
+  margin: 0;
+  padding: 0;
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.8;
+  font-family: var(--font-family);
+  color: var(--color);
+  margin-bottom: 1rem;
+  margin:auto;
+}
+
+/* .reader-view-page-content blockquote::before {
+  display: inline-block;
+  content: open-quote;
+  color: var(--accent-color);
+  font-size: 4rem;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.reader-view-page-content blockquote::after {
+  content: close-quote;
+  color: var(--accent-color);
+  font-size: 4rem;
+  position: relative;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+} */
+
+
 
 
 .reader-view-page-content figcaption,
@@ -84,12 +137,14 @@
    
     margin: 0
   }
+  
   .reader-view-header {
     position: sticky;
     top: 0px;
     padding-top:24px;
     background-color: var(--background-color);
     z-index: 1;
+    padding: 2rem 4rem 0 4rem;
   }
 
   .reader-view-header a{
@@ -123,21 +178,11 @@
   }
 
   .reader-view-page-content {
-    border-radius: 8px;
-    position: relative;
-    max-height: 90vh;
-    max-width: 1000px;
-    overflow-y: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+   
     margin: auto;
-    padding: 0 4rem;
-    box-shadow: var(--box-shadow-standard);
-    background-color: var(--background-color)
+    
   }
-  .reader-view-page-content::-webkit-scrollbar {
-    display: none
-  }
+  
   .reader-view-title {
     font-size: 28px;
     margin: 0;
