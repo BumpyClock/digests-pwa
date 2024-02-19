@@ -128,13 +128,13 @@ function App() {
   useEffect(() => {
     const checkScroll = () => {
       if (window.scrollY > 0) {
-        headerRef.current.classList.add("title-bar-small", "title-bar-shadow");
+        // headerRef.current.classList.add("title-bar-small", "title-bar-shadow");
         setIsScrolled(true);
       } else {
-        headerRef.current.classList.remove(
-          "title-bar-small",
-          "title-bar-shadow"
-        );
+        // headerRef.current.classList.remove(
+        //   "title-bar-small",
+        //   "title-bar-shadow"
+        // );
         setIsScrolled(false);
       }
     };
@@ -159,7 +159,7 @@ function App() {
             style={{
               cursor: "pointer",
 
-              fontSize: isScrolled ? "1rem" : "1.5rem"
+              fontSize: isScrolled ? "1.5rem" : "1.5rem"
             }}
             onClick={() => setIsListView(prev => !prev)}
           />

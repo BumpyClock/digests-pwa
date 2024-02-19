@@ -165,6 +165,7 @@ select:focus {
 @media (min-width: 2200px) {
 }
 
+
 .title-bar {
   display: flex;
   justify-content: space-between;

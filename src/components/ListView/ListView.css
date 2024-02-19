@@ -1,7 +1,17 @@
 .list-view-layout {
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 74px);
+    overflow-x: visible;
    
+
+}
+
+.loading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
 
 }
 
@@ -17,7 +27,7 @@
 
 .reader-view {
     width: 70%;
-    padding: 20px;
+    /* padding: 20px; */
     overflow: auto;
 }
 
