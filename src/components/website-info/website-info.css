@@ -19,7 +19,9 @@
 }
 
 .website-info {
+    width:-moz-fit-content;
     width: fit-content;
+    max-width: 240px;
     display:flex;
     column-gap: 8px;
     justify-content: center;

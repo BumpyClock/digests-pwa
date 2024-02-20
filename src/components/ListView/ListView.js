@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import './ListView.css'; // Import the CSS for this component
 import SlRelativeTime from '@shoelace-style/shoelace/dist/react/relative-time';
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
