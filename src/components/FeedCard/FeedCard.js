@@ -110,16 +110,23 @@ const FeedCard = ({ item }) => {
                 src={loadedImage.src}
                 alt={item.siteTitle}
                 effect="blur"
+                placeholder={<div style={{ height: '180px' }} />}
+                threshold={400}
+
+
               />
             </div>
           )}
           {loadedImage && !isError && (
             <div className="card-bg">
               <LazyLoadImage
-                src={loadedImage.src}
-                alt={item.siteTitle}
-                effect="blur"
-              />
+    src={loadedImage.src}
+    alt={item.siteTitle}
+    effect="blur"
+    placeholder={<div style={{ height: '120px' }} />}
+    threshold={400}
+
+/>
               <div className="noise"></div>
             </div>
           )}
@@ -140,6 +147,7 @@ const FeedCard = ({ item }) => {
                 {item.description}
               </div>
             )}
+            {item.link && <a href={item.link} target="_blank" rel="noopener noreferrer">Read more</a>}
 
           </div>
         </SlCard>
