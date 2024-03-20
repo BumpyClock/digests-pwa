@@ -45,18 +45,6 @@ useEffect(() => {
     return pattern.test(url);
   };
 
-  const extractUrlsFromOutlines = (outlines) => {
-    let urls = [];
-    outlines.forEach(outline => {
-      if (outline.type === "rss" && outline["@_xmlUrl"]) {
-        urls.push(outline["@_xmlUrl"]);
-      }
-      if (outline.outline) {
-        urls = [...urls, ...extractUrlsFromOutlines(Array.isArray(outline.outline) ? outline.outline : [outline.outline])];
-      }
-    });
-    return urls;
-  };
   
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
