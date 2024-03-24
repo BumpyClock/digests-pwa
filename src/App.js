@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef,memo } from "react";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import Feed from "./components/Feed/Feed.js";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
@@ -28,6 +28,8 @@ function App() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
+  const SettingsMemo = memo(Settings);
+
 
   const [feedUrls, setFeedUrls] = useState(() => {
     const savedFeedUrls = localStorage.getItem("feedUrls");
@@ -179,24 +181,26 @@ function App() {
         </div>
       </header>
       <main className={`content-container ${!isListView ? "feed-view" : ""}`}>
-        {" "}{isLoading
-          ? <div>
-              <SlSpinner />
-              <p>Preparing your Digest</p>
-            </div>
-          : showSettings
-            ? <Settings
-                feedUrls={feedUrls}
-                setFeedUrls={setFeedUrls}
-                feedDetails={feedDetails}
-                refreshInterval={refreshInterval}
-                setRefreshInterval={setRefreshInterval}
-              />
-            : isListView
-              ? <ListView articles={feedItems} />
-              : <Feed feedItems={feedItems} />}
-      </main>
-    </div>
+      {isLoading ? (
+        <div>
+          <SlSpinner />
+          <p>Preparing your Digest</p>
+        </div>
+      ) : showSettings ? (
+        <SettingsMemo
+          feedUrls={feedUrls}
+          setFeedUrls={setFeedUrls}
+          feedDetails={feedDetails}
+          refreshInterval={refreshInterval}
+          setRefreshInterval={setRefreshInterval}
+        />
+      ) : isListView ? (
+        <ListView articles={feedItems} />
+      ) : (
+        <Feed feedItems={feedItems} />
+      )}
+    </main>
+  </div>
   );
 }
 

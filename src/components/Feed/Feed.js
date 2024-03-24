@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback,useRef } from 'react';
+import React, { useState, useEffect, useCallback,useRef,memo } from 'react';
 import FeedCard from '../FeedCard/FeedCard.js';
 import './Feed.css';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { debounce } from 'lodash';
 
-const MemoizedFeedCard = React.memo(FeedCard);
+const MemoizedFeedCard = memo(FeedCard);
 
 const useEventListener = (eventName, handler, element = window) => {
   const savedHandler = useRef();
@@ -63,14 +63,13 @@ const getGutterSize = () => {
 
   const [stepSize, setStepSize] = useState(getStepSize());
 
-const debouncedSetStepSize = debounce(() => setStepSize(getStepSize()), 300);
-const debouncedSetGutterSize = debounce(() => setGutterSize(getGutterSize()), 300);
-
-const handleResize = useCallback(() => {
-  debouncedSetStepSize();
-  debouncedSetGutterSize();
-
-}, [debouncedSetStepSize, debouncedSetGutterSize]);
+  const debouncedSetStepSize = useCallback(debounce(() => setStepSize(getStepSize()), 300), []);
+  const debouncedSetGutterSize = useCallback(debounce(() => setGutterSize(getGutterSize()), 300), []);
+  
+  const handleResize = useCallback(() => {
+    debouncedSetStepSize();
+    debouncedSetGutterSize();
+  }, [debouncedSetStepSize, debouncedSetGutterSize]);
 
 
   useEventListener('resize', handleResize);
@@ -91,40 +90,40 @@ const handleResize = useCallback(() => {
     }
   }, [feedItems, stepSize]);
 
-  const fetchMoreData = useCallback(() => {
-    if (!hasMore || items.length >= feedItems.length) {
-      setHasMore(false);
-      return;
+const fetchMoreData = useCallback(() => {
+  if (!hasMore || items.length >= feedItems.length) {
+    setHasMore(false);
+    return;
+  }
+
+  const newItems = feedItems.slice(items.length, items.length + stepSize);
+  if (newItems.length === 0 || (newItems.length === 1 && newItems[0] === items[items.length - 1])) {
+    setHasMore(false);
+    return;
+  }
+
+  setItems(prevItems => [...prevItems, ...newItems]);
+}, [items, feedItems, stepSize, hasMore]);
+
+useEffect(() => {
+  const handleScroll = debounce(() => {
+    const scrollPosition = window.pageYOffset;
+    const windowSize     = window.innerHeight;
+    const bodyHeight     = document.body.offsetHeight;
+
+    // Calculate the scroll percentage
+    const scrollPercentage = (scrollPosition / (bodyHeight - windowSize)) * 100;
+
+    if (scrollPercentage >= 50) {
+      fetchMoreData();
     }
+  }, 100);
 
-    const newItems = feedItems.slice(items.length, items.length + stepSize);
-    if (newItems.length === 0 || (newItems.length === 1 && newItems[0] === items[items.length - 1])) {
-      setHasMore(false);
-      return;
-    }
-
-    setItems(prevItems => [...prevItems, ...newItems]);
-  }, [items, feedItems, stepSize, hasMore]);
-
-  useEffect(() => {
-    const handleScroll = debounce(() => {
-      const scrollPosition = window.pageYOffset;
-      const windowSize     = window.innerHeight;
-      const bodyHeight     = document.body.offsetHeight;
-
-      // Calculate the scroll percentage
-      const scrollPercentage = (scrollPosition / (bodyHeight - windowSize)) * 100;
-
-      if (scrollPercentage >= 50) {
-        fetchMoreData();
-      }
-    }, 100);
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [fetchMoreData]);
+  window.addEventListener('scroll', handleScroll);
+  return () => {
+    window.removeEventListener('scroll', handleScroll);
+  };
+}, [fetchMoreData]);
 
   return (
     <ResponsiveMasonry

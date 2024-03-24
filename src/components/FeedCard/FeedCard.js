@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import SlCard from "@shoelace-style/shoelace/dist/react/card";
 import WebsiteInfo from "../website-info/website-info.js";
 import "./FeedCard.css";
@@ -6,12 +6,9 @@ import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import DropShadow from "../DropShadow/DropShadow.js"; // Import DropShadow
 import ReaderView from "../ReaderView/ReaderView.js";
-import SlRelativeTime from '@shoelace-style/shoelace/dist/react/relative-time';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
-
-
-
+import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 
 const useImageLoader = (src) => {
@@ -20,35 +17,36 @@ const useImageLoader = (src) => {
   const [loadedImage, setLoadedImage] = useState(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     if (src) {
       const img = new Image();
       img.src = src;
 
       const onLoad = () => {
-        setIsLoaded(true);
-        setLoadedImage(img);
+        if (isMounted) {
+          setIsLoaded(true);
+          setLoadedImage(img);
+        }
       };
 
       const onError = () => {
-        setIsLoaded(true);
-        setIsError(true);
-        console.error("Error loading image", src);
+        if (isMounted) {
+          setIsLoaded(true);
+          setIsError(true);
+          console.error("Error loading image", src);
+        }
       };
 
       img.onload = onLoad;
       img.onerror = onError;
 
-      // Check if the image is a 1x1 pixel GIF
-      if (src === "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7") {
-        setIsError(true);
-      }
-
       return () => {
+        isMounted = false;
         img.onload = null;
         img.onerror = null;
       };
-    }
-    else {
+    } else {
       setIsLoaded(true);
       setIsError(true);
     }
@@ -57,30 +55,24 @@ const useImageLoader = (src) => {
   return { isLoaded, isError, loadedImage };
 };
 
-
 const FeedCard = ({ item }) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [showReaderView, setShowReaderView] = useState(false);
   const { isLoaded, isError, loadedImage } = useImageLoader(item.thumbnail);
 
+  const elevation = useMemo(() => {
+    if (mouseDown) return 8;
+    if (hover) return 32;
+    return 16;
+  }, [mouseDown, hover]);
 
-  let elevation;
-  if (mouseDown) {
-    elevation = 8;
-  } else if (hover) {
-    elevation = 32;
-  } else {
-    elevation = 16;
-  }
-  let thumbnailUrl = item.thumbnail;
-  if (Array.isArray(item.thumbnail)) {
-    thumbnailUrl = item.thumbnail.find(
-      (thumbnail) => thumbnail.url || thumbnail.link
-    )?.url;
-  } else if (!item.thumbnail) {
-    thumbnailUrl = null;
-  }
+  const thumbnailUrl = useMemo(() => {
+    if (Array.isArray(item.thumbnail)) {
+      return item.thumbnail.find((thumbnail) => thumbnail.url || thumbnail.link)?.url;
+    }
+    return item.thumbnail || null;
+  }, [item.thumbnail]);
 
   if (!isLoaded) {
     return <FeedCardLoader id={item.id} />;
@@ -88,20 +80,25 @@ const FeedCard = ({ item }) => {
 
   return (
     <SlAnimation name="fade-in" duration={500} play={isLoaded}>
-      <div style={{ position: 'relative' }}
+      <div
+        style={{ position: "relative" }}
         onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => { setHover(false); setMouseDown(false); }}
+        onMouseLeave={() => {
+          setHover(false);
+          setMouseDown(false);
+        }}
         onMouseDown={() => setMouseDown(true)}
         onMouseUp={() => setMouseDown(false)}
-        onClick={() => setShowReaderView(!showReaderView)}>
-
+        onClick={() => setShowReaderView(!showReaderView)}
+      >
         <DropShadow color={item.thumbnailColor || { r: 0, g: 0, b: 0 }} elevation={elevation} />
         <SlCard
-          className="card" id={item.id}
+          className="card"
+          id={item.id}
           style={{
             opacity: isLoaded ? 1 : 0,
             transition: "opacity 0.5s",
-            border: `1px solid ${item.thumbnailColor}`
+            border: `1px solid ${item.thumbnailColor}`,
           }}
         >
           {loadedImage && !isError && (
@@ -110,49 +107,44 @@ const FeedCard = ({ item }) => {
                 src={loadedImage.src}
                 alt={item.siteTitle}
                 effect="blur"
-                placeholder={<div style={{ height: '180px' }} />}
-                threshold={400}
-
-
+                placeholder={<div style={{ height: "180px" }} />}
+                threshold={600}
               />
             </div>
           )}
           {loadedImage && !isError && (
             <div className="card-bg">
               <LazyLoadImage
-    src={loadedImage.src}
-    alt={item.siteTitle}
-    effect="blur"
-    placeholder={<div style={{ height: '120px' }} />}
-    threshold={400}
-
-/>
+                src={loadedImage.src}
+                alt={item.siteTitle}
+                effect="blur"
+                placeholder={<div style={{ height: "180px" }} />}
+                threshold={600}
+              />
               <div className="noise"></div>
             </div>
           )}
-          <div className="text-content" style={{ padding: isError ? '' : '12px 24px' }}>
-            <WebsiteInfo
-              favicon={item.favicon}
-              siteTitle={item.siteTitle}
-              feedTitle={item.feedTitle}
-            />
+          <div className="text-content" style={{ padding: isError ? "" : "12px 24px" }}>
+            <WebsiteInfo favicon={item.favicon} siteTitle={item.siteTitle} feedTitle={item.feedTitle} />
             <h3>{item.title}</h3>
             <div className="date">
-              <SlRelativeTime date={new Date(item.published)} />       
-                   </div>
+              <SlRelativeTime date={new Date(item.published)} />
+            </div>
             {item.content && <p className="description">{item.content}</p>}
 
             {!thumbnailUrl && item.description && (
-              <div className="description long-description">
-                {item.description}
-              </div>
+              <div className="description long-description">{item.description}</div>
             )}
-            {item.link && <a href={item.link} target="_blank" rel="noopener noreferrer">Read more</a>}
-
+            {item.link && (
+              <a href={item.link} target="_blank" rel="noopener noreferrer">
+                Read more
+              </a>
+            )}
           </div>
         </SlCard>
       </div>
-      {showReaderView && <ReaderView url={item.link} item={item} onClose={() => setShowReaderView(false)} />}    </SlAnimation>
+      {showReaderView && <ReaderView url={item.link} item={item} onClose={() => setShowReaderView(false)} />}{" "}
+    </SlAnimation>
   );
 };
 
