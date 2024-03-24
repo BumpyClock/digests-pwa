@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, memo } from "react";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import Feed from "./components/Feed/Feed.js";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
@@ -24,6 +24,8 @@ function App() {
     return savedRefreshInterval ? Number(savedRefreshInterval) : 15;
   });
   const [isLoading, setIsLoading] = useState(true);
+  const SettingsMemo = memo(Settings);
+const FeedMemo = memo(Feed);
 
   const [feedUrls, setFeedUrls] = useState(() => {
     const savedFeedUrls = localStorage.getItem("feedUrls");
@@ -125,25 +127,24 @@ function App() {
         />
       </header>
       <main>
-        {isLoading ? (
-          <div>
-            <SlSpinner />
-            <p>Preparing your Digest</p>
-          </div>
-        ) : // Show loading spinner while waiting for data
-        showSettings ? (
-          <Settings
-            feedUrls={feedUrls}
-            setFeedUrls={setFeedUrls}
-            feedDetails={feedDetails}
-            refreshInterval={refreshInterval}
-            setRefreshInterval={setRefreshInterval}
-          />
-        ) : (
-          <Feed feedItems={feedItems} />
-        )}
-      </main>
-    </div>
+      {isLoading ? (
+        <div>
+          <SlSpinner />
+          <p>Preparing your Digest</p>
+        </div>
+      ) : showSettings ? (
+        <SettingsMemo
+          feedUrls={feedUrls}
+          setFeedUrls={setFeedUrls}
+          feedDetails={feedDetails}
+          refreshInterval={refreshInterval}
+          setRefreshInterval={setRefreshInterval}
+        />
+      ) : (
+        <FeedMemo feedItems={feedItems} />
+      )}
+    </main>
+  </div>
   );
 }
 
