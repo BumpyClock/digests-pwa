@@ -36,7 +36,7 @@ import "./ReaderViewContent.css";
               favicon={item.favicon}
               siteTitle={item.siteTitle}
               feedTitle={item.feedTitle}
-              style={{ marginBottom: '8px' }}
+              style={{ marginBottom: '8px', maxWidth: 'fit-content'}}
             />
             <a href={url} target="_blank" rel="noopener noreferrer">
               <h1 className="reader-view-title">{article.title}</h1>

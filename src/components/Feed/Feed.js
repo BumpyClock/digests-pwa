@@ -127,7 +127,7 @@ useEffect(() => {
 
   return (
     <ResponsiveMasonry
-      columnsCountBreakPoints={{550: 1, 750: 2, 1201: 3,1401:4,1901:5,2201:6}}
+      columnsCountBreakPoints={{320: 1, 550: 2, 750: 3, 1201: 4,1401:5,1901:6,2201:7}}
     >
       <Masonry gutter={gutterSize}>
         {items.map((item) => (
