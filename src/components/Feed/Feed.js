@@ -31,6 +31,8 @@ const useEventListener = (eventName, handler, element = window) => {
 const Feed = ({ feedItems, feedDetails }) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // New state variable
+
 const getGutterSize = () => {
   const width = window.innerWidth;
   if (width <= 650) {
@@ -87,6 +89,7 @@ const getGutterSize = () => {
       const newItems = feedItems.slice(0, stepSize);
       setItems(newItems);
       setHasMore(feedItems.length > newItems.length);
+      setIsLoading(false); // Set loading to false once data is fetched
     }
   }, [feedItems, stepSize]);
 
@@ -125,19 +128,20 @@ useEffect(() => {
   };
 }, [fetchMoreData]);
 
-  return (
-    <ResponsiveMasonry
-      columnsCountBreakPoints={{320: 1, 550: 2, 750: 3, 1201: 4,1401:5,1901:6,2201:7}}
-    >
-      <Masonry gutter={gutterSize}>
-        {items.map((item) => (
-          <div key={item.id}>
-            <MemoizedFeedCard item={item} />
-          </div>
-        ))}
-      </Masonry>
-    </ResponsiveMasonry>
-  );
+return (
+  isLoading ? <div>Loading...</div> : // Return loading indicator if isLoading is true
+  <ResponsiveMasonry
+    columnsCountBreakPoints={{320: 1, 550: 2, 750: 3, 1201: 4,1401:5,1901:6,2201:7}}
+  >
+    <Masonry gutter={gutterSize}>
+      {items.map((item) => (
+        <div key={item.id}>
+          <MemoizedFeedCard item={item} />
+        </div>
+      ))}
+    </Masonry>
+  </ResponsiveMasonry>
+);
 };
 
 export default Feed;
