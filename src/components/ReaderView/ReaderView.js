@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, Suspense, lazy } from "react";
 import axios from "axios";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
 import "./ReaderView.css";
 import Modal from "../Modal/Modal.js";
-import ReaderViewContent from '../ReaderViewContent/ReaderViewContent.js';
+const ReaderViewContent = lazy(() => import('../ReaderViewContent/ReaderViewContent.js'));
 
 
 function updateReadingProgress(progressCircle, pageText) {
@@ -146,6 +146,7 @@ const ReaderView = ({ url, item, onClose }) => {
 
   return (
     <Modal onClose={onClose}>
+      <Suspense fallback={<SlSpinner style={{ fontSize: "3rem", margin: "2rem" }} />}>
         {isLoading ? (
           <SlSpinner style={{ fontSize: "3rem", margin: "2rem" }} />
         ) : (
@@ -160,7 +161,7 @@ const ReaderView = ({ url, item, onClose }) => {
             />
           )
         )}
-      
+      </Suspense>
     </Modal>
   );
 };

@@ -79,7 +79,7 @@ const FeedCard = ({ item }) => {
   }
 
   return (
-    <SlAnimation name="fade-in" duration={500} play={isLoaded}>
+    <SlAnimation name="fade-in" duration={125} play={isLoaded}>
       <div
         style={{ position: "relative" }}
         onMouseEnter={() => setHover(true)}

@@ -15,7 +15,7 @@ const Modal = ({ children, visible, onClose }) => {
     function handleClickOutside(event) {
       if (childRef.current && !childRef.current.contains(event.target)) {
         setIsAnimating(false);
-        setTimeout(onClose, 500); // Delay onClose until the animation finishes
+        setTimeout(onClose, 125); // Delay onClose until the animation finishes
       }
     }
 
