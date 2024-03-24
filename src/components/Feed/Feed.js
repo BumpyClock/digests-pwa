@@ -131,7 +131,7 @@ useEffect(() => {
 return (
   isLoading ? <div>Loading...</div> : // Return loading indicator if isLoading is true
   <ResponsiveMasonry
-    columnsCountBreakPoints={{320: 1, 550: 2, 750: 3, 1201: 4,1401:5,1901:6,2201:7}}
+    columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:5,1901:6,2201:7}}
   >
     <Masonry gutter={gutterSize}>
       {items.map((item) => (
