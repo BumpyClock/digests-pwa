@@ -33,18 +33,19 @@ const Feed = ({ feedItems, feedDetails }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true); // New state variable
 
-const getGutterSize = () => {
-  const width = window.innerWidth;
-  if (width <= 650) {
-    return '12px';
-  } else if (width <= 1050) {
-    return '24px';
-  } else if (width <= 1250) {
-    return '36px';
-  } else {
-    return '36px';
-  }
-};
+  const getGutterSize = useCallback(() => {
+    const width = window.innerWidth;
+    if (width <= 650) {
+      return '12px';
+    } else if (width <= 1050) {
+      return '24px';
+    } else if (width <= 1250) {
+      return '36px';
+    } else {
+      return '36px';
+    }
+  }, []);
+  
   const getStepSize = useCallback(() => {
     const width = window.innerWidth;
     if (width <= 350) {
@@ -65,13 +66,13 @@ const getGutterSize = () => {
 
   const [stepSize, setStepSize] = useState(getStepSize());
 
-  const debouncedSetStepSize = useCallback(debounce(() => setStepSize(getStepSize()), 300), []);
-  const debouncedSetGutterSize = useCallback(debounce(() => setGutterSize(getGutterSize()), 300), []);
-  
-  const handleResize = useCallback(() => {
-    debouncedSetStepSize();
-    debouncedSetGutterSize();
-  }, [debouncedSetStepSize, debouncedSetGutterSize]);
+ const debouncedSetStepSize = debounce(setStepSize, 300);
+const debouncedSetGutterSize = debounce(setGutterSize, 300);
+
+const handleResize = useCallback(() => {
+  debouncedSetStepSize(getStepSize());
+  debouncedSetGutterSize(getGutterSize());
+}, [debouncedSetStepSize, debouncedSetGutterSize, getStepSize, getGutterSize]);
 
 
   useEventListener('resize', handleResize);

@@ -2,8 +2,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import SlCard from "@shoelace-style/shoelace/dist/react/card";
 import WebsiteInfo from "../website-info/website-info.js";
 import "./FeedCard.css";
-// import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
-// import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
+import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
+import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import DropShadow from "../DropShadow/DropShadow.js"; // Import DropShadow
 import ReaderView from "../ReaderView/ReaderView.js";
 import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
@@ -82,9 +82,9 @@ const FeedCard = ({ item }) => {
     return item.thumbnail || null;
   }, [item.thumbnail]);
 
-  // if (!isLoaded) {
-  //   return <FeedCardLoader id={item.id} />;
-  // }
+  if (!isLoaded) {
+    return <FeedCardLoader id={item.id} />;
+  }
 
   return (
   <div
