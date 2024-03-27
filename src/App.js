@@ -30,7 +30,6 @@ function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const SettingsMemo = memo(Settings);
 
-
   const [feedUrls, setFeedUrls] = useState(() => {
     const savedFeedUrls = localStorage.getItem("feedUrls");
     return savedFeedUrls
@@ -198,6 +197,7 @@ function App() {
         <ListView articles={feedItems} />
       ) : (
         <Feed feedItems={feedItems} />
+
       )}
     </main>
   </div>
