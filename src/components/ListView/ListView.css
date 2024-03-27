@@ -1,0 +1,111 @@
+.list-view-layout {
+    display: flex;
+    height: calc(100vh - 74px);
+    overflow-x: visible;
+   
+
+}
+
+.loading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+}
+
+.article-list {
+    width: 30%;
+    overflow: auto;
+    background-color: var(--background-color-secondary);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    font-weight: var(--font-weight);
+}
+
+.reader-view {
+    width: 70%;
+    /* padding: 20px; */
+    overflow: auto;
+}
+
+.article-item {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+    flex-direction: row;
+    padding: 16px 12px;
+    column-gap: 12px;
+    cursor: pointer;
+}
+
+.article-item .info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    column-gap: 4px;
+    width: 100%;
+    margin: 0;
+
+}
+
+.article-item:hover {
+    background-color: var(--background-color-hover);
+    border-radius: 7px;
+    transition: background-color 0.3s ease-in-out
+}
+
+.article-item .title {
+    font-size: 16px;
+    font-weight:500;
+    margin-bottom: 8px;
+}
+
+.article-item .author {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px !important;
+    margin-top:0 !important;
+    font-size: 12px;
+    font-weight: 600
+}
+
+.article-item .image-container {
+    width: 100%;
+    max-width: 100px;
+    height: 100px;
+    margin-bottom: 8px;
+    border-radius: 7px;
+    overflow: hidden;
+    object-fit: cover   ;
+
+}
+
+.article-item .image-container  img{
+    width: 100%;
+    max-width: 100px;
+    height: 100px;
+    margin-bottom: 8px;
+    border-radius: 7px;
+    overflow: hidden;
+    object-fit: cover   ;
+
+}
+
+.article-item h2 {
+    margin:0;
+}
+
+
+.article 
+
+.article-item.selected {
+    background-color: #f0f0f0;
+}

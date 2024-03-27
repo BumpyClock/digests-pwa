@@ -1,0 +1,156 @@
+  
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(90px);
+    margin: 0 auto;
+    overflow-y: auto;
+    background-color: rgba(0,0,0,.7);
+    z-index: 3000;
+    overflow-y: overlay;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    opacity: 0;
+    transition: all .25s ease-in-out;
+    -webkit-overflow-scroll: auto;
+    -ms-overflow-style: auto;    
+  }
+  .modal-container .noise {
+    position: absolute;
+    background-image: url("../assets/images/noise.svg");
+    background-repeat: repeat;
+    background-size: 2000px 2000px;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    mix-blend-mode: multiply;
+
+    opacity: .04;
+  }
+  
+  .modal-container-content {
+    position: relative;
+    max-height: 90vh;
+    max-width: 1000px;
+    overflow-y: overlay;
+    margin: auto;
+    box-shadow: var(--box-shadow-standard);
+    background-color: var(--background-color);
+    border-radius: 8px;
+    scrollbar-width: thin;
+  }
+
+  /* .modal-container-content::-webkit-scrollbar {
+    width: 4px;
+    position: relative;
+    transition: all ease-in .25s;
+    border-radius: 8px;
+  }
+
+  .modal-container-content::-webkit-scrollbar:hover {
+    width: 8px;
+    transition: all ease-in .25s;
+  }
+
+
+  .modal-container-content::-webkit-scrollbar-thumb {
+    background-color: rgba(85, 85, 85, 0.6); /* Use rgba for semi-transparent scrollbar */
+    /* opacity: .7;
+    border-radius:4px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+
+
+  } */
+
+  /* .modal-container-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(85, 85, 85, 0.8); 
+    width: 8px;
+  }
+
+  .modal-container-content::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.3); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+
+    opacity: .6;
+  }
+
+
+  .modal-container-content::-webkit-scrollbar-thumb:active {
+    background-color: var(--accent-color);
+    opacity: .9;
+  }
+
+  .modal-container-content::-webkit-scrollbar-thumb:window-inactive {
+    background-color: var(--color);
+    opacity: .5;
+  }
+
+  .modal-container-content::-webkit-scrollbar-track:window-inactive {
+    background-color: var(--background-color);
+    opacity: .5;
+  }
+
+  .modal-container-content::-webkit-scrollbar-track-piece:start {
+    background-color: var(--background-color);
+    opacity: .5;
+  }
+
+  .modal-container-content::-webkit-scrollbar-track-piece:end {
+    background-color: var(--background-color);
+    opacity: .5;
+  }
+
+  .modal-container-content::-webkit-scrollbar-track-piece:vertical {
+    background-color: var(--background-color);
+    opacity: .5;
+  }
+
+  .modal-container-content::-webkit-scrollbar-track-piece:horizontal {
+    background-color: var(--background-color);
+    opacity: .5;
+  }
+
+  .modal-container-content::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  .modal-container-content::-webkit-scrollbar-corner {
+    background-color: var(--background-color);
+    opacity: .5;
+  }
+
+  .modal-container-content::-webkit-resizer {
+    display: none;
+  }
+
+  .modal-container-content::-webkit-scrollbar-thumb:horizontal {
+    background-color: var(--color);
+    opacity: .7;
+  }  */
+
+  
+  /* Adjustments for smaller screens */
+  @media (max-width: 750px) {
+    .modal-container {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+    }
+  
+    .modal-content {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 0;
+    }
+  }
+  
+
+  .modal-container.visible {
+    opacity: 1;
+    position: fixed
+  }

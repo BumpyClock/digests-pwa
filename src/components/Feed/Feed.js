@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback,useRef } from 'react';
+import React, { useState, useEffect, useCallback,useRef,memo } from 'react';
 import FeedCard from '../FeedCard/FeedCard.js';
 import './Feed.css';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { debounce } from 'lodash';
 
-const MemoizedFeedCard = React.memo(FeedCard);
+const MemoizedFeedCard = memo(FeedCard);
 
 const useEventListener = (eventName, handler, element = window) => {
   const savedHandler = useRef();
@@ -31,18 +31,21 @@ const useEventListener = (eventName, handler, element = window) => {
 const Feed = ({ feedItems, feedDetails }) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-const getGutterSize = () => {
-  const width = window.innerWidth;
-  if (width <= 650) {
-    return '12px';
-  } else if (width <= 1050) {
-    return '24px';
-  } else if (width <= 1250) {
-    return '36px';
-  } else {
-    return '36px';
-  }
-};
+  const [isLoading, setIsLoading] = useState(true); // New state variable
+
+  const getGutterSize = useCallback(() => {
+    const width = window.innerWidth;
+    if (width <= 650) {
+      return '12px';
+    } else if (width <= 1050) {
+      return '24px';
+    } else if (width <= 1250) {
+      return '36px';
+    } else {
+      return '36px';
+    }
+  }, []);
+  
   const getStepSize = useCallback(() => {
     const width = window.innerWidth;
     if (width <= 350) {
@@ -63,14 +66,13 @@ const getGutterSize = () => {
 
   const [stepSize, setStepSize] = useState(getStepSize());
 
-const debouncedSetStepSize = debounce(() => setStepSize(getStepSize()), 300);
-const debouncedSetGutterSize = debounce(() => setGutterSize(getGutterSize()), 300);
+ const debouncedSetStepSize = debounce(setStepSize, 300);
+const debouncedSetGutterSize = debounce(setGutterSize, 300);
 
 const handleResize = useCallback(() => {
-  debouncedSetStepSize();
-  debouncedSetGutterSize();
-
-}, [debouncedSetStepSize, debouncedSetGutterSize]);
+  debouncedSetStepSize(getStepSize());
+  debouncedSetGutterSize(getGutterSize());
+}, [debouncedSetStepSize, debouncedSetGutterSize, getStepSize, getGutterSize]);
 
 
   useEventListener('resize', handleResize);
@@ -88,57 +90,59 @@ const handleResize = useCallback(() => {
       const newItems = feedItems.slice(0, stepSize);
       setItems(newItems);
       setHasMore(feedItems.length > newItems.length);
+      setIsLoading(false); // Set loading to false once data is fetched
     }
   }, [feedItems, stepSize]);
 
-  const fetchMoreData = useCallback(() => {
-    if (!hasMore || items.length >= feedItems.length) {
-      setHasMore(false);
-      return;
+const fetchMoreData = useCallback(() => {
+  if (!hasMore || items.length >= feedItems.length) {
+    setHasMore(false);
+    return;
+  }
+
+  const newItems = feedItems.slice(items.length, items.length + stepSize);
+  if (newItems.length === 0 || (newItems.length === 1 && newItems[0] === items[items.length - 1])) {
+    setHasMore(false);
+    return;
+  }
+
+  setItems(prevItems => [...prevItems, ...newItems]);
+}, [items, feedItems, stepSize, hasMore]);
+
+useEffect(() => {
+  const handleScroll = debounce(() => {
+    const scrollPosition = window.pageYOffset;
+    const windowSize     = window.innerHeight;
+    const bodyHeight     = document.body.offsetHeight;
+
+    // Calculate the scroll percentage
+    const scrollPercentage = (scrollPosition / (bodyHeight - windowSize)) * 100;
+
+    if (scrollPercentage >= 50) {
+      fetchMoreData();
     }
+  }, 100);
 
-    const newItems = feedItems.slice(items.length, items.length + stepSize);
-    if (newItems.length === 0 || (newItems.length === 1 && newItems[0] === items[items.length - 1])) {
-      setHasMore(false);
-      return;
-    }
+  window.addEventListener('scroll', handleScroll);
+  return () => {
+    window.removeEventListener('scroll', handleScroll);
+  };
+}, [fetchMoreData]);
 
-    setItems(prevItems => [...prevItems, ...newItems]);
-  }, [items, feedItems, stepSize, hasMore]);
-
-  useEffect(() => {
-    const handleScroll = debounce(() => {
-      const scrollPosition = window.pageYOffset;
-      const windowSize     = window.innerHeight;
-      const bodyHeight     = document.body.offsetHeight;
-
-      // Calculate the scroll percentage
-      const scrollPercentage = (scrollPosition / (bodyHeight - windowSize)) * 100;
-
-      if (scrollPercentage >= 50) {
-        fetchMoreData();
-      }
-    }, 100);
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [fetchMoreData]);
-
-  return (
-    <ResponsiveMasonry
-      columnsCountBreakPoints={{550: 1, 750: 2, 1201: 3,1401:4,1901:5,2201:6}}
-    >
-      <Masonry gutter={gutterSize}>
-        {items.map((item) => (
-          <div key={item.id}>
-            <MemoizedFeedCard item={item} />
-          </div>
-        ))}
-      </Masonry>
-    </ResponsiveMasonry>
-  );
+return (
+  isLoading ? <div>Loading...</div> : // Return loading indicator if isLoading is true
+  <ResponsiveMasonry
+    columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:5,1901:6,2201:7}}
+  >
+    <Masonry gutter={gutterSize}>
+      {items.map((item) => (
+        <div key={item.id}>
+          <MemoizedFeedCard item={item} />
+        </div>
+      ))}
+    </Masonry>
+  </ResponsiveMasonry>
+);
 };
 
 export default Feed;

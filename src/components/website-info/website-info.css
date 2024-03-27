@@ -3,7 +3,7 @@
     padding: 0;
     border: none!important;
     box-shadow: none;
-    background: 0 0;
+    background: white;
 }
 
 .website-info img {
@@ -19,7 +19,9 @@
 }
 
 .website-info {
-    width: -webkit-fill-available;
+    width:-moz-fit-content;
+    width: fit-content;
+    max-width: 240px;
     display:flex;
     column-gap: 8px;
     justify-content: center;
@@ -34,6 +36,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     align-items: top;
+    font-size: .8rem !important;
+    font-weight: 600 !important;
     margin: 0 !important;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
