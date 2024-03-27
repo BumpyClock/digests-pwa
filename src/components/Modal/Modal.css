@@ -42,6 +42,7 @@
     box-shadow: var(--box-shadow-standard);
     background-color: var(--background-color);
     border-radius: 8px;
+    scrollbar-width: thin;
   }
 
   /* .modal-container-content::-webkit-scrollbar {

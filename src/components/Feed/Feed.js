@@ -31,18 +31,21 @@ const useEventListener = (eventName, handler, element = window) => {
 const Feed = ({ feedItems, feedDetails }) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-const getGutterSize = () => {
-  const width = window.innerWidth;
-  if (width <= 650) {
-    return '12px';
-  } else if (width <= 1050) {
-    return '24px';
-  } else if (width <= 1250) {
-    return '36px';
-  } else {
-    return '36px';
-  }
-};
+  const [isLoading, setIsLoading] = useState(true); // New state variable
+
+  const getGutterSize = useCallback(() => {
+    const width = window.innerWidth;
+    if (width <= 650) {
+      return '12px';
+    } else if (width <= 1050) {
+      return '24px';
+    } else if (width <= 1250) {
+      return '36px';
+    } else {
+      return '36px';
+    }
+  }, []);
+  
   const getStepSize = useCallback(() => {
     const width = window.innerWidth;
     if (width <= 350) {
@@ -63,13 +66,13 @@ const getGutterSize = () => {
 
   const [stepSize, setStepSize] = useState(getStepSize());
 
-  const debouncedSetStepSize = useCallback(debounce(() => setStepSize(getStepSize()), 300), []);
-  const debouncedSetGutterSize = useCallback(debounce(() => setGutterSize(getGutterSize()), 300), []);
-  
-  const handleResize = useCallback(() => {
-    debouncedSetStepSize();
-    debouncedSetGutterSize();
-  }, [debouncedSetStepSize, debouncedSetGutterSize]);
+ const debouncedSetStepSize = debounce(setStepSize, 300);
+const debouncedSetGutterSize = debounce(setGutterSize, 300);
+
+const handleResize = useCallback(() => {
+  debouncedSetStepSize(getStepSize());
+  debouncedSetGutterSize(getGutterSize());
+}, [debouncedSetStepSize, debouncedSetGutterSize, getStepSize, getGutterSize]);
 
 
   useEventListener('resize', handleResize);
@@ -87,6 +90,7 @@ const getGutterSize = () => {
       const newItems = feedItems.slice(0, stepSize);
       setItems(newItems);
       setHasMore(feedItems.length > newItems.length);
+      setIsLoading(false); // Set loading to false once data is fetched
     }
   }, [feedItems, stepSize]);
 
@@ -125,19 +129,20 @@ useEffect(() => {
   };
 }, [fetchMoreData]);
 
-  return (
-    <ResponsiveMasonry
-      columnsCountBreakPoints={{320: 1, 550: 2, 750: 3, 1201: 4,1401:5,1901:6,2201:7}}
-    >
-      <Masonry gutter={gutterSize}>
-        {items.map((item) => (
-          <div key={item.id}>
-            <MemoizedFeedCard item={item} />
-          </div>
-        ))}
-      </Masonry>
-    </ResponsiveMasonry>
-  );
+return (
+  isLoading ? <div>Loading...</div> : // Return loading indicator if isLoading is true
+  <ResponsiveMasonry
+    columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:5,1901:6,2201:7}}
+  >
+    <Masonry gutter={gutterSize}>
+      {items.map((item) => (
+        <div key={item.id}>
+          <MemoizedFeedCard item={item} />
+        </div>
+      ))}
+    </Masonry>
+  </ResponsiveMasonry>
+);
 };
 
 export default Feed;
