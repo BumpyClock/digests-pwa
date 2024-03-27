@@ -29,7 +29,10 @@ import "./ReaderViewContent.css";
                 library="iconoir" 
                 name="xmark"
                 class="reader-view-header-button"
-                onClick={onClose}
+                onClick={() => {
+    console.log('Close button clicked');
+    onClose();
+  }}
               />
             </div>
             <WebsiteInfo

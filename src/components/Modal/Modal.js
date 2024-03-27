@@ -19,13 +19,28 @@ const Modal = ({ children, visible, onClose }) => {
       }
     }
 
-    // Bind the event listener
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [onClose]);
+
+  //Handle escape key event
+  useEffect(() => {
+  function handleKeyDown(event) {
+    if (event.key === 'Escape') {
+      setIsAnimating(false);
+      setTimeout(onClose, 125); // Delay onClose until the animation finishes
+    }
+  }
+
+  // Bind the event listener
+  document.addEventListener('keydown', handleKeyDown);
+  return () => {
+    // Unbind the event listener on clean up
+    document.removeEventListener('keydown', handleKeyDown);
+  };
+}, [onClose]);
 
   return (
     <SlAnimation name={visible ? "fade-in" : "fade-out"} duration={125} play={isAnimating}>
