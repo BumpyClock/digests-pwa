@@ -65,6 +65,7 @@ useEffect(() => {
             }
           }
         }
+        console.log("Imported URLs:", urls);
       
         setFeedUrls([...new Set([...feedUrls, ...urls])]); // Use Set to avoid duplicates
       };

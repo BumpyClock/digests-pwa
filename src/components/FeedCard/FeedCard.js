@@ -67,7 +67,6 @@ const FeedCard = ({ item }) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [showReaderView, setShowReaderView] = useState(false);
-  console.log('showReaderView:', showReaderView);
 
   const { isLoaded, isError, loadedImage } = useImageLoader(item.thumbnail);
 
@@ -158,7 +157,6 @@ const FeedCard = ({ item }) => {
       </div>
     </SlCard>
 {showReaderView && <ReaderView url={item.link} item={item} onClose={() => {
-  console.log('onClose called');
   setShowReaderView(false);
 }} />}  </div>
 );

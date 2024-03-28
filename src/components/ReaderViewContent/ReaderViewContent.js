@@ -30,7 +30,6 @@ import "./ReaderViewContent.css";
                 name="xmark"
                 class="reader-view-header-button"
                 onClick={() => {
-    console.log('Close button clicked');
     onClose();
   }}
               />

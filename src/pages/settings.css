@@ -179,7 +179,8 @@
     color: var(--color);
     display: flex;
     flex-direction: column;
-    width: -webkit-fill-available
+    width: -webkit-fill-available;
+    margin-bottom: 48px !important;
   }
   #subscribed-feeds-list .list-item img {
     width: fit-content;
