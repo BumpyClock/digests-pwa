@@ -3,7 +3,7 @@
     padding: 0;
     border: none!important;
     box-shadow: none;
-    background: white;
+    /* background: white; */
     max-width: 120px;
     width: 50%;
     height: 50%;
@@ -14,7 +14,8 @@
 
 .website-info img {
     width: auto;
-    height: 32px !important;
+    height: auto;
+    max-height: 20px !important;
 }
 
 .website-info, .site-name {
