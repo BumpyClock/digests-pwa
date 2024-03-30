@@ -21,13 +21,11 @@
   ],
   "start_url": "www.digests.app",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#ffffff",
   "background_color": "#ffffff",
   "orientation": "any",
   "display_override": [
-    "window-controls-overlay",
-  "standalone",
-  "browser"
+    "standalone"
   ],
   "categories": [
     "productivity"
