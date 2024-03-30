@@ -52,33 +52,26 @@
   .list-item:hover .remove-feed-button {
     visibility: visible;
     transition: var(--transition-fast);
-    bottom: 0;
     margin-left: -24px;
     margin-right: -24px;
-    width: -webkit-fill-available;
-    color: var(--background-color-hover);
-    border-radius: 0 0 12px 12px;
     transition: var(--transition-standard)
   }
   .list-item .remove-feed-button {
-    position: absolute;
-    visibility: hidden;
-    bottom: 0;
-    width: -webkit-fill-available;
     font-size: small;
     width: 100%;
     height: fit-content;
     margin-left: -24px;
     margin-right: -24px;
-    width: -webkit-fill-available;
-    background-color: var(--critical-color);
     border: none;
-    color: var(--background-color-secondary);
+    background-color: var(--background-color-secondary);
+    color: var(--critical-color);
     cursor: pointer;
     border-radius: 0 0x 12px 12px
   }
   .list-item:hover .remove-feed-button:hover {
-    color: var(--background-color-secondary)
+    color: var(--background-color-secondary);
+    background-color: var(--critical-color);
+
   }
   #subscribed-feeds-list {
     list-style-type: none;
@@ -97,14 +90,14 @@
     flex-direction: column;
     gap: 4px;
     align-items: center;
-    padding: 24px;
+    padding: 24px 24px 24px 24px;
     background: var(--background-color-secondary);
     overflow: hidden;
     border-radius: 12px;
     box-shadow: var(--box-shadow-standard), 0px 10px 15px rgba(0, 0, 0, 0.1); /* Add drop shadow */
     border: 1px solid #ccc; /* Add border */
     width: 240px;
-    justify-content: flex-start;
+    justify-content: space-between;
     max-height: 240px;
     transition: var(--transition-standard);
   }
@@ -137,7 +130,6 @@
     opacity: .85
   }
   #subscribed-feeds-list .list-item .remove-feed-button span {
-    width: -webkit-fill-available;
     font-size: medium;
     font-weight: 600;
     font-family: var(--font-family);
@@ -168,9 +160,10 @@
     margin-bottom: 0;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-    overflow: hidden;
+    overflow: hidden !important;
     text-overflow: ellipsis;
-    width: -webkit-fill-available
+    width: -webkit-fill-available;
+    min-height: 24px;
   }
   #subscribed-feeds-list .list-item .website-info {
     font-family: var(--font-family);

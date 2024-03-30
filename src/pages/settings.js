@@ -177,26 +177,28 @@ const handleExportFeeds = () => {
       {urlError && <p className="error-message">{urlError}</p>}
       
       <div id="subscribed-feeds-list">
-        {feedDetails.map((detail, index) => (
-          <div key={feedUrls[index]} className="list-item">
-            <div className="website-info">
-              <img
-                className="site-favicon"
-                src={detail.favicon}
-                alt={`${detail.siteTitle || detail.feedTitle} Favicon`}
-              />
-              <h3>{ detail.feedTitle || detail.siteTitle }</h3>
-              <p className="feed-url">{detail.feedUrl}</p>
-            </div>
-            <button
-              className="remove-feed-button"
-              onClick={() => handleRemoveFeed(detail.feedUrl)}
-            >
-              <p className="unsubscribe-button">Unsubscribe</p>
-            </button>
-          </div>
-        ))}
+  {feedDetails.map((detail, index) => (
+    <div key={feedUrls[index]} className="list-item">
+      <div className="website-info">
+        {detail.favicon && (
+          <img
+            className="site-favicon"
+            src={detail.favicon}
+            alt={`${detail.siteTitle || detail.feedTitle} Favicon`}
+          />
+        )}
+        <h3>{detail.feedTitle || detail.siteTitle}</h3>
+        <p className="feed-url">{detail.feedUrl}</p>
       </div>
+      <button
+        className="remove-feed-button"
+        onClick={() => handleRemoveFeed(detail.feedUrl)}
+      >
+        <p className="unsubscribe-button">Unsubscribe</p>
+      </button>
+    </div>
+  ))}
+</div>
       <div className="settings-section">
         <div className="infoContainer">
           <h3>Refresh Interval</h3>

@@ -34,7 +34,7 @@ function App() {
     const savedFeedUrls = localStorage.getItem("feedUrls");
     return savedFeedUrls
       ? (
-          console.log("Found existing feed configuration, loading those"),
+          console.log("Found existing feed configuration", JSON.parse(savedFeedUrls)),
           JSON.parse(savedFeedUrls)
         )
       : (
