@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef,memo } from "react";
+import React, { useState, useCallback, useEffect, useRef, memo } from "react";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import Feed from "./components/Feed/Feed.js";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
@@ -34,7 +34,10 @@ function App() {
     const savedFeedUrls = localStorage.getItem("feedUrls");
     return savedFeedUrls
       ? (
-          console.log("Found existing feed configuration", JSON.parse(savedFeedUrls)),
+          console.log(
+            "Found existing feed configuration",
+            JSON.parse(savedFeedUrls)
+          ),
           JSON.parse(savedFeedUrls)
         )
       : (
@@ -70,6 +73,11 @@ function App() {
     },
     [feedUrls]
   );
+
+  const refreshFeed = useCallback(() => {
+    setIsLoading(true); // Set loading to true when refresh starts
+    refreshRSSData();
+  }, [refreshRSSData]);
 
   useEffect(
     () => {
@@ -153,6 +161,17 @@ function App() {
         <h1 className="title">Digests</h1>
         <div className="button-container">
           <SlIconButton
+            className="refresh"
+            name="refresh"
+            size="large"
+            library="iconoir"
+            style={{
+              cursor: "pointer",
+              fontSize: isScrolled ? "1.5rem" : "1.5rem"
+            }}
+            onClick={refreshFeed}
+          />
+          <SlIconButton
             className="view-toggle"
             name={isListView ? "view-grid" : "list"}
             size="large"
@@ -170,7 +189,7 @@ function App() {
             library="iconoir"
             style={{
               cursor: "pointer",
-              fontSize: isScrolled ? "1rem" : "1.5rem"
+              fontSize: isScrolled ? "1.5rem" : "1.5rem"
             }}
             onClick={event => {
               toggleSettings();
@@ -180,27 +199,24 @@ function App() {
         </div>
       </header>
       <main className={`content-container ${!isListView ? "feed-view" : ""}`}>
-      {isLoading ? (
-        <div>
-          <SlSpinner />
-          <p>Preparing your Digest</p>
-        </div>
-      ) : showSettings ? (
-        <SettingsMemo
-          feedUrls={feedUrls}
-          setFeedUrls={setFeedUrls}
-          feedDetails={feedDetails}
-          refreshInterval={refreshInterval}
-          setRefreshInterval={setRefreshInterval}
-        />
-      ) : isListView ? (
-        <ListView articles={feedItems} />
-      ) : (
-        <Feed feedItems={feedItems} />
-
-      )}
-    </main>
-  </div>
+        {isLoading
+          ? <div>
+              <SlSpinner />
+              <p>Preparing your Digest</p>
+            </div>
+          : showSettings
+            ? <SettingsMemo
+                feedUrls={feedUrls}
+                setFeedUrls={setFeedUrls}
+                feedDetails={feedDetails}
+                refreshInterval={refreshInterval}
+                setRefreshInterval={setRefreshInterval}
+              />
+            : isListView
+              ? <ListView articles={feedItems} />
+              : <Feed feedItems={feedItems} />}
+      </main>
+    </div>
   );
 }
 

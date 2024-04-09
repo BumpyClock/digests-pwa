@@ -180,7 +180,18 @@ select:focus {
   background-color: var(--background-color);
   border-bottom: var(--border-color) 1px solid;
   z-index: 2000;
-  app-region: drag;
+}
+
+/* small blur below the title bar */
+.title-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background-color: var(--border-color);
+  filter: var(--blur);
 }
 
 .title-bar-small {
@@ -220,12 +231,12 @@ select:focus {
 .content-container {
   margin: 0px auto;
   max-width: 2400px;
+  overflow: auto;
+ 
+
 }
 
-.feed-view {
-  padding: 24px;
-  margin: 24px auto;
-}
+
 
 .date {
   font-size: 12px;
@@ -233,3 +244,4 @@ select:focus {
   margin-bottom: 8px;
   opacity: .65;
 }
+

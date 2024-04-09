@@ -31,7 +31,8 @@ const useEventListener = (eventName, handler, element = window) => {
 const Feed = ({ feedItems, feedDetails }) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(true); // New state variable
+  const [isLoading, setIsLoading] = useState(true); 
+  const feedRef = useRef();
 
   const getGutterSize = useCallback(() => {
     const width = window.innerWidth;
@@ -111,37 +112,56 @@ const fetchMoreData = useCallback(() => {
 
 useEffect(() => {
   const handleScroll = debounce(() => {
-    const scrollPosition = window.pageYOffset;
-    const windowSize     = window.innerHeight;
-    const bodyHeight     = document.body.offsetHeight;
+    if (!feedRef.current) {
+      console.log("🚀 ~ handleScroll ~ current is null");
+      return;
+    }
+
+    const scrollPosition = feedRef.current.scrollTop;
+    console.log("🚀 ~ handleScroll ~ scrollPosition:", scrollPosition)
+    const divSize     = feedRef.current.clientHeight;
+    console.log("🚀 ~ handleScroll ~ divSize:", divSize)
+    const divScrollHeight = feedRef.current.scrollHeight;
+    console.log("🚀 ~ handleScroll ~ divScrollHeight:", divScrollHeight)
 
     // Calculate the scroll percentage
-    const scrollPercentage = (scrollPosition / (bodyHeight - windowSize)) * 100;
+    const scrollPercentage = (scrollPosition / (divScrollHeight - divSize)) * 100;
+    console.log("🚀 ~ handleScroll ~ scrollPercentage:", scrollPercentage)
 
     if (scrollPercentage >= 50) {
       fetchMoreData();
     }
   }, 100);
 
-  window.addEventListener('scroll', handleScroll);
+  // Add the event listener to the feed div
+  if (feedRef.current) {
+    console.log("🚀 ~ useEffect Event listner added~ current:", feedRef.current)
+    feedRef.current.addEventListener('scroll', handleScroll);
+  }
+
   return () => {
-    window.removeEventListener('scroll', handleScroll);
+    // Remove the event listener from the feed div
+    if (feedRef.current) {
+      feedRef.current.removeEventListener('scroll', handleScroll);
+    }
   };
-}, [fetchMoreData]);
+}, [fetchMoreData]); // Add feedRef.current as a dependency
 
 return (
   isLoading ? <div>Loading...</div> : // Return loading indicator if isLoading is true
-  <ResponsiveMasonry
-    columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:5,1901:6,2201:7}}
-  >
-    <Masonry gutter={gutterSize}>
-      {items.map((item) => (
-        <div key={item.id}>
-          <MemoizedFeedCard item={item} />
-        </div>
-      ))}
-    </Masonry>
-  </ResponsiveMasonry>
+  <div className="feed" ref={feedRef}> {/* Add the ref here */}
+    <ResponsiveMasonry
+      columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:5,1901:6,2201:7}}
+    >
+      <Masonry gutter={gutterSize}>
+        {items.map((item) => (
+          <div key={item.id}>
+            <MemoizedFeedCard item={item} />
+          </div>
+        ))}
+      </Masonry>
+    </ResponsiveMasonry>
+  </div>
 );
 };
 

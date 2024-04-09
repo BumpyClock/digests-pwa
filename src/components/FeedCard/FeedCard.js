@@ -3,7 +3,7 @@ import SlCard from "@shoelace-style/shoelace/dist/react/card";
 import WebsiteInfo from "../website-info/website-info.js";
 import "./FeedCard.css";
 import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
-// import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
+import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import DropShadow from "../DropShadow/DropShadow.js"; // Import DropShadow
 import ReaderView from "../ReaderView/ReaderView.js";
 import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
@@ -98,10 +98,11 @@ const FeedCard = ({ item }) => {
     onMouseDown={() => setMouseDown(true)}
     onMouseUp={() => setMouseDown(false)}
     onClick={() => {
-  if (!showReaderView) {
-    setShowReaderView(true);
-  }
-}}  >
+      if (!showReaderView) {
+        setShowReaderView(true);
+      }
+    }}
+  >
     <DropShadow color={item.thumbnailColor || { r: 0, g: 0, b: 0 }} elevation={elevation} />
     <SlCard
       className="card"
@@ -112,6 +113,11 @@ const FeedCard = ({ item }) => {
         border: `1px solid ${item.thumbnailColor}`,
       }}
     >
+      {!isLoaded && (
+        <SlAnimation name="pulse" duration={1000} repeat>
+          <FeedCardLoader />
+        </SlAnimation>
+      )}
       {loadedImage && !isError && (
         <>
           <div className="image-container">
@@ -156,9 +162,10 @@ const FeedCard = ({ item }) => {
         )}
       </div>
     </SlCard>
-{showReaderView && <ReaderView url={item.link} item={item} onClose={() => {
-  setShowReaderView(false);
-}} />}  </div>
+    {showReaderView && <ReaderView url={item.link} item={item} onClose={() => {
+      setShowReaderView(false);
+    }} />}
+  </div>
 );
 };
 

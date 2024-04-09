@@ -11,6 +11,14 @@
 
 }
 
+.feed {
+    margin : auto;
+    padding:0px 64px 0px 64px;
+    height: calc(100vh - 74px);
+    scrollbar-width: thin;
+    overflow: auto;
+}
+
 /* For mobile devices */
 @media (max-width: 600px) {
     .feed-container {
