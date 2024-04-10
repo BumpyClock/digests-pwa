@@ -18,47 +18,50 @@ const useImageLoader = (src) => {
   const [loadedImage, setLoadedImage] = useState(null);
 
   useEffect(() => {
-  let isMounted = true;
+    let isMounted = true;
 
-  if (src) {
-    const img = new Image();
-    img.src = src;
+    if (src) {
+     // console.log("🚀 ~ useEffect ~ src:", src)
+      const img = new Image();
+      // Use the image proxy if src exists
+      img.src = `https://digests-imgproxy-a4crwf5b7a-uw.a.run.app/unsafe/rs:fit:600:300:0/g:no/plain/${encodeURIComponent(src)}@webp`;
 
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = src;
-    document.head.appendChild(link);
+      //console.log("🚀 ~ useEffect ~ src:", img.src)
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = img.src;
+      document.head.appendChild(link);
 
-    const onLoad = () => {
-      if (isMounted) {
-        setIsLoaded(true);
-        setLoadedImage(img);
-      }
-    };
+      const onLoad = () => {
+        if (isMounted) {
+          setIsLoaded(true);
+          setLoadedImage(img);
+        }
+      };
 
-    const onError = () => {
-      if (isMounted) {
-        setIsLoaded(true);
-        setIsError(true);
-        console.error("Error loading image", src);
-      }
-    };
+      const onError = () => {
+        if (isMounted) {
+          setIsLoaded(true);
+          setIsError(true);
+          console.error("Error loading image", src);
+        }
+      };
 
-    img.onload = onLoad;
-    img.onerror = onError;
+      img.onload = onLoad;
+      img.onerror = onError;
 
-    return () => {
-      isMounted = false;
-      img.onload = null;
-      img.onerror = null;
-      document.head.removeChild(link); // Clean up the preload link
-    };
-  } else {
-    setIsLoaded(true);
-    setIsError(true);
-  }
-}, [src]);
+      return () => {
+        isMounted = false;
+        img.onload = null;
+        img.onerror = null;
+        document.head.removeChild(link); // Clean up the preload link
+      };
+    } else {
+      setIsLoaded(true);
+      setIsError(true);
+    }
+  }, [src]);
 
   return { isLoaded, isError, loadedImage };
 };

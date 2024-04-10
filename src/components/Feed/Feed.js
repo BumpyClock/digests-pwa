@@ -4,6 +4,7 @@ import './Feed.css';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { debounce } from 'lodash';
 
+
 const MemoizedFeedCard = memo(FeedCard);
 
 const useEventListener = (eventName, handler, element = window) => {
@@ -113,36 +114,39 @@ const fetchMoreData = useCallback(() => {
 useEffect(() => {
   const handleScroll = debounce(() => {
     if (!feedRef.current) {
-      console.log("🚀 ~ handleScroll ~ current is null");
+     // console.log("🚀 ~ handleScroll ~ current is null");
       return;
     }
 
     const scrollPosition = feedRef.current.scrollTop;
-    console.log("🚀 ~ handleScroll ~ scrollPosition:", scrollPosition)
+    //console.log("🚀 ~ handleScroll ~ scrollPosition:", scrollPosition)
     const divSize     = feedRef.current.clientHeight;
-    console.log("🚀 ~ handleScroll ~ divSize:", divSize)
+    //console.log("🚀 ~ handleScroll ~ divSize:", divSize)
     const divScrollHeight = feedRef.current.scrollHeight;
-    console.log("🚀 ~ handleScroll ~ divScrollHeight:", divScrollHeight)
+    //console.log("🚀 ~ handleScroll ~ divScrollHeight:", divScrollHeight)
 
     // Calculate the scroll percentage
     const scrollPercentage = (scrollPosition / (divScrollHeight - divSize)) * 100;
-    console.log("🚀 ~ handleScroll ~ scrollPercentage:", scrollPercentage)
+    //console.log("🚀 ~ handleScroll ~ scrollPercentage:", scrollPercentage)
 
     if (scrollPercentage >= 50) {
       fetchMoreData();
     }
   }, 100);
 
+  // Capture the current value of feedRef.current in a variable
+  const currentFeedRef = feedRef.current;
+
   // Add the event listener to the feed div
-  if (feedRef.current) {
-    console.log("🚀 ~ useEffect Event listner added~ current:", feedRef.current)
-    feedRef.current.addEventListener('scroll', handleScroll);
+  if (currentFeedRef) {
+    //console.log("🚀 ~ useEffect Event listner added~ current:", currentFeedRef)
+    currentFeedRef.addEventListener('scroll', handleScroll);
   }
 
   return () => {
     // Remove the event listener from the feed div
-    if (feedRef.current) {
-      feedRef.current.removeEventListener('scroll', handleScroll);
+    if (currentFeedRef) {
+      currentFeedRef.removeEventListener('scroll', handleScroll);
     }
   };
 }, [fetchMoreData]); // Add feedRef.current as a dependency
@@ -151,7 +155,7 @@ return (
   isLoading ? <div>Loading...</div> : // Return loading indicator if isLoading is true
   <div className="feed" ref={feedRef}> {/* Add the ref here */}
     <ResponsiveMasonry
-      columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:5,1901:6,2201:7}}
+      columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:5,1801:5,1901:5,2201:7}}
     >
       <Masonry gutter={gutterSize}>
         {items.map((item) => (
