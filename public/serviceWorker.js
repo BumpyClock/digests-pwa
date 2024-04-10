@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '24_03_27_v2';
+const CACHE_NAME = '24_04_10_v1';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -53,7 +53,7 @@ async function fetchRSS(feedUrls) {
   let feedDetails = [];
   let items = [];
   try {
-    const apiUrl = "https://api.bumpyclock.com";
+    const apiUrl = "https://api.digests.app";
     const requestUrl = `${apiUrl}/parse`;
     const requestOptions = createRequestOptions(feedUrls);
     const response = await fetch(requestUrl, requestOptions);
