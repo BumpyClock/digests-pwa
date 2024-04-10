@@ -24,12 +24,19 @@
     .feed-container {
         column-count: 1;
     }
+
+    .feed{
+        padding:0px 32px 0px 32px;
+    }
 }
 
 /* For tablet devices */
 @media (min-width: 601px) and (max-width: 900px) {
     .feed-container {
         column-count: 2;
+    }
+    .feed{
+        padding:0px 32px 0px 32px;
     }
 }
 
@@ -44,6 +51,9 @@
 @media (min-width: 1201px) {
     .feed-container {
         column-count: 4;
+    }
+    .feed{
+        padding:0px 32px 0px 32px;
     }
 }
 @media (min-width: 1900px) {
