@@ -112,6 +112,7 @@
   margin-bottom: 1rem;
   margin:auto;
   text-align: center;
+  display: block;
 }
 .reader-view-close-button {
   align-self: flex-end;
