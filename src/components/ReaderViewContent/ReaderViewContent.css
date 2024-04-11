@@ -106,11 +106,12 @@
 
 .reader-view-page-content figcaption,
 .reader-view-page-content cite {
-  font-size: 14px;
+  font-size: 1rem;
   color: var(--color);
   opacity: .7;
   margin-bottom: 1rem;
   margin:auto;
+  text-align: center;
 }
 .reader-view-close-button {
   align-self: flex-end;

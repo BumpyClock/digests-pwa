@@ -129,7 +129,7 @@ useEffect(() => {
     const scrollPercentage = (scrollPosition / (divScrollHeight - divSize)) * 100;
     //console.log("🚀 ~ handleScroll ~ scrollPercentage:", scrollPercentage)
 
-    if (scrollPercentage >= 50) {
+    if (scrollPercentage >= 40) {
       fetchMoreData();
     }
   }, 100);

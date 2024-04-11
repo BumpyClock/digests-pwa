@@ -117,37 +117,29 @@ const FeedCard = ({ item }) => {
       }}
     >
       {!isLoaded && (
-        <SlAnimation name="pulse" duration={1000} repeat>
+        <SlAnimation name="pulse" duration={125} repeat>
           <FeedCardLoader />
         </SlAnimation>
       )}
-      {loadedImage && !isError && (
-        <>
-          <div className="image-container">
-            <LazyLoadImage
-              src={loadedImage.src}
-              alt={item.siteTitle}
-              effect="opacity"
-              placeholder={<div style={{ height: "180px", width: "100%" }} />}
-              threshold={600}
-              width="100%" // Set the width
-              height="100%" // Set the height
-            />
-          </div>
-          <div className="card-bg">
-            <LazyLoadImage
-              src={loadedImage.src}
-              alt={item.siteTitle}
-              effect="opacity"
-              placeholder={<div style={{ height: "180px", width: "100%" }} />}
-              threshold={600}
-              width="100%" // Set the width
-              height="100%" // Set the height
-            />
-            <div className="noise"></div>
-          </div>
-        </>
-      )}
+     {loadedImage && !isError && (
+  <>
+    <div className="image-container">
+      <img
+        src={loadedImage.src}
+        alt={item.siteTitle}
+        style={{ width: "100%", height: "100%" }}
+      />
+    </div>
+    <div className="card-bg">
+      <img
+        src={loadedImage.src}
+        alt={item.siteTitle}
+        style={{ width: "100%", height: "100%" }}
+      />
+      <div className="noise"></div>
+    </div>
+  </>
+)}
       <div className="text-content" style={{ padding: isError ? "" : "12px 24px" }}>
         <WebsiteInfo favicon={item.favicon} siteTitle={item.siteTitle} feedTitle={item.feedTitle} />
         <h3>{item.title}</h3>
