@@ -55,9 +55,12 @@ const ListView = ({ articles }) => {
                         className={`article-item ${selectedArticle === article ? 'selected' : ''}`}
                     >
                        {article.thumbnail ? (
-    <div className="image-container">
-        <img src={article.thumbnail} alt={article.title} />
-    </div>
+  <div className="image-container">
+    <img 
+      src={`https://digests-imgproxy-a4crwf5b7a-uw.a.run.app/unsafe/rs:fit:200:200:0/g:no/plain/${encodeURIComponent(article.thumbnail)}@webp`} 
+      alt={article.title} 
+    />
+  </div>
 ) : null}
                         <div className="info-container">
                         <WebsiteInfo

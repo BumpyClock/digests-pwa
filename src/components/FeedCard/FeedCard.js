@@ -22,7 +22,7 @@ const useImageLoader = (src) => {
      // console.log("🚀 ~ useEffect ~ src:", src)
       const img = new Image();
       // Use the image proxy if src exists
-      img.src = `https://digests-imgproxy-a4crwf5b7a-uw.a.run.app/unsafe/rs:fit:600:300:0/g:no/plain/${encodeURIComponent(src)}@webp`;
+      img.src = `https://digests-imgproxy-a4crwf5b7a-uw.a.run.app/unsafe/rs:fit:0:300:0/g:no/plain/${encodeURIComponent(src)}@webp`;
 
       //console.log("🚀 ~ useEffect ~ src:", img.src)
       const link = document.createElement('link');
