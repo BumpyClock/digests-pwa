@@ -7,9 +7,7 @@ import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import DropShadow from "../DropShadow/DropShadow.js"; // Import DropShadow
 import ReaderView from "../ReaderView/ReaderView.js";
 import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
-import "react-lazy-load-image-component/src/effects/opacity.css";
+
 
 
 const useImageLoader = (src) => {
