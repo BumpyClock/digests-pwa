@@ -57,7 +57,7 @@
     
   }
 
-  @media screen and (min-width: 750px and max-width: 1150px) {
+  @media screen and (min-width: 750px) and (max-width: 1150px) {
     .modal-container-content {
      width:85vw;
     }
