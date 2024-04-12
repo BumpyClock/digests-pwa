@@ -230,7 +230,7 @@ select:focus {
 
 .content-container {
   margin: 0px auto;
-  max-width: 2400px;
+  /* max-width: 2400px; */
   overflow: auto;
  
 
