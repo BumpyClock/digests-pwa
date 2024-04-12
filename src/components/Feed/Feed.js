@@ -156,6 +156,7 @@ return (
   <div className="feed" ref={feedRef}> {/* Add the ref here */}
     <ResponsiveMasonry
       columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:5,1801:5,1901:5,2201:7}}
+      style={{maxWidth: '2400px', margin: '0 auto'}}
     >
       <Masonry gutter={gutterSize}>
         {items.map((item) => (
