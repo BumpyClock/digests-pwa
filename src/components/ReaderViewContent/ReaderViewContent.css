@@ -57,7 +57,7 @@
 .reader-view-page-content blockquote {
 
   opacity: .8;
-  background: var(--reading-progress-container-background-color);
+  background: var(--blockquote-background-color);
   border-left: 8px solid var(--border-color);
   box-shadow: inset 0 0 0 1px var(--border-color);
   border-radius: 7px;

@@ -22,7 +22,9 @@
   --light-border-color: #e6e6e6;
   --light-critical-color: red;
   --light-success-color: green;
+  --light-blockquote-background-color: rgba(0, 0, 0, 0.1);
   --dark-background-color: rgba(0, 0, 0, 1);
+  --dark-blockquote-background-color: rgba(255, 255, 255, 0.1);
   --dark-new-tab-background-color: rgba(0,0,0,1);
   --dark-theme-search-box-color: rgba(0, 0, 0, 0.5);
   --dark-theme-search-box-color-active: rgba(0, 0, 0, 0.8);
@@ -65,6 +67,7 @@
     --progress-background: var(--dark-background-color);
     --success-color: var(--dark-success-color);
     --critical-color: var(--dark-critical-color);
+    --blockquote-background-color: var(--dark-blockquote-background-color);
   }
 }
 @media (prefers-color-scheme: light) {
@@ -80,6 +83,7 @@
     --reading-progress-container-background-color: var(
       --light-background-color-hover
     );
+    --blockquote-background-color: var(--light-blockquote-background-color);
     --reading-progress-color: var(--light-accent-color);
     --search-box-color: var(--light-theme-search-box-color);
     --search-box-color-active: var(--light-theme-search-box-color-active);
