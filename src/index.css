@@ -22,6 +22,21 @@
   --light-border-color: #e6e6e6;
   --light-critical-color: red;
   --light-success-color: green;
+  --light-scrollbar-rest: rgba(0, 0, 0, 0.1);
+  --light-scrollbar-thumb-rest: rgba(0, 0, 0, 0.2);
+  --light-scrollbar-track-hover: rgba(0, 0, 0, 0.3);
+  --light-scrollbar-track-active: rgba(0, 0, 0, 0.2);
+  --light-scrollbar-track-rest: rgba(0, 0, 0, 0.0);
+  --light-scrollbar-thumb-hover: rgba(0, 0, 0, 0.7);
+  --light-scrollbar-thumb-active: rgba(0, 0, 0, 0.9);
+  --dark-scrollbar-thumb: rgba(255, 255, 255, 0.5);
+  --dark-scrollbar-rest: rgba(255, 255, 255, 0.1);
+  --dark-scrollbar-track-hover: rgba(255, 255, 255, 0.1);
+  --dark-scrollbar-track-active: rgba(255, 255, 255, 0.2);
+  --dark-scrollbar-track-rest: rgba(255, 255, 255, 0.0);
+  --dark-scrollbar-thumb-hover: rgba(255, 255, 255, 0.7);
+  --dark-scrollbar-thumb-active: rgba(255, 255, 255, 0.9);
+  --dark-scrollbar-thumb-rest: rgba(255, 255, 255, 0.1);
   --light-blockquote-background-color: rgba(0, 0, 0, 0.1);
   --dark-background-color: rgba(0, 0, 0, 1);
   --dark-blockquote-background-color: rgba(255, 255, 255, 0.1);
@@ -67,6 +82,12 @@
     --progress-background: var(--dark-background-color);
     --success-color: var(--dark-success-color);
     --critical-color: var(--dark-critical-color);
+    --scrollbar-thumb-rest: var(--dark-scrollbar-thumb-rest);
+    --scrollbar-track-hover: var(--dark-scrollbar-track-hover);
+    --scrollbar-track-active: var(--dark-scrollbar-track-active);
+    --scrollbar-track-rest: var(--dark-scrollbar-track-rest);
+    --scrollbar-thumb-hover: var(--dark-scrollbar-thumb-hover);
+    --scrollbar-thumb-active: var(--dark-scrollbar-thumb-active);
     --blockquote-background-color: var(--dark-blockquote-background-color);
   }
 }
@@ -89,6 +110,12 @@
     --search-box-color-active: var(--light-theme-search-box-color-active);
     --success-color: var(--light-success-color);
     --critical-color: var(--light-critical-color);
+    --scrollbar-thumb-rest: var(--light-scrollbar-thumb-rest);
+    --scrollbar-track-hover: var(--light-scrollbar-track-hover);
+    --scrollbar-track-active: var(--light-scrollbar-track-active);
+    --scrollbar-track-rest: var(--light-scrollbar-track-rest);
+    --scrollbar-thumb-hover: var(--light-scrollbar-thumb-hover);
+    --scrollbar-thumb-active: var(--light-scrollbar-thumb-active);
   }
 }
 body {
@@ -249,3 +276,37 @@ select:focus {
   opacity: .65;
 }
 
+/* Scroll bar styling to make it look like macOS scrollbar on all platforms */
+
+/* Customize website's scrollbar like Mac OS
+Taken from https://gist.github.com/spemer/a0e218bbb45433bd611e68446523a00b
+Not supports in Firefox and IE */
+
+/* total width */
+body::-webkit-scrollbar {
+  background-color: #fff;
+  width: 16px;
+}
+
+/* background of the scrollbar except button or resizer */
+body::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
+/* scrollbar itself */
+body::-webkit-scrollbar-thumb {
+  background-color: #babac0;
+  border-radius: 16px;
+  border: 4px solid #fff;
+}
+
+/* set button(top and bottom of the scrollbar) */
+body::-webkit-scrollbar-button {
+  display:none;
+}
+
+
+::-webkit-scrollbar       {background-color:var(--scrollbar-track-rest);width:16px}
+::-webkit-scrollbar-track {background-color:var(--scrollbar-track-rest)}
+::-webkit-scrollbar-thumb:hover {background-color:var(--scrollbar-thumb-hover);}
+::-webkit-scrollbar-thumb {background-color:var(--scrollbar-thumb-rest);border-radius:16px;border:4px solid var(--background-color);}

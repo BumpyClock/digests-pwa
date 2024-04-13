@@ -36,6 +36,7 @@
   .modal-container-content {
     position: relative;
     max-height: 90vh;
+    width:65vw;
     max-width: 1000px;
     overflow-y: overlay;
     margin: auto;
@@ -43,6 +44,24 @@
     background-color: var(--background-color);
     border-radius: 8px;
     scrollbar-width: thin;
+  
+  }
+
+  @media screen and (max-width: 750px) {
+    .modal-container-content {
+      height:100%;
+      width: 100%;
+      border-radius: 0;
+      max-height: 100vh;
+    }
+    
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 1150px) {
+    .modal-container-content {
+     width:85vw;
+    }
+    
   }
 
   /* .modal-container-content::-webkit-scrollbar {
