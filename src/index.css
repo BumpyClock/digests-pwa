@@ -10,8 +10,7 @@
   --dracula-purple: rgba(189, 147, 249, 1);
   --dracula-red: rgba(255, 85, 85, 1);
   --dracula-yellow: rgba(241, 250, 140, 1);
-  --font-family: "Lato" ,"GeistVariableVF","Open Sans","Noto Sans","Segoe UI Variable Small Light", "Roboto",
-    sans-serif;
+  --font-family: "Noto Sans","Segoe UI Variable Small Light", "Roboto", sans-serif;
   --font-weight-light: 300;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
@@ -278,6 +277,9 @@ select:focus {
 
 }
 
+.App {
+  scroll-behavior: smooth;
+}
 
 
 .date {
