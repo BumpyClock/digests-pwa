@@ -9,7 +9,7 @@
     backdrop-filter: blur(90px);
     margin: 0 auto;
     overflow-y: auto;
-    background-color: rgba(0,0,0,.7);
+    /* background-color: rgba(0,0,0,.7); */
     z-index: 3000;
     overflow-y: overlay;
     display: flex;
