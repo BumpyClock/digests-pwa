@@ -155,7 +155,7 @@ return (
   isLoading ? <div>Loading...</div> : // Return loading indicator if isLoading is true
   <div className="feed" ref={feedRef}> {/* Add the ref here */}
     <ResponsiveMasonry
-      columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:5,1801:5,1901:5,2201:7}}
+      columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:4,1801:4,1901:5,2201:6}}
       style={{maxWidth: '2400px', margin: '0 auto'}}
     >
       <Masonry gutter={gutterSize}>
