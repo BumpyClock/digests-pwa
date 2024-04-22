@@ -44,7 +44,7 @@
 .reader-view-page-content p{
   font-family: var(--font-family);
     line-height: 2.33;
-    font-weight: var(--font-weight-light);
+    font-weight: var(--font-weight-regular);
     font-size: 1.2rem;
 }
 
