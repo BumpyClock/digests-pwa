@@ -328,3 +328,11 @@ sl-icon-button::part(base):hover,
 sl-icon-button::part(base):focus {
     color:var(--accent-color);
   }
+  
+  .loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+}

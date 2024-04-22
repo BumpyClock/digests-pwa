@@ -200,7 +200,7 @@ function App() {
       </header>
       <main className={`content-container ${!isListView ? "feed-view" : ""}`}>
         {isLoading
-          ? <div>
+          ? <div className="loading-indicator">
               <SlSpinner />
               <p>Preparing your Digest</p>
             </div>

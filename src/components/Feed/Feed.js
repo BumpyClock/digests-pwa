@@ -134,7 +134,6 @@ useEffect(() => {
     }
   }, 100);
 
-  // Capture the current value of feedRef.current in a variable
   const currentFeedRef = feedRef.current;
 
   // Add the event listener to the feed div
@@ -152,8 +151,8 @@ useEffect(() => {
 }, [fetchMoreData]); // Add feedRef.current as a dependency
 
 return (
-  isLoading ? <div>Loading...</div> : // Return loading indicator if isLoading is true
-  <div className="feed" ref={feedRef}> {/* Add the ref here */}
+  isLoading ? <div className='loading-indicator'>Loading...</div> : 
+  <div className="feed" ref={feedRef}> {}
     <ResponsiveMasonry
       columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:4,1801:4,1901:5,2201:6}}
       style={{maxWidth: '2400px', margin: '0 auto'}}

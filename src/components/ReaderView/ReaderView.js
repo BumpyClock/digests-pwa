@@ -148,7 +148,7 @@ const ReaderView = ({ url, item, onClose }) => {
     <Modal onClose={onClose}>
       <Suspense fallback={<SlSpinner style={{ fontSize: "3rem", margin: "2rem" }} />}>
         {isLoading ? (
-          <SlSpinner style={{ fontSize: "3rem", margin: "2rem" }} />
+          <SlSpinner style={{ fontSize: "3rem", margin: "2rem" }}  />
         ) : (
           article && (
             <ReaderViewContent
