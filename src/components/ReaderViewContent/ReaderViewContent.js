@@ -16,6 +16,7 @@ import "./ReaderViewContent.css";
       <>
         <div className="reader-view-page-content" ref={pageTextRef}>
           <div className="reader-view-header">
+            <img src={item.thumbnail} alt="favicon" className="reader-view-header-image" />
             <div className="reader-view-header-button-container">
               <SlIconButton
                 library="iconoir" 

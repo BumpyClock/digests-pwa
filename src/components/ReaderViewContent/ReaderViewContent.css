@@ -41,6 +41,7 @@
 }
 
 
+
 .reader-view-page-content p{
   font-family: var(--font-family);
     line-height: 2.33;
@@ -149,10 +150,22 @@
   .reader-view-header {
     position: sticky;
     top: 0px;
-    padding-top:24px;
     background-color: var(--background-color);
     z-index: 1;
-    padding: 2rem 4rem 0 4rem;
+    padding: 0;
+  }
+  .reader-view-header-image {
+    top:0;
+    left: 0;
+    width: 100%;
+    max-height: 300px;
+    aspect-ratio: 16/9;
+    height: 100%;
+    object-fit: cover;
+    margin: 0;
+    max-height: 450px;
+    z-index: -1;
+  
   }
 
   .reader-view-header a{
