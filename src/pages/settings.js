@@ -4,6 +4,7 @@ import {
   SlInput,
   SlIcon,
   SlSpinner,
+  SlCheckbox,
 } from "@shoelace-style/shoelace/dist/react/";
 import "./settings.css";
 
@@ -19,9 +20,22 @@ function Settings({
   const [urlError, setUrlError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [detailsLoading, setDetailsLoading] = useState(false);
+  const [minimalTheme, setMinimalTheme] = useState(false);
   const fileInputRef = useRef();
 
   const inputRef = useRef();
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('minimalTheme');
+    if (storedTheme) {
+      setMinimalTheme(JSON.parse(storedTheme));
+    }
+  }, []);
+  
+  // Step 3: Whenever the minimalTheme state changes, update the value in localStorage
+  useEffect(() => {
+    localStorage.setItem('minimalTheme', JSON.stringify(minimalTheme));
+  }, [minimalTheme]);
 
 useEffect(() => {
   if (inputRef.current) {
@@ -147,7 +161,7 @@ const handleExportFeeds = () => {
   };
 
   return (
-    <div className="settings">
+    <div className="settings-container">
 
       <h2>Settings</h2>
       <div className="subscription-form">
@@ -208,6 +222,18 @@ const handleExportFeeds = () => {
           type="number"
           label="Refresh Interval (minutes):"
           value={refreshInterval}
+          onChange={(e) => setRefreshInterval(e.target.value)}
+        />
+      </div>
+      <div className="settings-section">
+        <div className="infoContainer">
+          <h3>Minimal Theme</h3>
+          <p>Turn on minimal theme on lower end machines and e-ink tablets</p>
+        </div>
+        <SlCheckbox
+          type="checkbox"
+          label="Minimal theme"
+          value={minimalTheme}
           onChange={(e) => setRefreshInterval(e.target.value)}
         />
       </div>

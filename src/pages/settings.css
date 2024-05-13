@@ -2,12 +2,14 @@
 .settings-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 24px
+    padding: 24px;
+    height: calc(100vh - 74px);
   }
   .settings-container h1,
   .settings-container h2 {
     margin-bottom: 1rem;
-    font-family: var(--font-family)
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-medium);
   }
   .settings-container ul {
     list-style-type: none;
@@ -68,6 +70,11 @@
     cursor: pointer;
     border-radius: 0 0x 12px 12px
   }
+
+  .list-item .remove-feed-button p{
+    margin: 0;
+    padding:12px 8px;
+  }
   .list-item:hover .remove-feed-button:hover {
     color: var(--background-color-secondary);
     background-color: var(--critical-color);
@@ -89,12 +96,13 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    row-gap:4px;
     align-items: center;
     padding: 24px 24px 24px 24px;
     background: var(--background-color-secondary);
     overflow: hidden;
     border-radius: 12px;
-    box-shadow: var(--box-shadow-standard), 0px 10px 15px rgba(0, 0, 0, 0.1); /* Add drop shadow */
+    box-shadow: var(--box-shadow-standard), 0px 10px 15px rgba(0, 0, 0, 0.1); 
     border: 1px solid #ccc; /* Add border */
     width: 240px;
     justify-content: space-between;
@@ -142,12 +150,13 @@
     color: var(--color);
     display: -webkit-box;
     text-align: center;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.5;
-    width: 100%
+    width: 100%;
+    margin:0px;
   }
   #subscribed-feeds-list .list-item .website-info p {
     font-family: var(--font-family);
@@ -158,6 +167,7 @@
     display: -webkit-box;
     text-align: center;
     margin-bottom: 0;
+    margin-top:4px;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden !important;
@@ -173,7 +183,8 @@
     display: flex;
     flex-direction: column;
     width: -webkit-fill-available;
-    margin-bottom: 48px !important;
+    row-gap: 4px;
+    /* margin-bottom: 24px !important; */
   }
   #subscribed-feeds-list .list-item img {
     width: fit-content;
@@ -198,6 +209,7 @@
     background-color: var(--background-color-secondary);
     transition: var(--transition-fast);
     max-width: 1200px;
+    margin-bottom: 24px;
   }
   .settings-section:hover {
     box-shadow: var(--box-shadow-hover);
