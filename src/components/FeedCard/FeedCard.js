@@ -100,7 +100,11 @@ const FeedCard = ({ item }) => {
     onMouseUp={() => setMouseDown(false)}
     onClick={() => {
       if (!showReaderView) {
-        setShowReaderView(true);
+        setTimeout(() => {
+          if (!showReaderView) {
+            setShowReaderView(true);
+          }
+        }, 500);
       }
     }}
   >

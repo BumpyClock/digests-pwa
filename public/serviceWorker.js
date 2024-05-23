@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '24_04_12_v2';
+const CACHE_NAME = '22_05_24_v1';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
