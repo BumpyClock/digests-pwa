@@ -19,12 +19,9 @@ const useImageLoader = (src) => {
     let isMounted = true;
 
     if (src) {
-     // console.log("🚀 ~ useEffect ~ src:", src)
       const img = new Image();
-      // Use the image proxy if src exists
       img.src = `https://digests-imgproxy-a4crwf5b7a-uw.a.run.app/unsafe/rs:fit:0:300:0/g:no/plain/${encodeURIComponent(src)}@webp`;
 
-      //console.log("🚀 ~ useEffect ~ src:", img.src)
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'image';
@@ -33,8 +30,14 @@ const useImageLoader = (src) => {
 
       const onLoad = () => {
         if (isMounted) {
-          setIsLoaded(true);
-          setLoadedImage(img);
+          // Check if the image is a 1x1 pixel placeholder
+          if (img.width === 1 && img.height === 1) {
+            setIsLoaded(true);
+            setIsError(true); // Treat it as an error or placeholder
+          } else {
+            setIsLoaded(true);
+            setLoadedImage(img);
+          }
         }
       };
 
