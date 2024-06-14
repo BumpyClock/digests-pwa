@@ -230,6 +230,8 @@
     stroke-width: 1px;
     stroke: #000;
     object-fit: contain;
+    width: fit-content;
+    width: -moz-fit-content;
   }
   .reader-view-article p {
     margin: 1.33em 0

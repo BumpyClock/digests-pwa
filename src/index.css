@@ -219,7 +219,7 @@ select:focus {
   height: env(titlebar-area-height, 24px);
   -webkit-app-region: drag;
   background-color: var(--background-color);
-  border-bottom: var(--border-color) 1px solid;
+  border-top:none;
   z-index: 2000;
 }
 
@@ -272,6 +272,8 @@ select:focus {
 .content-container {
   margin: 0px auto;
   /* max-width: 2400px; */
+  border-top: var(--border-color) 1px solid;
+
   overflow: auto;
  
 
