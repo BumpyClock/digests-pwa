@@ -133,7 +133,13 @@ sl-card {
   .card:active .card-bg img{
     background: var(--active-color);
     filter: blur(90px) brightness(.9);
-       transform: scale(1);
+       transform: scale(1) rotate(180deg);
+    transition: all .25s ease-in-out;
+  }
+
+  .card:active .image-container img{
+    background: var(--active-color);
+    transform: scale(1) ;
     transition: all .25s ease-in-out;
   }
 
