@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '06_06_24_v1';
+const CACHE_NAME = '06_20_24_v2';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -60,16 +60,22 @@ async function fetchRSS(feedUrls) {
     const fetchedFeedData = await response.json();
 
     if (response.status === 200) {
+
       for (const feed of fetchedFeedData.feeds) {
+
+        console.log("feed: ", feed.siteTitle);
+
         const isErrorTitle = errorMessages.some((msg) =>
           feed.siteTitle.includes(msg)
         );
         if (isErrorTitle) {
           feed.siteTitle = feed.feedTitle;
           console.log("no site title");
-        } else {
-          feed.siteTitle = feed.feedUrl;
-        }
+        } 
+
+        console.log("feed: ", feed.siteTitle);
+
+
 
         feedDetails.push({
           siteTitle: feed.siteTitle,

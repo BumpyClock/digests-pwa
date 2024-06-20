@@ -146,7 +146,7 @@ const FeedCard = ({ item }) => {
   </>
 )}
       <div className="text-content" style={{ padding: isError ? "" : "12px 24px" }}>
-        <WebsiteInfo favicon={item.favicon} siteTitle={item.siteTitle} feedTitle={item.feedTitle} />
+        <WebsiteInfo favicon={item.favicon} siteTitle={item.siteTitle} feedTitle={item.siteTitle} />
         <h3>{item.title}</h3>
         <div className="date">
           <SlRelativeTime date={new Date(item.published)} />
