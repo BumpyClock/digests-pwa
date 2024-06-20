@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta name="theme-color" content="#ffffff" id="theme-color" charset="utf-8" />
 
     <script type="text/javascript">
       (function(c,l,a,r,i,t,y){
@@ -72,6 +72,27 @@
             });
         });
       }
+    </script>
+    <script>
+      function updateThemeColor() {
+        const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
+        const style = getComputedStyle(document.documentElement);
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          // Dark mode
+          const darkThemeColor = style.getPropertyValue('--dark-new-tab-background-color').trim();
+          themeColorMetaTag.setAttribute('content', darkThemeColor);
+        } else {
+          // Light mode or no preference
+          const lightThemeColor = style.getPropertyValue('--light-new-tab-background-color').trim();
+          themeColorMetaTag.setAttribute('content', lightThemeColor);
+        }
+      }
+    
+      // Initial theme color setup
+      updateThemeColor();
+    
+      // Listen for changes in the color scheme preference
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(updateThemeColor);
     </script>
     <script defer src="
 https://cdn.jsdelivr.net/npm/@mozilla/readability@0.5.0/Readability.min.js

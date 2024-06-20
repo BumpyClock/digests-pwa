@@ -57,7 +57,7 @@ const ListView = ({ articles }) => {
                        {article.thumbnail ? (
   <div className="image-container">
     <img 
-      src={`https://digests-imgproxy-a4crwf5b7a-uw.a.run.app/unsafe/rs:fit:200:200:0/g:no/plain/${encodeURIComponent(article.thumbnail)}@webp`} 
+      src={`https://digests-imgproxy-a4crwf5b7a-uw.a.run.app/unsafe/rs:fit:0:300:0/g:no/plain/${encodeURIComponent(article.thumbnail)}@webp`} 
       alt={article.title} 
     />
   </div>
