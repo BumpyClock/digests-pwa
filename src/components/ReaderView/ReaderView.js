@@ -20,6 +20,7 @@ const ReaderView = ({ url, item, onClose }) => {
   const modalRef = useRef(null);
   const articleRef = useRef(null);
   const contentcontainerRef = useRef(null);
+  const scrollPositionRef = useRef(scrollPosition);
 
   useEffect(() => {
     // Disable background scrolling
@@ -59,24 +60,29 @@ const ReaderView = ({ url, item, onClose }) => {
     };
   }, [url]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (articleRef.current) {
-        const position = articleRef.current.scrollTop;
-        if (scrollPosition !== position) {
-          setScrollPosition(position);
-        }
+useEffect(() => {
+  const handleScroll = () => {
+    console.log("entering handleScroll");
+    if (articleRef.current) {
+      console.log("Scrolling: ", articleRef.current.scrollTop);
+      const position = articleRef.current.scrollTop;
+      if (scrollPositionRef.current !== position) {
+        setScrollPosition(position);
+        scrollPositionRef.current = position; // Update the ref
       }
-    };
-
-    const modalElement = articleRef.current;
-    if (modalElement) {
-      modalElement.addEventListener("scroll", handleScroll);
-      return () => {
-        modalElement.removeEventListener("scroll", handleScroll);
-      };
     }
-  }, [scrollPosition]);
+  };
+
+  const modalElement = articleRef.current;
+  if (modalElement) {
+    console.log("Adding scroll event listener to: ", modalElement);
+    modalElement.addEventListener("scroll", handleScroll);
+    return () => {
+      console.log("Removing scroll event listener from: ", modalElement);
+      modalElement.removeEventListener("scroll", handleScroll);
+    };
+  }
+}, [articleRef.current]); 
 
   const handleClickOutside = useCallback((event) => {
     if (modalRef.current && !contentcontainerRef.current.contains(event.target)) {
