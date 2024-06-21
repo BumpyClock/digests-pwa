@@ -83,6 +83,7 @@ useEffect(() => {
       modalElement.removeEventListener("scroll", handleScroll);
     };
   }
+  // eslint-disable-next-line
 }, [articleRef.current]); 
 
   const handleClickOutside = useCallback((event) => {
