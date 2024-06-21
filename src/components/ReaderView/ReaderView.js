@@ -57,6 +57,7 @@ const ReaderView = ({ url, item, onClose }) => {
 
     return () => {
       document.body.style.overflow = "";
+      articleRef.current=null;
     };
   }, [url]);
 
@@ -88,6 +89,7 @@ useEffect(() => {
     if (modalRef.current && !contentcontainerRef.current.contains(event.target)) {
       onClose();
       document.body.style.overflow = ""; // Re-enable scrolling
+      articleRef.current=null;
     }
   }, [onClose]);
 
@@ -103,6 +105,8 @@ useEffect(() => {
       if (event.key === 'Escape') {
         onClose();
         document.body.style.overflow = ""; // Re-enable scrolling
+        articleRef.current=null;
+
       }
     };
 
@@ -122,13 +126,14 @@ useEffect(() => {
             article && (
               <>
                 <div className="reader-view-page-content" >
-                <div className="reader-view-header-container">
 
-                  <div className="reader-view-header">
+                  <div className="reader-view-header" style={{height: `${Math.max(500 - Math.pow(scrollPosition / 100, 2.5) * 50, 200)}px`}}>
+                  <div className="reader-view-header-container">
+
                     <div
                       className="header-image"
                       style={{
-filter: `blur(${Math.min(Math.pow(scrollPosition / 25, 1.5), 150)}px) opacity(${Math.max(1 - Math.pow(scrollPosition / 100, 2), 0.6)})`,         
+filter: `blur(${Math.min(Math.pow(scrollPosition / 50, 1.5), 150)}px) opacity(${Math.max(1 - Math.pow(scrollPosition / 100, 2), 0.6)})`,         
 height: `${Math.max(500 - Math.pow(scrollPosition / 100, 1.5) * 50, 150)}px`                      }}
                     >
                       {item.thumbnail && (
@@ -138,7 +143,7 @@ height: `${Math.max(500 - Math.pow(scrollPosition / 100, 1.5) * 50, 150)}px`    
                           style={{ width: '100%', objectFit: 'cover' }}
                         />
                       )}
-                    </div>
+                    </div></div>
                     <div className="header-image-info" style={{ transform: `translateY(${Math.max(-scrollPosition , -40)}px)` }}>
                       <WebsiteInfo
                         favicon={item.favicon}
@@ -169,7 +174,7 @@ height: `${Math.max(500 - Math.pow(scrollPosition / 100, 1.5) * 50, 150)}px`    
                         onClick={onClose}
                       />
                     </div>
-                  </div></div>
+                  </div>
                   <div className="reader-view-page-text" ref={articleRef}>
                     <div
                       className="reader-view-article"
