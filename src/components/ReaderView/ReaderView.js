@@ -25,6 +25,7 @@ const ReaderView = ({ url, item, onClose }) => {
   const contentcontainerRef = useRef(null);
   const scrollPositionRef = useRef(scrollPosition);
   const headerImageInfoRef = useRef(null);
+  //eslint-disable-next-line
   const [headerImageInfoInitialized, setHeaderImageInfoInitialized] = useState(false);
 
   const dynamicTop = useRef(0);
