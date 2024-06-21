@@ -40,11 +40,11 @@ const Feed = ({ feedItems, feedDetails }) => {
     if (width <= 650) {
       return '12px';
     } else if (width <= 1050) {
-      return '24px';
+      return '16px';
     } else if (width <= 1250) {
-      return '36px';
+      return '24px';
     } else {
-      return '36px';
+      return '28px';
     }
   }, []);
   
@@ -154,7 +154,7 @@ return (
   isLoading ? <div className='loading-indicator'>Loading...</div> : 
   <div className="feed" ref={feedRef}> {}
     <ResponsiveMasonry
-      columnsCountBreakPoints={{320: 1, 550: 2, 850: 3, 1201: 4,1601:4,1801:4,1901:5,2201:6}}
+      columnsCountBreakPoints={{320: 1, 650: 2, 850: 3, 1201: 4,1601:5,1801:5,1901:6,2201:6}}
       style={{maxWidth: '2400px', margin: '0 auto'}}
     >
       <Masonry gutter={gutterSize}>
