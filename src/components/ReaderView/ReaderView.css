@@ -242,7 +242,6 @@
 .reader-view-header {
     position: sticky !important;
     top: 0px;
-    min-height: 200px;
     background-color: var(--background-color); /* Existing background color */
     background-image: linear-gradient(to bottom, var(--background-color), transparent); /* Gradient overlay */
     z-index: 1;

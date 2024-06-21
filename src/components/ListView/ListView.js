@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './ListView.css'; // Import the CSS for this component
 import SlRelativeTime from '@shoelace-style/shoelace/dist/react/relative-time';
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
-import ReaderViewContent from '../ReaderViewContent/ReaderViewContent.js'; // Import the ReaderViewContent component
+import ReaderViewContent from '../ReaderView/ReaderView.js'; // Import the ReaderViewContent component
 import axios from "axios";
 import WebsiteInfo from '../website-info/website-info.js';
 
