@@ -1,39 +1,31 @@
-import React, { useState, useEffect, useRef, useCallback, Suspense, lazy } from "react";
+import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import axios from "axios";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
+import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
 import "./ReaderView.css";
-import Modal from "../Modal/Modal.js";
-const ReaderViewContent = lazy(() => import('../ReaderViewContent/ReaderViewContent.js'));
+import WebsiteInfo from "../website-info/website-info.js";
 
-
-function updateReadingProgress(progressCircle, pageText) {
-  const scrollPosition = pageText.scrollTop;
-  const maxScroll = pageText.scrollHeight - pageText.clientHeight;
-  const progressPercentage = (scrollPosition / maxScroll) * 100;
-  const setCircularProgress = (progressIndicator, progressPercentage) => {
-    const radius = progressIndicator.r.baseVal.value;
-    const circumference = 2 * Math.PI * radius;
-    const offset = circumference - (progressPercentage / 100) * circumference;
-    progressIndicator.style.strokeDashoffset = offset;
-  };
-
-  setCircularProgress(progressCircle, progressPercentage);
+function estimateReadingTime(text) {
+  if (!text) return 0;
+  const wordsPerMinute = 183; // Adjust this value based on your preferred reading speed
+  const words = text.trim().split(/\s+/).length;
+  const readingTimeInMinutes = Math.ceil(words / wordsPerMinute);
+  return readingTimeInMinutes;
 }
 
 const ReaderView = ({ url, item, onClose }) => {
   const [article, setArticle] = useState(null);
-  // eslint-disable-next-line
-  const progressCircleRef = useRef(null);
-  const pageTextRef = useRef(null);
-  const articleRef = useRef(null);
-  const modalRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const modalRef = useRef(null);
+  const articleRef = useRef(null);
+  const contentcontainerRef = useRef(null);
 
   useEffect(() => {
     // Disable background scrolling
     document.body.style.overflow = "hidden";
 
-    const fetchArticleFromEndpoint = async () => {
+    const fetchArticle = async () => {
       try {
         const response = await axios.post(
           `https://api.bumpyclock.com/getreaderview`,
@@ -54,68 +46,40 @@ const ReaderView = ({ url, item, onClose }) => {
         } else {
           setArticle({ content: "Error getting article content" });
         }
-        // console.log("🚀 ~ fetchArticle ~ for", url);
       } catch (error) {
         console.error("Error fetching the page content:", error);
       }
       setIsLoading(false);
     };
 
+    fetchArticle();
 
-    fetchArticleFromEndpoint();
-
-    // fetchArticleFromEndpoint();
-
-    // Cleanup function to re-enable background scrolling
     return () => {
       document.body.style.overflow = "";
     };
-  }, [url]); // Effect runs when URL changes
-
-  const handleGlobalScroll = useCallback((event) => {
-  if (modalRef.current && articleRef.current) {
-    event.preventDefault();
-    const { scrollTop, scrollHeight, clientHeight } = articleRef.current;
-    const wheel = event.deltaY < 0 ? -1 : 1;
-    const newScrollTop = scrollTop + (wheel * 30); // 30 is the scroll speed, adjust as needed
-
-    // Prevent scrolling beyond the content
-    if (newScrollTop < 0) {
-      articleRef.current.scrollTop = 0;
-    } else if (newScrollTop > scrollHeight - clientHeight) {
-      articleRef.current.scrollTop = scrollHeight - clientHeight;
-    } else {
-      articleRef.current.scrollTop = newScrollTop;
-    }
-  }
-}, []);
-
-
-  const handleScroll = useCallback(() => {
-    updateReadingProgress(progressCircleRef.current, articleRef.current);
-  }, []);
+  }, [url]);
 
   useEffect(() => {
-  window.addEventListener('wheel', handleGlobalScroll, { passive: false });
+    const handleScroll = () => {
+      if (articleRef.current) {
+        const position = articleRef.current.scrollTop;
+        if (scrollPosition !== position) {
+          setScrollPosition(position);
+        }
+      }
+    };
 
-  return () => {
-    window.removeEventListener('wheel', handleGlobalScroll);
-  };
-}, [handleGlobalScroll]);
-
-  useEffect(() => {
-    const articleElement = articleRef.current;
-
-    if (articleElement) {
-      articleElement.addEventListener("scroll", handleScroll);
+    const modalElement = articleRef.current;
+    if (modalElement) {
+      modalElement.addEventListener("scroll", handleScroll);
       return () => {
-        articleElement.removeEventListener("scroll", handleScroll);
+        modalElement.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [handleScroll, article]); 
+  }, [scrollPosition]);
 
   const handleClickOutside = useCallback((event) => {
-    if (modalRef.current && !articleRef.current.contains(event.target)) {
+    if (modalRef.current && !contentcontainerRef.current.contains(event.target)) {
       onClose();
       document.body.style.overflow = ""; // Re-enable scrolling
     }
@@ -123,46 +87,96 @@ const ReaderView = ({ url, item, onClose }) => {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [handleClickOutside]);
 
-  const handleModalScroll = useCallback((event) => {
-    articleRef.current.scrollTop = event.target.scrollTop;
-  }, []);
-
   useEffect(() => {
-    const modalElement = modalRef.current;
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+        document.body.style.overflow = ""; // Re-enable scrolling
+      }
+    };
 
-    if (modalElement) {
-      modalElement.addEventListener("scroll", handleModalScroll);
-      return () => {
-        modalElement.removeEventListener("scroll", handleModalScroll);
-      };
-    }
-  }, [handleModalScroll]);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
 
   return (
-    <Modal onClose={onClose}>
-      <Suspense fallback={<SlSpinner style={{ fontSize: "3rem", margin: "2rem" }} />}>
-        {isLoading ? (
-          <SlSpinner style={{ fontSize: "3rem", margin: "2rem" }}  />
-        ) : (
-          article && (
-            <ReaderViewContent
-              article={article}
-              url={url}
-              onClose={onClose}
-              progressCircleRef={progressCircleRef}
-              pageTextRef={pageTextRef}
-              item={item}
-            />
-          )
-        )}
-      </Suspense>
-    </Modal>
+    <div className={`modal-container ${isLoading ? '' : 'visible'}`} ref={modalRef}>
+      <div className="modal-container-content" ref={contentcontainerRef}>
+        <Suspense fallback={<SlSpinner style={{ fontSize: "3rem", margin: "2rem" }} />}>
+          {isLoading ? (
+            <SlSpinner style={{ fontSize: "3rem", margin: "2rem" }} />
+          ) : (
+            article && (
+              <>
+                <div className="reader-view-page-content" >
+                <div className="reader-view-header-container">
+
+                  <div className="reader-view-header">
+                    <div
+                      className="header-image"
+                      style={{
+filter: `blur(${Math.min(Math.pow(scrollPosition / 25, 1.5), 150)}px) opacity(${Math.max(1 - Math.pow(scrollPosition / 100, 2), 0.6)})`,         
+height: `${Math.max(500 - Math.pow(scrollPosition / 100, 1.5) * 50, 150)}px`                      }}
+                    >
+                      {item.thumbnail && (
+                        <img
+                          src={item.thumbnail}
+                          alt="Header"
+                          style={{ width: '100%', objectFit: 'cover' }}
+                        />
+                      )}
+                    </div>
+                    <div className="header-image-info" style={{ transform: `translateY(${Math.max(-scrollPosition , -40)}px)` }}>
+                      <WebsiteInfo
+                        favicon={item.favicon}
+                        siteTitle={item.siteTitle}
+                        feedTitle={item.feedTitle}
+                        style={{ marginBottom: '8px', maxWidth: 'fit-content' }}
+                      />
+                      <a href={url} target="_blank" rel="noopener noreferrer">
+                        <h1 className="reader-view-title">{article.title}</h1>
+                      </a>
+                      <p className="reader-view-reading-time">
+                        {estimateReadingTime(article.textContent)} minutes
+                      </p>
+                    </div>
+                    <div className="reader-view-header-button-container">
+                      <SlIconButton
+                        library="iconoir"
+                        name="open-new-window"
+                        class="reader-view-header-button"
+                        onClick={() => {
+                          window.open(url, '_blank');
+                        }}
+                      />
+                      <SlIconButton
+                        library="iconoir"
+                        name="xmark"
+                        class="reader-view-header-button"
+                        onClick={onClose}
+                      />
+                    </div>
+                  </div></div>
+                  <div className="reader-view-page-text" ref={articleRef}>
+                    <div
+                      className="reader-view-article"
+                      dangerouslySetInnerHTML={{ __html: article.content }}
+                    />
+                  </div>
+                </div>
+              </>
+            )
+          )}
+        </Suspense>
+      </div>
+    </div>
   );
 };
 

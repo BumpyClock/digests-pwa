@@ -20,7 +20,8 @@ const useImageLoader = (src) => {
 
     if (src) {
       const img = new Image();
-      img.src = `https://digests-imgproxy-a4crwf5b7a-uw.a.run.app/unsafe/rs:fit:0:300:0/g:no/plain/${encodeURIComponent(src)}@webp`;
+      // img.src = `https://digests-imgproxy-a4crwf5b7a-uw.a.run.app/unsafe/rs:fit:0:300:0/g:no/plain/${encodeURIComponent(src)}@webp`;
+      img.src = src;
 
       const link = document.createElement('link');
       link.rel = 'preload';
@@ -146,7 +147,7 @@ const FeedCard = ({ item }) => {
   </>
 )}
       <div className="text-content" style={{ padding: isError ? "" : "12px 24px" }}>
-        <WebsiteInfo favicon={item.favicon} siteTitle={item.siteTitle} feedTitle={item.feedTitle} />
+        <WebsiteInfo favicon={item.favicon} siteTitle={item.siteTitle} feedTitle={item.siteTitle} />
         <h3>{item.title}</h3>
         <div className="date">
           <SlRelativeTime date={new Date(item.published)} />

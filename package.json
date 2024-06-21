@@ -1,10 +1,11 @@
 {
   "name": "digests-pwa",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@mozilla/readability": "^0.5.0",
+    "@react-spring/web": "^9.7.3",
     "@shoelace-style/react": "^3.0.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -20,6 +21,7 @@
     "react-pull-to-refresh": "^2.0.1",
     "react-responsive-masonry": "^2.1.7",
     "react-scripts": "^5.0.1",
+    "react-spring": "^9.7.3",
     "react-virtualized": "^9.22.5",
     "stream-http": "^3.2.0",
     "tinycolor2": "^1.6.0",
