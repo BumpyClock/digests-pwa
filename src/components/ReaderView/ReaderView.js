@@ -4,7 +4,6 @@ import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
 import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
 import "./ReaderView.css";
 import WebsiteInfo from "../website-info/website-info.js";
-import { transform } from "framer-motion";
 
 function estimateReadingTime(text) {
   if (!text) return 0;
