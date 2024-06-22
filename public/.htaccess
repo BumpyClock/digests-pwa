@@ -20,3 +20,14 @@
         Header set Expires "Thu, 1 Jan 1970 00:00:00 GMT"
     </IfModule>
 </FilesMatch>
+
+# ENABLE CACHING FOR IMAGES
+<FilesMatch "\.(png|jpe?g|gif|svg)$">
+    <IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresDefault "access plus 1 week"
+    </IfModule>
+    <IfModule mod_headers.c>
+        Header set Cache-Control "public"
+    </IfModule>
+</FilesMatch>
