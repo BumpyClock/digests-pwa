@@ -4,6 +4,7 @@ import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
 import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
 import "./ReaderView.css";
 import WebsiteInfo from "../website-info/website-info.js";
+import { transform } from "framer-motion";
 
 function estimateReadingTime(text) {
   if (!text) return 0;
@@ -17,14 +18,16 @@ function estimateReadingTime(text) {
 
 const ReaderView = ({ url, item, onClose }) => {
   const [article, setArticle] = useState(null);
-  const isLoading  = useRef(true);
-  const requestSent= useRef(true);
+  const isLoading = useRef(true);
+  const requestSent = useRef(true);
   const [scrollPosition, setScrollPosition] = useState(0);
   const modalRef = useRef(null);
   const articleRef = useRef(null);
   const contentcontainerRef = useRef(null);
   const scrollPositionRef = useRef(scrollPosition);
   const headerImageInfoRef = useRef(null);
+  const viewportWidth = window.innerWidth;
+
   //eslint-disable-next-line
   const [headerImageInfoInitialized, setHeaderImageInfoInitialized] = useState(false);
 
@@ -32,17 +35,52 @@ const ReaderView = ({ url, item, onClose }) => {
   function calculateHeaderHeight(scrollPosition) {
     return Math.max(500 - Math.pow(scrollPosition / 100, 1.5) * 50, 200);
   }
-  
+
+ function calculateFontSize(scrollPosition) {
+  const maxScrollForFontSizeChange = 500;
+  let minFontSize; // Minimum font size
+  let maxFontSize = 16; // Maximum font size
+
+  // Adjusting the minimum font size based on the viewport width
+  if (viewportWidth < 600) {
+    minFontSize = 12; // Smaller screens get a smaller min font size
+  } else if (viewportWidth >= 600 && viewportWidth < 1200) {
+    minFontSize = 14; // Medium screens
+  } else {
+    minFontSize = 16; // Larger screens get a larger min font size
+  }
+
+  const scaleFactor = Math.max(0, Math.min(1, scrollPosition / maxScrollForFontSizeChange));
+  const fontSize = maxFontSize - (scaleFactor * (maxFontSize - minFontSize));
+
+  return `${fontSize}px`;
+}
+
+function calculateHeaderImageInfoBottom(scrollPosition) {
+  const maxScroll=500;
+  const minBottom = -1;
+  let maxBottom ;
+  if (viewportWidth < 600) {
+    maxBottom = 1.5; // Smaller screens get a smaller min font size
+  } else if (viewportWidth >= 600 && viewportWidth < 1200) {
+    maxBottom = 1; // Medium screens
+  } else {
+    maxBottom = .5; // Larger screens get a larger min font size
+  }
+  const scaleFactor = Math.max(0, Math.min(1, scrollPosition / maxScroll));
+  const bottom = minBottom + (scaleFactor * (maxBottom - minBottom));
+  return `${bottom}em`;
+}
 
   useEffect(() => {
     // Disable background scrolling
     document.body.style.overflow = "hidden";
 
-    
+
 
     const fetchArticle = async () => {
       try {
-        requestSent.current=false;
+        requestSent.current = false;
         console.log("Fetching article content for: ", url);
         const response = await axios.post(
           `https://api.digests.app/getreaderview`,
@@ -74,84 +112,84 @@ const ReaderView = ({ url, item, onClose }) => {
     if (isLoading.current && url && requestSent.current) {
       // console.log("calling fetchArticle");
 
-    fetchArticle();
-    
+      fetchArticle();
+
     }
 
     return () => {
       document.body.style.overflow = "";
-      articleRef.current=null;
+      articleRef.current = null;
     };
-  }, [url, isLoading,headerImageInfoRef]);
+  }, [url, isLoading, headerImageInfoRef]);
 
 
 
-useEffect(() => {
-  const handleScroll = () => {
-    
-    if (articleRef.current) {
-      
-      const position = articleRef.current.scrollTop;
-      if (scrollPositionRef.current !== position) {
-        if (headerImageInfoRef.current) {
-          dynamicTop.current = Math.max(calculateHeaderHeight(position) - headerImageInfoRef.current.offsetHeight,24);
-          // console.log("Dynamic top", dynamicTop.current);
+  useEffect(() => {
+    const handleScroll = () => {
+
+      if (articleRef.current) {
+
+        const position = articleRef.current.scrollTop;
+        if (scrollPositionRef.current !== position) {
+          if (headerImageInfoRef.current) {
+            dynamicTop.current = Math.max(calculateHeaderHeight(position) - headerImageInfoRef.current.offsetHeight, 24);
+            // console.log("Dynamic top", dynamicTop.current);
+          }
+          setScrollPosition(position);
+          scrollPositionRef.current = position; // Update the ref
         }
-        setScrollPosition(position);
-        scrollPositionRef.current = position; // Update the ref
       }
-    }
-  };
-
-  // console.log("handleScroll is called", isLoading.current, articleRef.current);
-
-  const articleElement = articleRef.current;
-  if (articleElement) {
-    // console.log("Adding scroll event listener to: ", articleElement);
-    articleElement.addEventListener("scroll", handleScroll);
-    return () => {
-      // console.log("Removing scroll event listener from: ", articleElement);
-      articleElement.removeEventListener("scroll", handleScroll);
     };
-  }
-  // eslint-disable-next-line
-}, [articleRef.current, isLoading.current] ); 
 
+    // console.log("handleScroll is called", isLoading.current, articleRef.current);
 
-
-
-
-useEffect(() => {
-  // This function will be called whenever the user scrolls on the modal
-  const handleModalScroll = () => {
-    if (modalRef.current && articleRef.current) {
-      // Calculate the scroll ratio or any other logic you want to use
-      // For simplicity, we're directly using the scrollTop value of modalRef
-      const scrollAmount = modalRef.current.scrollTop;
-      console.log("Scrolling", scrollAmount);
-      
-      // Apply the scroll to articleRef
-      articleRef.current.scrollTop = scrollAmount;
+    const articleElement = articleRef.current;
+    if (articleElement) {
+      // console.log("Adding scroll event listener to: ", articleElement);
+      articleElement.addEventListener("scroll", handleScroll);
+      return () => {
+        // console.log("Removing scroll event listener from: ", articleElement);
+        articleElement.removeEventListener("scroll", handleScroll);
+      };
     }
-  };
+    // eslint-disable-next-line
+  }, [articleRef.current, isLoading.current]);
 
-  // Add the scroll event listener to modalRef
-  const modalElement = modalRef.current;
-  if (modalElement) {
-    modalElement.addEventListener('scroll', handleModalScroll);
-    
-    // Cleanup function to remove the event listener
-    return () => {
-      modalElement.removeEventListener('scroll', handleModalScroll);
+
+
+
+
+  useEffect(() => {
+    // This function will be called whenever the user scrolls on the modal
+    const handleModalScroll = () => {
+      if (modalRef.current && articleRef.current) {
+        // Calculate the scroll ratio or any other logic you want to use
+        // For simplicity, we're directly using the scrollTop value of modalRef
+        const scrollAmount = modalRef.current.scrollTop;
+        console.log("Scrolling", scrollAmount);
+
+        // Apply the scroll to articleRef
+        articleRef.current.scrollTop = scrollAmount;
+      }
     };
-  }
-}, [modalRef]);
+
+    // Add the scroll event listener to modalRef
+    const modalElement = modalRef.current;
+    if (modalElement) {
+      modalElement.addEventListener('scroll', handleModalScroll);
+
+      // Cleanup function to remove the event listener
+      return () => {
+        modalElement.removeEventListener('scroll', handleModalScroll);
+      };
+    }
+  }, [modalRef]);
 
   const handleClickOutside = useCallback((event) => {
     if (modalRef.current && !contentcontainerRef.current.contains(event.target)) {
       onClose();
       document.body.style.overflow = ""; // Re-enable scrolling
-      articleRef.current=null;
+      articleRef.current = null;
     }
   }, [onClose]);
 
@@ -167,7 +205,7 @@ useEffect(() => {
       if (event.key === 'Escape') {
         onClose();
         document.body.style.overflow = ""; // Re-enable scrolling
-        articleRef.current=null;
+        articleRef.current = null;
 
       }
     };
@@ -178,7 +216,7 @@ useEffect(() => {
     };
   }, [onClose]);
 
-  
+
   useEffect(() => {
     const calculateInitialDynamicTop = () => {
       const initialScrollPosition = 0; // Assuming the initial scroll position is 0
@@ -191,7 +229,7 @@ useEffect(() => {
         console.error("Header image info ref not found");
       }
     };
-  
+
     if (headerImageInfoInitialized) {
       calculateInitialDynamicTop();
     }
@@ -199,7 +237,7 @@ useEffect(() => {
 
   return (
     <div className={`modal-container ${isLoading.current ? '' : 'visible'}`} ref={modalRef}>
-      <div className="modal-container-content" ref={contentcontainerRef}>
+      <div className="modal-container-content" ref={contentcontainerRef} style={{ fontSize: calculateFontSize(scrollPosition) }}>
         <Suspense fallback={<SlSpinner style={{ fontSize: "3rem", margin: "2rem" }} />}>
           {isLoading.current ? (
             <SlSpinner style={{ fontSize: "3rem", margin: "2rem" }} />
@@ -208,24 +246,25 @@ useEffect(() => {
               <>
                 <div className="reader-view-page-content" >
 
-                  <div className="reader-view-header" style={{height:`${calculateHeaderHeight(scrollPosition)}px`}}>
-                  <div className="reader-view-header-container">
+                  <div className="reader-view-header" style={{ height: `${calculateHeaderHeight(scrollPosition)}px` }}>
+                    <div className="reader-view-header-container">
 
-                    <div
-                      className="header-image"
-                      style={{
-filter: `blur(${Math.min(Math.pow(scrollPosition / 50, 2), 150)}px) opacity(${Math.max(1 - Math.pow(scrollPosition / 100, 2), 0.6)})`,         
-height: `${calculateHeaderHeight(scrollPosition)}px`                      }}
-                    >
-                      {item.thumbnail && (
-                        <img
-                          src={item.thumbnail}
-                          alt="Header"
-                        
-                        />
-                      )}
-                    </div></div>
-                    <div className="header-image-info" ref={headerImageInfoRef} >
+                      <div
+                        className="header-image"
+                        style={{
+                          filter: `blur(${Math.min(Math.pow(scrollPosition / 50, 2), 150)}px) opacity(${Math.max(1 - Math.pow(scrollPosition / 100, 2), 0.6)})`,
+                          height: `${calculateHeaderHeight(scrollPosition)}px`
+                        }}
+                      >
+                        {item.thumbnail && (
+                          <img
+                            src={item.thumbnail}
+                            alt="Header"
+
+                          />
+                        )}
+                      </div></div>
+                    <div className="header-image-info" ref={headerImageInfoRef} style={{bottom: calculateHeaderImageInfoBottom(scrollPosition)}} >
                       <WebsiteInfo
                         favicon={item.favicon}
                         siteTitle={item.siteTitle}
@@ -256,7 +295,7 @@ height: `${calculateHeaderHeight(scrollPosition)}px`                      }}
                       />
                     </div>
                   </div>
-                  <div className="reader-view-page-text" ref={articleRef} style={{top: `${calculateHeaderHeight(scrollPosition)+40}px`}}>
+                  <div className="reader-view-page-text" ref={articleRef} >
                     <div
                       className="reader-view-article"
                       dangerouslySetInnerHTML={{ __html: article.content }}

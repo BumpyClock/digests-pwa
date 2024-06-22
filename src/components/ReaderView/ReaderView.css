@@ -43,7 +43,7 @@
   box-shadow: var(--box-shadow-standard);
   background-color: var(--background-color);
   border-radius: 8px;
-  scrollbar-width: thin;
+  scrollbar-width: none;
 
 }
 
@@ -97,7 +97,8 @@
 }
 
 .reader-view-page-content h1 {
-  font-size: 1.8rem;
+  font-size: 1.8em;
+  margin-right: 4em;
   /* margin: 1.5rem 0 */
 }
 
@@ -138,6 +139,8 @@
   padding: 0 4rem;
   height: 100%;
   overflow:auto;
+  position:relative;
+  top:0em;
   /* scrollbar-width: thin; */
 
 }
@@ -328,8 +331,9 @@
     stroke-width: 1px;
     stroke: #000;
     object-fit: contain;
-    width: fit-content;
     width: -moz-fit-content;
+    width: fit-content;
+
   }
   .reader-view-article p {
     margin: 1.33em 0
@@ -457,7 +461,7 @@
 .header-image-info {
   position: absolute;
   height:fit-content;
-  bottom: .5rem;
+  bottom: -1em;
   z-index: 4;
   display: flex;
   flex-direction: column;
