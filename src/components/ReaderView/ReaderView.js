@@ -52,8 +52,8 @@ const ReaderView = ({ url, item, onClose }) => {
     maxFontSize = 16; 
 
   } else {
-    minFontSize = 16; // Larger screens get a larger min font size
-    maxFontSize = 18; 
+    minFontSize = 14; // Larger screens get a larger min font size
+    maxFontSize = 16; 
 
   }
 
