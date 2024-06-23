@@ -301,7 +301,11 @@
       border-radius: 0;
       max-height: 100vh;
     }
-    
+
+    .modal-container-content {
+      font-size: 12px;
+    }
+   
   }
   
   .reader-view-title {
