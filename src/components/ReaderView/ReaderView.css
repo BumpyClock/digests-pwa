@@ -460,7 +460,6 @@
 
 .header-image-info {
   position: absolute;
-  height:fit-content;
   bottom: -1em;
   z-index: 4;
   display: flex;
