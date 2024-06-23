@@ -254,12 +254,15 @@ function calculateHeaderImageInfoBottom(scrollPosition) {
                 <div className="reader-view-page-content" >
 
                   <div className="reader-view-header" style={{ height: `${calculateHeaderHeight(scrollPosition)}px` }}>
-                    <div className="reader-view-header-container">
+                   <div
+  className="reader-view-header-container"
+  style={{ height: item.thumbnail === "" ? "200px" : "auto" }}
+>
 
                       <div
                         className="header-image"
                         style={{
-                          filter: `blur(${Math.min(Math.pow(scrollPosition / 50, 2), 150)}px) opacity(${Math.max(1 - Math.pow(scrollPosition / 100, 2), 0.6)})`,
+                          filter: `blur(${Math.min(Math.pow(scrollPosition / 50, 2), 200)}px) opacity(${Math.max(1 - Math.pow(scrollPosition / 100, 2), 0.9)})`,
                           height: `${calculateHeaderHeight(scrollPosition)}px`
                         }}
                       >
