@@ -38,15 +38,23 @@ const ReaderView = ({ url, item, onClose }) => {
  function calculateFontSize(scrollPosition) {
   const maxScrollForFontSizeChange = 500;
   let minFontSize; // Minimum font size
-  let maxFontSize = 16; // Maximum font size
+  let maxFontSize ; // Maximum font size
 
   // Adjusting the minimum font size based on the viewport width
-  if (viewportWidth < 600) {
-    minFontSize = 12; // Smaller screens get a smaller min font size
+  if (viewportWidth <450) {
+    maxFontSize = 10; 
+    minFontSize = 8;
+  }else if(viewportWidth < 650) {
+    maxFontSize = 12; 
+    minFontSize = 10; // Smaller screens get a smaller min font size
   } else if (viewportWidth >= 600 && viewportWidth < 1200) {
     minFontSize = 14; // Medium screens
+    maxFontSize = 16; 
+
   } else {
     minFontSize = 16; // Larger screens get a larger min font size
+    maxFontSize = 18; 
+
   }
 
   const scaleFactor = Math.max(0, Math.min(1, scrollPosition / maxScrollForFontSizeChange));
