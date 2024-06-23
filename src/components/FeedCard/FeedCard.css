@@ -9,6 +9,8 @@ sl-card {
     row-gap: 0;
     /* background: var(--background-color-secondary); */
     /* border: var(--border-color); */
+    -webkit-border-radius: 24px;
+
     border-radius: 24px;
     /* box-shadow: var(--box-shadow-standard); */
     width: 100%;
@@ -41,6 +43,8 @@ sl-card {
         position: absolute;
     background-size: auto;
     background-repeat: repeat;
+    -webkit-border-radius: 24px;
+
     border-radius: 24px;
     background-position: center center;
     z-index: -1;
@@ -95,6 +99,8 @@ sl-card {
     left: 0;
     transition: transform .25s ease-in-out;
     overflow: hidden;
+    -webkit-border-radius: 12px 12px 0 0;
+
     border-radius: 12px 12px 0 0;
   }
 
@@ -111,18 +117,24 @@ sl-card {
     transition: all .25s ease-in-out;
   }
   .card .image-container img {
+    -webkit-border-radius: 12px;
+
     border-radius: 12px;
     max-height:320px;
     transform: scale(1);
     transition: all .25s ease-in-out !important;
   }
   .card:hover .image-container img {
+    -webkit-border-radius: 12px 12px 0 0;
+
     border-radius: 12px 12px 0 0;
     transform: scale(1.1);
     transition: all .25s ease-in-out
   }
-  .card:hover .card-bg img {
+  .card:hover .card-bg img, card:hover .card-bg {
     opacity: .35;
+    -webkit-border-radius: 24px;
+    border-radius: 24px;
     transform: scale(1.5) rotate(180deg);
     filter: blur(60px) brightness(1.1);
   }
@@ -157,6 +169,8 @@ sl-card {
     margin-left: -16px;
     width: 32px;
     height: 32px;
+    -webkit-border-radius: 32px;
+
     border-radius: 32px;
     animation: scaleout 1.2s infinite ease-in-out
   }
@@ -167,9 +181,13 @@ sl-card {
     background-position: center center;
     object-fit: cover;
     transform-origin: center;
+    -webkit-border-radius: 24px;
+
     border-radius: 24px
   }
   .card:hover .image-container {
+    -webkit-border-radius: 24px 24px 0 0;
+
     border-radius: 24px 24px 0 0
   }
   .card .text-content {
@@ -215,6 +233,8 @@ sl-card {
   .card button {
     background-color: #2a6496;
     border: none;
+    -webkit-border-radius: 5px;
+
     border-radius: 5px;
     color: #fff;
     cursor: pointer;
