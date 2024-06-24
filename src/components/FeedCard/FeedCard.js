@@ -152,8 +152,7 @@ const FeedCard = ({ item }) => {
         <div className="date">
           <SlRelativeTime date={new Date(item.published)} />
         </div>
-        {item.content && <p className="description">{item.content}</p>}
-        {!thumbnailUrl && item.description && (
+{item.description ? <p className="description">{item.description}</p> : <p className="description">{item.content}</p>}        {!thumbnailUrl && item.description && (
           <div className="description long-description">{item.description}</div>
         )}
         {item.link && (

@@ -103,7 +103,7 @@ const handleExportFeeds = () => {
 
   
     // Ensure input is trimmed and lowercased for consistency
-    const input = newFeedUrl.trim().toLowerCase();
+    const input = newFeedUrl.trim();
   
     // Debugging: Log the input
     // console.log("Input URL String:", input);
