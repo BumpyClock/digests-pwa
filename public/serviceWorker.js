@@ -44,6 +44,7 @@ function createRequestOptions(feedUrls) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      
     },
     body: JSON.stringify({ urls: feedUrls }),
   };
@@ -58,12 +59,12 @@ async function fetchRSS(feedUrls) {
     const requestOptions = createRequestOptions(feedUrls);
     const response = await fetch(requestUrl, requestOptions);
     const fetchedFeedData = await response.json();
+    console.log("fetchedFeedData", fetchedFeedData);
 
     if (response.status === 200) {
 
       for (const feed of fetchedFeedData.feeds) {
 
-        console.log("feed: ", feed.siteTitle);
 
         const isErrorTitle = errorMessages.some((msg) =>
           feed.siteTitle.includes(msg)
@@ -73,7 +74,6 @@ async function fetchRSS(feedUrls) {
           console.log("no site title");
         } 
 
-        console.log("feed: ", feed.siteTitle);
 
 
 

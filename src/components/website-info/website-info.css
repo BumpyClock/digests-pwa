@@ -10,12 +10,14 @@
     max-height: 20px;
     margin: 12px;
     border-radius: 4px;
+    object-fit: fill !important;
 }
 
 .website-info img {
-    width: auto;
-    height: auto;
+    width: auto !important;
+    height: auto !important;
     max-height: 20px !important;
+    border-radius: 2px !important;
 }
 
 .website-info, .site-name {

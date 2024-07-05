@@ -53,6 +53,8 @@ function App() {
 
   const refreshRSSData = useCallback(
     () => {
+
+      console.log("[RefreshRSSDATA] Refreshing RSS data");
       navigator.serviceWorker.ready.then(registration => {
         const messageChannel = new MessageChannel();
         messageChannel.port1.onmessage = event => {
@@ -76,6 +78,7 @@ function App() {
 
   const refreshFeed = useCallback(() => {
     setIsLoading(true); // Set loading to true when refresh starts
+    console.log("Refreshing feed");
     refreshRSSData();
   }, [refreshRSSData]);
 
