@@ -140,7 +140,7 @@ const FeedCard = ({ item }) => {
       <img
         src={loadedImage.src}
         alt={item.siteTitle}
-        style={{ width: "100%", height: "100%" }}
+        // style={{ width: "100%", height: "100%" }}
       />
       <div className="noise"></div>
     </div>

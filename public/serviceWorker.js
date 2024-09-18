@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '06_24_24_v1';
+const CACHE_NAME = '09_18_24_v1';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -12,6 +12,8 @@ self.addEventListener('install', (event) => {
       ]);
     })
   );
+  // Activate the service worker immediately after installation
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
@@ -23,9 +25,9 @@ self.addEventListener('activate', (event) => {
           .map((cacheName) => caches.delete(cacheName))
       );
     })
-  ).then(() => {
-    return self.clients.claim();
-  });
+  );
+  // Claim control over all clients (pages) immediately
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {

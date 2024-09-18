@@ -2,6 +2,7 @@
   "short_name": "Digests",
   "description": "Simple RSS Reader",
   "name": "Digests - RSS Reader",
+  "version": "0.0.4",
   "icons": [
     {
       "src": "favicon.ico",
@@ -19,16 +20,13 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "www.digests.app",
-  "display": "standalone",
+  "start_url": "/",
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
-  "orientation": "any",
-  "display_override": [
-    "minimal-ui","window-controls-overlay","browser-controls","fullscreen","standalone","browser"
-  ],
   "categories": [
     "productivity"
   ],
-  "id": "digests-app"
+  "id": "digests-app",
+  "orientation": "portrait",
+  "display": "minimal-ui"
 }

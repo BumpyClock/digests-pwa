@@ -207,7 +207,7 @@ select:focus {
 }
 
 
-.title-bar {
+.top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -224,7 +224,7 @@ select:focus {
 }
 
 /* small blur below the title bar */
-.title-bar::after {
+.top-bar::after {
   content: "";
   position: absolute;
   left: 0;
@@ -235,22 +235,22 @@ select:focus {
   filter: var(--blur);
 }
 
-.title-bar-small {
+.top-bar-small {
   height: 24px;
   overflow: hidden;
   transition: all 0.1s ease-in-out;
   padding: 12px 12px;
 }
 
-.title-bar-small h1 {
+.top-bar-small h1 {
   font-size: 18px !important;
   transition: all 0.1s ease-in-out;
 }
-.title-bar-shadow {
+.top-bar-shadow {
   box-shadow: 0 4px 4px -4px rgba(128, 128, 128, 0.2); /* Adjust as needed */
 }
 
-.title-bar .title {
+.top-bar .title {
   font-size: 28px;
   font-weight: 400;
   padding: 0;
@@ -259,7 +259,7 @@ select:focus {
   color: var(--color);
 }
 
-.title-bar .button-container {
+.top-bar .button-container {
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -51,30 +51,55 @@ function App() {
         );
   });
 
-  const refreshRSSData = useCallback(
-    () => {
+  
 
-      console.log("[RefreshRSSDATA] Refreshing RSS data");
-      navigator.serviceWorker.ready.then(registration => {
+  const refreshRSSData = useCallback(() => {
+    console.log("[RefreshRSSDATA] Refreshing RSS data");
+
+    if (navigator.serviceWorker.controller) {
+      // Service worker is active, send a message
+      navigator.serviceWorker.ready.then((registration) => {
         const messageChannel = new MessageChannel();
-        messageChannel.port1.onmessage = event => {
+        messageChannel.port1.onmessage = (event) => {
           if (event.data && event.data.type === "RSS_DATA") {
             setFeedDetails(event.data.payload.feedDetails);
             setFeedItems(event.data.payload.items);
-            setIsLoading(false); // Set loading to false when data is received
+            setIsLoading(false);
           }
         };
         registration.active.postMessage(
           {
             type: "FETCH_RSS",
-            payload: { urls: feedUrls }
+            payload: { urls: feedUrls },
           },
           [messageChannel.port2]
         );
       });
-    },
-    [feedUrls]
-  );
+    } else {
+      // Service worker is not active yet; will wait for it to become active
+      console.log("Service worker not active yet; waiting for activation.");
+    }
+  }, [feedUrls]);
+
+  useEffect(() => {
+    const onControllerChange = () => {
+      console.log("Service worker has taken control; refreshing RSS data.");
+      refreshRSSData();
+    };
+
+    if (!navigator.serviceWorker.controller) {
+      // Service worker is not controlling the page yet
+      console.log("Service worker not controlling the page; adding controllerchange listener.");
+      navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+    } else {
+      // Service worker is already controlling the page
+      refreshRSSData();
+    }
+
+    return () => {
+      navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+    };
+  }, [refreshRSSData]);
 
   const refreshFeed = useCallback(() => {
     setIsLoading(true); // Set loading to true when refresh starts
@@ -160,7 +185,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="title-bar" ref={headerRef}>
+      <header className="top-bar" ref={headerRef}>
         <h1 className="title">Digests</h1>
         <div className="button-container">
           <SlIconButton

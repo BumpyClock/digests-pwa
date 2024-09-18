@@ -1,5 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/serviceworker.js')
+        .then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+    }
+  </script>
   <head>
     <meta name="theme-color" content="#ffffff" id="theme-color" charset="utf-8" />
 
@@ -59,7 +69,7 @@
       name="Digests"
       content="Get your daily dose of news with Digests."
     />
-    <script>
+    <!-- <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('/serviceWorker.js')
@@ -72,28 +82,8 @@
             });
         });
       }
-    </script>
-    <script>
-      function updateThemeColor() {
-        const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
-        const style = getComputedStyle(document.documentElement);
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          // Dark mode
-          const darkThemeColor = style.getPropertyValue('--dark-new-tab-background-color').trim();
-          themeColorMetaTag.setAttribute('content', darkThemeColor);
-        } else {
-          // Light mode or no preference
-          const lightThemeColor = style.getPropertyValue('--light-new-tab-background-color').trim();
-          themeColorMetaTag.setAttribute('content', lightThemeColor);
-        }
-      }
-    
-      // Initial theme color setup
-      updateThemeColor();
-    
-      // Listen for changes in the color scheme preference
-      window.matchMedia('(prefers-color-scheme: dark)').addListener(updateThemeColor);
-    </script>
+    </script> -->
+   
     <script defer src="
 https://cdn.jsdelivr.net/npm/@mozilla/readability@0.5.0/Readability.min.js
 "></script>
@@ -128,5 +118,30 @@ https://cdn.jsdelivr.net/npm/@mozilla/readability@0.5.0/Readability.min.js
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        function updateThemeColor() {
+          const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
+          const style = getComputedStyle(document.documentElement);
+  
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // Dark mode
+            const darkThemeColor = style.getPropertyValue('--dark-new-tab-background-color').trim();
+            themeColorMetaTag.setAttribute('content', darkThemeColor);
+          } else {
+            // Light mode or no preference
+            const lightThemeColor = style.getPropertyValue('--light-new-tab-background-color').trim();
+            themeColorMetaTag.setAttribute('content', lightThemeColor);
+          }
+        }
+  
+        // Initial theme color setup
+        updateThemeColor();
+  
+        // Listen for changes in the color scheme preference
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeColor);
+      });
+    </script>
   </body>
 </html>
