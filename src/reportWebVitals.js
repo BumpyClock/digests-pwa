@@ -9,5 +9,5 @@ const reportWebVitals = onPerfEntry => {
     });
   }
 };
-
+reportWebVitals(console.log); // Logs performance metrics to the console
 export default reportWebVitals;
