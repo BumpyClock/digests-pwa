@@ -1,6 +1,6 @@
 {
   "name": "digests-pwa",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
@@ -56,7 +56,10 @@
     "@svgr/webpack": "$@svgr/webpack"
   },
   "devDependencies": {
+    "@babel/core": "^7.25.2",
     "@babel/plugin-transform-private-property-in-object": "^7.23.4",
+    "@babel/preset-env": "^7.25.4",
+    "@babel/preset-react": "^7.24.7",
     "@svgr/webpack": "^8.0.1",
     "axios": "^1.6.5",
     "postcss-flexbugs-fixes": "^5.0.2",

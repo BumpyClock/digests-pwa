@@ -7,8 +7,7 @@ import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path";
 import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
 import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/icon-library";
 import ListView from "./components/ListView/ListView.js";
-import { WebSocketProvider } from './WebSocketContext';
-import WebSocketConsumerComponent from './WebSocketConsumerComponent';
+
 
 registerIconLibrary("iconoir", {
   resolver: name =>
@@ -188,10 +187,8 @@ function App() {
   }, []);
 
   return (
-    <WebSocketProvider>
     <div className="App">
     
-    <WebSocketConsumerComponent />
       <header className="top-bar" ref={headerRef}>
         <h1 className="title">Digests</h1>
         <div className="button-container">
@@ -252,7 +249,6 @@ function App() {
               : <Feed feedItems={feedItems} />}
       </main>
     </div>
-    </WebSocketProvider>
   );
 }
 

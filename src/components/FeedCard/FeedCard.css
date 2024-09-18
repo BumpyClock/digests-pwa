@@ -199,6 +199,7 @@ card:hover .card-bg {
 }
 .card h3 {
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -242,6 +243,7 @@ card:hover .card-bg {
 
 .description {
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
