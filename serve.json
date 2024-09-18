@@ -1,0 +1,26 @@
+{
+  "headers": {
+    "/**/*.js": {
+      "Content-Type": "application/javascript"
+    },
+    "/**/*.css": {
+      "Content-Type": "text/css"
+    },
+    "/**/*.html": {
+      "Content-Type": "text/html"
+    },
+    "/**/*.png": {
+      "Content-Type": "image/png"
+    },
+    "/**/*.jpg": {
+      "Content-Type": "image/jpeg"
+    },
+    "/**/*.svg": {
+      "Content-Type": "image/svg+xml"
+    },
+    "/**/*.json": {
+      "Content-Type": "application/json"
+    }
+  },
+  "public": "build"
+}

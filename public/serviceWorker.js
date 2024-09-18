@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '09_18_24_v1';
+const CACHE_NAME = 'v' + new Date().toISOString().replace(/[:.]/g, '-');
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -12,6 +12,7 @@ self.addEventListener('install', (event) => {
       ]);
     })
   );
+  console.log("service worker installed");
   // Activate the service worker immediately after installation
   self.skipWaiting();
 });
@@ -27,16 +28,30 @@ self.addEventListener('activate', (event) => {
     })
   );
   // Claim control over all clients (pages) immediately
+  console.log("service worker activated");
   self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
+  // Network-first, fallback to cache if network fails
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    fetch(event.request)
+      .then((response) => {
+        // Clone response and store a copy in the cache
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseClone);
+        });
+        return response;
+      })
+      .catch(() => {
+        // If network fails, try to serve from cache
+        return caches.match(event.request)
+          .then((cachedResponse) => cachedResponse || new Response("Offline"));
+      })
   );
 });
+
 
 
 const errorMessages = ["Error: no title", "Error: no link"]; // Add your error messages here
@@ -51,6 +66,16 @@ function createRequestOptions(feedUrls) {
   };
 }
 
+async function fetchWithTimeout(resource, options = {}) {
+  const { timeout = 10000 } = options; // 10-second timeout
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  const response = await fetch(resource, { ...options, signal: controller.signal });
+  clearTimeout(id);
+  return response;
+}
+
+
 async function fetchRSS(feedUrls) {
   let feedDetails = [];
   let items = [];
@@ -58,7 +83,7 @@ async function fetchRSS(feedUrls) {
     const apiUrl = "https://api.digests.app";
     const requestUrl = `${apiUrl}/parse`;
     const requestOptions = createRequestOptions(feedUrls);
-    const response = await fetch(requestUrl, requestOptions);
+    const response = await fetchWithTimeout(requestUrl, requestOptions);
 
     console.log("Response status: ", response.status);
 
@@ -159,18 +184,6 @@ async function fetchRSS(feedUrls) {
 
   return { feedDetails, items };
 }
-
-self.addEventListener('message', async (event) => {
-  if (event.data && event.data.type === 'FETCH_RSS') {
-    const feedData = await fetchRSS(event.data.payload.urls);
-    // Send the fetched data back to the main thread
-    event.ports[0].postMessage({
-      type: 'RSS_DATA',
-      payload: feedData,
-    });
-  }
-});
-
 
 self.addEventListener('message', async (event) => {
   if (event.data && event.data.type === 'FETCH_RSS') {

@@ -86,20 +86,22 @@ function App() {
       console.log("Service worker has taken control; refreshing RSS data.");
       refreshRSSData();
     };
-
-    if (!navigator.serviceWorker.controller) {
-      // Service worker is not controlling the page yet
-      console.log("Service worker not controlling the page; adding controllerchange listener.");
-      navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
-    } else {
-      // Service worker is already controlling the page
+  
+    // Check if the service worker is controlling the page
+    if (navigator.serviceWorker.controller) {
+      console.log("Service worker already controlling the page; fetching RSS data.");
       refreshRSSData();
+    } else {
+      console.log("Service worker not active yet. Waiting for activation...");
+      navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
     }
-
+  
+    // Cleanup the event listener on component unmount
     return () => {
       navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
     };
   }, [refreshRSSData]);
+  
 
   const refreshFeed = useCallback(() => {
     setIsLoading(true); // Set loading to true when refresh starts
