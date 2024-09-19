@@ -1,6 +1,7 @@
 {
     "appService.defaultWebAppToDeploy": "None",
     "appService.zipIgnorePattern": [
+        ".git{,/**}",
         "node_modules{,/**}",
         ".vscode{,/**}"
     ],
