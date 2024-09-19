@@ -5,7 +5,7 @@ export function register() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker
-          .register(`${process.env.PUBLIC_URL}/serviceworker.js`) // Path to the service-worker.js
+          .register(`${process.env.PUBLIC_URL}/serviceWorker.js`) // Path to the service-worker.js
           .then((registration) => {
             console.log('Service Worker registered with scope:', registration.scope);
   
