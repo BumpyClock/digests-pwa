@@ -3,15 +3,15 @@
 const CACHE_NAME = '9_18_24_v2';
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll([
-        '/',
-        '/index.html',
-        '/static/js/bundle.js',
-      ]);
-    })
-  );
+  // event.waitUntil(
+  //   // caches.open(CACHE_NAME).then((cache) => {
+  //   //   return cache.addAll([
+  //   //     '/',
+  //   //     '/*index.html',
+  //   //     '/static/js/bundle.js',
+  //   //   ]);
+  //   // })
+  // );
   console.log("service worker installed");
   // Activate the service worker immediately after installation
   self.skipWaiting();
