@@ -3,16 +3,19 @@
 const CACHE_NAME = '9_18_24_v2';
 
 self.addEventListener('install', (event) => {
-  // event.waitUntil(
-  //   // caches.open(CACHE_NAME).then((cache) => {
-  //   //   return cache.addAll([
-  //   //     '/',
-  //   //     '/*index.html',
-  //   //     '/static/js/bundle.js',
-  //   //   ]);
-  //   // })
-  // );
-  console.log("service worker installed");
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll([
+        '/', // Ensure this path is correct
+        '/index.html', // Remove wildcard and specify exact path
+        '/static/js/bundle.js', // Ensure this path is correct
+        // Add other paths as needed
+      ]).catch((error) => {
+        console.error('Failed to cache resources during install:', error);
+      });
+    })
+  );
+  console.log("Service worker installed");
   // Activate the service worker immediately after installation
   self.skipWaiting();
 });
