@@ -193,6 +193,7 @@ function App() {
         <h1 className="title">Digests</h1>
         <div className="button-container">
           <SlIconButton
+          id="refreshButton"
             className="refresh"
             name="refresh"
             size="large"
@@ -219,6 +220,7 @@ function App() {
             name={showSettings ? "xmark" : "settings"}
             size="large"
             library="iconoir"
+            id="settingsButton"
             style={{
               cursor: "pointer",
               fontSize: isScrolled ? "1.5rem" : "1.5rem"
