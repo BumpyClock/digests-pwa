@@ -6,7 +6,7 @@
 .feed-container {
     column-gap: 12px;
     margin: auto;
-    overflow: overlay;
+    overflow: hidden;
     padding:64px;
 
 }
@@ -14,9 +14,8 @@
 .feed {
     margin : auto;
     padding:0px 64px 0px 64px;
-    height: calc(100vh - 74px);
+    /* height: calc(100vh - 74px); */
     /* scrollbar-width: thin; */
-    overflow: auto;
 }
 
 

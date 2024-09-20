@@ -4,10 +4,11 @@ import Feed from "./components/Feed/Feed.js";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
 import Settings from "./pages/settings.js";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path";
-import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
 import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/icon-library";
 import ListView from "./components/ListView/ListView.js";
-
+import AppBar from "./components/AppBar/AppBar.js";
+import CustomScrollbar from "./components/CustomScrollbar/CustomScrollbar.js";
+import "./App.css";
 
 registerIconLibrary("iconoir", {
   resolver: name =>
@@ -22,7 +23,6 @@ function App() {
   const [feedItems, setFeedItems] = useState([]);
   const [isListView, setIsListView] = useState(false);
   const [feedDetails, setFeedDetails] = useState([]);
-  const headerRef = useRef(null);
   const [refreshInterval, setRefreshInterval] = useState(() => {
     const savedRefreshInterval = localStorage.getItem("refreshInterval");
     return savedRefreshInterval ? Number(savedRefreshInterval) : 15;
@@ -30,7 +30,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const SettingsMemo = memo(Settings);
-
+  const [showSettings, setShowSettings] = useState(false);
   const [feedUrls, setFeedUrls] = useState(() => {
     const savedFeedUrls = localStorage.getItem("feedUrls");
     return savedFeedUrls
@@ -116,14 +116,12 @@ function App() {
     },
     [feedUrls]
   );
-  const [showSettings, setShowSettings] = useState(false);
   const toggleSettings = useCallback(() => {
-    setShowSettings(show => !show);
+    setShowSettings(prev => !prev);
   }, []);
 
   useEffect(
     () => {
-      // Inside handleRefresh and the useEffect hook
       refreshRSSData();
     },
     [feedUrls, refreshRSSData]
@@ -188,15 +186,28 @@ function App() {
 
   return (
     <div className="App">
+      <AppBar
+        isScrolled={isScrolled}
+        refreshFeed={refreshFeed}
+        isListView={isListView}
+        setIsListView={setIsListView}
+        showSettings={showSettings}
+        toggleSettings={toggleSettings}
+      />
+      <CustomScrollbar>
+      
     
-      <header className="top-bar" ref={headerRef}>
+      {/* <header className="top-bar" ref={headerRef}>
         <h1 className="title">Digests</h1>
         <div className="button-container">
           <SlIconButton
             className="refresh"
             name="refresh"
+            id="refreshButton"
             size="large"
             library="iconoir"
+            visible={false}
+
             style={{
               cursor: "pointer",
               fontSize: isScrolled ? "1.5rem" : "1.5rem"
@@ -208,6 +219,8 @@ function App() {
             name={isListView ? "view-grid" : "list"}
             size="large"
             library="iconoir"
+            visible={false}
+
             style={{
               cursor: "pointer",
 
@@ -219,6 +232,8 @@ function App() {
             name={showSettings ? "xmark" : "settings"}
             size="large"
             library="iconoir"
+            id="settingsButton"
+            visible={false}
             style={{
               cursor: "pointer",
               fontSize: isScrolled ? "1.5rem" : "1.5rem"
@@ -229,7 +244,8 @@ function App() {
             }}
           />
         </div>
-      </header>
+      </header> */}
+      
       <main className={`content-container ${!isListView ? "feed-view" : ""}`}>
         {isLoading
           ? <div className="loading-indicator">
@@ -248,7 +264,9 @@ function App() {
               ? <ListView articles={feedItems} />
               : <Feed feedItems={feedItems} />}
       </main>
+      </CustomScrollbar>
     </div>
+   
   );
 }
 

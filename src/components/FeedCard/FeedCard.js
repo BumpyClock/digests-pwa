@@ -75,6 +75,8 @@ const FeedCard = ({ item }) => {
 
   const { isLoaded, isError, loadedImage } = useImageLoader(item.thumbnail);
 
+  
+
   const elevation = useMemo(() => {
     if (mouseDown) return 8;
     if (hover) return 32;

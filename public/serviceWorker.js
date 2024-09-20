@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '9_19_24_9_51_AM';
+const CACHE_NAME = '9_20_24_9_51_AM';
+const apiUrl = "http://localhost:8000";
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -83,7 +84,7 @@ async function fetchRSS(feedUrls) {
   let feedDetails = [];
   let items = [];
   try {
-    const apiUrl = "https://api.digests.app";
+    
     const requestUrl = `${apiUrl}/parse`;
     const requestOptions = createRequestOptions(feedUrls);
     const response = await fetchWithTimeout(requestUrl, requestOptions);
@@ -144,6 +145,7 @@ async function fetchRSS(feedUrls) {
                 title: item.title,
                 siteTitle: isErrorTitle ? feed.feedTitle : feed.siteTitle,
                 feedTitle: feed.feedTitle,
+                feedImage: feed.favicon,
                 thumbnail: item.thumbnail,
                 thumbnailColor: item.thumbnailColor,
                 description: item.description,
@@ -156,6 +158,7 @@ async function fetchRSS(feedUrls) {
                 category: item.category,
                 content: item.content,
                 media: item.media,
+                type: item.type,
                 enclosures: item.enclosures,
                 podcastInfo: {
                   author: item.podcastInfo ? item.podcastInfo.author : "",
