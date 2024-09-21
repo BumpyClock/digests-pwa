@@ -1,67 +1,31 @@
-import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import FeedCard from '../FeedCard/FeedCard.js';
 import PodcastCard from '../PodcastCard/PodcastCard.js'; // Import PodcastCard
 import './Feed.css';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { debounce } from 'lodash';
+import CustomScrollbar from '../CustomScrollbar/CustomScrollbar.js';
 
 const MemoizedFeedCard = memo(FeedCard);
-const MemoizedPodcastCard = memo(PodcastCard); // Memoize PodcastCard for optimization
 
-const useEventListener = (eventName, handler, element = window) => {
-  const savedHandler = useRef();
-
-  useEffect(() => {
-    savedHandler.current = handler;
-  }, [handler]);
-
-  useEffect(() => {
-    const isSupported = element && element.addEventListener;
-    if (!isSupported) return;
-
-    const eventListener = event => savedHandler.current(event);
-    element.addEventListener(eventName, eventListener);
-
-    return () => {
-      element.removeEventListener(eventName, eventListener);
-    };
-  }, [eventName, element]);
-};
-
-const Feed = ({ feedItems, feedDetails }) => {
+const Feed = ({ feedItems }) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const feedRef = useRef();
 
   const getGutterSize = useCallback(() => {
     const width = window.innerWidth;
-    if (width <= 650) {
-      return '12px';
-    } else if (width <= 1050) {
-      return '24px';
-    } else if (width <= 1250) {
-      return '36px';
-    } else {
-      return '36px';
-    }
+    if (width <= 650) return '12px';
+    else if (width <= 1050) return '24px';
+    else return '36px';
   }, []);
 
   const getStepSize = useCallback(() => {
     const width = window.innerWidth;
-    if (width <= 350) {
-      return 4;
-    } else if (width <= 750) {
-      return 8;
-    } else if (width <= 900) {
-      return 12;
-    } else if (width <= 1200) {
-      return 16;
-    } else if (width <= 1900) {
-      return 20;
-    } else {
-      return 25;
-    }
+    if (width <= 350) return 4;
+    else if (width <= 750) return 8;
+    else if (width <= 900) return 12;
+    else return 20;
   }, []);
 
   const [gutterSize, setGutterSize] = useState(getGutterSize());
@@ -74,8 +38,6 @@ const Feed = ({ feedItems, feedDetails }) => {
     debouncedSetStepSize(getStepSize());
     debouncedSetGutterSize(getGutterSize());
   }, [debouncedSetStepSize, debouncedSetGutterSize, getStepSize, getGutterSize]);
-
-  useEventListener('resize', handleResize);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -100,65 +62,41 @@ const Feed = ({ feedItems, feedDetails }) => {
     }
 
     const newItems = feedItems.slice(items.length, items.length + stepSize);
-    if (newItems.length === 0 || (newItems.length === 1 && newItems[0] === items[items.length - 1])) {
-      setHasMore(false);
-      return;
-    }
-
     setItems(prevItems => [...prevItems, ...newItems]);
   }, [items, feedItems, stepSize, hasMore]);
 
-  useEffect(() => {
-    const handleScroll = debounce(() => {
-      if (!feedRef.current) {
-        return;
-      }
+  const handleScrollFrame = useCallback((values) => {
+    const { scrollTop, scrollHeight, clientHeight } = values;
+    const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
-      const scrollPosition = feedRef.current.scrollTop;
-      const divSize = feedRef.current.clientHeight;
-      const divScrollHeight = feedRef.current.scrollHeight;
-
-      const scrollPercentage = (scrollPosition / (divScrollHeight - divSize)) * 100;
-
-      if (scrollPercentage >= 40) {
-        fetchMoreData();
-      }
-    }, 100);
-
-    const currentFeedRef = feedRef.current;
-
-    if (currentFeedRef) {
-      currentFeedRef.addEventListener('scroll', handleScroll);
+    if (scrollPercentage >= 90) {
+      fetchMoreData();  // Fetch more data when the user scrolls 90% of the content
     }
-
-    return () => {
-      if (currentFeedRef) {
-        currentFeedRef.removeEventListener('scroll', handleScroll);
-      }
-    };
   }, [fetchMoreData]);
 
   return isLoading ? (
     <div className="loading-indicator">Loading...</div>
   ) : (
-    <div className="feed" ref={feedRef}>
-      <ResponsiveMasonry
-        columnsCountBreakPoints={{ 320: 1, 550: 2, 850: 3, 1201: 4, 1601: 4, 1801: 4, 1901: 5, 2201: 6 }}
-        style={{ maxWidth: '2400px', margin: '0 auto' }}
-      >
-        <Masonry gutter={gutterSize}>
-          {items.map((item) => (
-            <div key={item.id}>
-              {item.type === 'podcast' ? (
-                <MemoizedPodcastCard item={item} /> // Render PodcastCard for podcasts
-              ) : (
-                <MemoizedFeedCard item={item} /> // Render FeedCard for other types
-              )}
-            </div>
-          ))}
-        </Masonry>
-      </ResponsiveMasonry>
-    </div>
+    <CustomScrollbar onScrollFrame={handleScrollFrame}>
+      <div className="feed">
+        <ResponsiveMasonry
+          columnsCountBreakPoints={{ 320: 1, 550: 2, 850: 3, 1201: 4, 1601: 4, 1801: 4, 1901: 5, 2201: 6 }}
+          style={{ maxWidth: '2400px', margin: '0 auto' }}
+        >
+          <Masonry gutter={gutterSize}>
+            {items.map((item) => (
+              <div key={item.id}>
+                {item.type === 'podcast' ? (
+                  <PodcastCard item={item} />
+                ) : (
+                  <MemoizedFeedCard item={item} />
+                )}
+              </div>
+            ))}
+          </Masonry>
+        </ResponsiveMasonry>
+      </div>
+    </CustomScrollbar>
   );
 };
 

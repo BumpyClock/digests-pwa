@@ -6,16 +6,16 @@
   height: 100%;
   width: 100%;
   -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(90px);
+  backdrop-filter: blur(120px);
   margin: 0 auto;
   overflow-y: auto;
-  /* background-color: rgba(0,0,0,.7); */
+  background-color: rgba(0,0,0,.85);
   z-index: 3000;
   overflow-y: overlay;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  opacity: 0;
+  opacity: .5;
   transition: all .25s ease-in-out;
   -webkit-overflow-scroll: auto;
   -ms-overflow-style: auto;    

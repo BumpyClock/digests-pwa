@@ -194,7 +194,6 @@ function App() {
         showSettings={showSettings}
         toggleSettings={toggleSettings}
       />
-      <CustomScrollbar>
       
     
       {/* <header className="top-bar" ref={headerRef}>
@@ -264,7 +263,6 @@ function App() {
               ? <ListView articles={feedItems} />
               : <Feed feedItems={feedItems} />}
       </main>
-      </CustomScrollbar>
     </div>
    
   );

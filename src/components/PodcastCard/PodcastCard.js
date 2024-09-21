@@ -1,17 +1,59 @@
-import React from 'react';
-import { SlIcon } from '@shoelace-style/shoelace/dist/react';
+import React,{useMemo,useState} from 'react';
+import { SlIcon, SlCard } from '@shoelace-style/shoelace/dist/react';
 import './PodcastCard.css';
+import DropShadow from '../DropShadow/DropShadow.js'; // Import DropShadow
+import PodcastDetails from '../PodcastDetails/PodcastDetails.js'; // Import PodcastDetails
+
 
 const PodcastCard = ({ item }) => {
-  console.log(item);
+  const [hover, setHover] = useState(false);
+  const [mouseDown, setMouseDown] = useState(false);
+  const [showPodcastDetails, setShowPodcastDetails] = useState(false);
+
+  const elevation = useMemo(() => {
+    if (mouseDown) return 8;
+    if (hover) return 32;
+    return 16;
+  }, [mouseDown, hover]);
+
+
   return (
-    <div className="podcast-card">
+    <div
+    style={{ position: "relative" }}
+    onMouseEnter={() => setHover(true)}
+    onMouseLeave={() => {
+      setHover(false);
+      setMouseDown(false);
+    }}
+    onMouseDown={() => setMouseDown(true)}
+    onMouseUp={() => setMouseDown(false)}
+    onClick={() => {
+      if (!showPodcastDetails) {
+        setTimeout(() => {
+          if (!showPodcastDetails) {
+            setShowPodcastDetails(true);
+          }
+        }, 500);
+      }
+    }}
+  >
+    <DropShadow color={item.thumbnailColor || {r:0,g:0,b:0}} elevation={elevation}/> 
+    <SlCard className="card" id={item.id}>
+    
       {/* Card Image */}
       <div className="image-container">
         {item.feedImage && (
           <img src={item.feedImage} alt={item.title} className="podcast-card-image" />
         )}
       </div>
+      <div className="card-bg">
+      <img
+        src={item.thumbnail}
+        alt={item.siteTitle}
+        // style={{ width: "100%", height: "100%" }}
+      />
+      <div className="noise"></div>
+    </div>
 
       {/* Card Content */}
       <div className="text-content">
@@ -42,8 +84,13 @@ const PodcastCard = ({ item }) => {
           <SlIcon name="play-circle" />
         </span>
       </div>
+    </SlCard>
+    {showPodcastDetails&& <PodcastDetails url={item.link} item={item} onClose={() => {
+      setShowPodcastDetails(false);
+    }} />}
     </div>
   );
 };
 
-export default PodcastCard;
+export default React.memo(PodcastCard);
+

@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '9_20_24_9_51_AM';
-const apiUrl = "http://localhost:8000";
+const CACHE_NAME = '9_21_24_9_51_AM';
+const apiUrl = "https://api.digests.app";
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

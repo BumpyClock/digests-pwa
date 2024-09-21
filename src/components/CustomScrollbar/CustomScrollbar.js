@@ -1,7 +1,7 @@
 import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
-const CustomScrollbar = ({ children }) => {
+const CustomScrollbar = ({ children, onScrollFrame }) => {
   // Function to get the value of a CSS variable
   const getCSSVariableValue = (variable) => {
     return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
@@ -15,6 +15,7 @@ const CustomScrollbar = ({ children }) => {
       autoHide
       autoHideTimeout={1000}
       autoHideDuration={200}
+      onScrollFrame={onScrollFrame} // Pass onScrollFrame prop to Scrollbars
       renderThumbVertical={({ style, ...props }) => (
         <div
           {...props}
