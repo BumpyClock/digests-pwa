@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef, memo } from "react";
+import React, { useState, useCallback, useEffect, memo } from "react";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import Feed from "./components/Feed/Feed.js";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
@@ -7,7 +7,6 @@ import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path";
 import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/icon-library";
 import ListView from "./components/ListView/ListView.js";
 import AppBar from "./components/AppBar/AppBar.js";
-import CustomScrollbar from "./components/CustomScrollbar/CustomScrollbar.js";
 import "./App.css";
 
 registerIconLibrary("iconoir", {
