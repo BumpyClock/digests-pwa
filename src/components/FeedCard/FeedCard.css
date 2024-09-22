@@ -1,7 +1,7 @@
 sl-card {
   --padding: 0;
-  --border-radius: 32px;
-  max-width: 350px;
+  --border-radius: 40px;
+  max-width: 450px;
 }
 .card {
   overflow: hidden;
@@ -22,7 +22,7 @@ sl-card {
   break-inside: avoid;
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
-  transition: all .125s ease-in-out !important;
+  transition: all .25s ease-in-out !important;
   will-change: height, transform;
 }
 
@@ -36,6 +36,8 @@ sl-card {
 .card::part(base) {
   background-color: transparent;
   border: none;
+  border-radius: 40px;
+  transition: all .25s ease-in-out;
 }
 .card .card-bg .noise {
   background-image: url("../assets/images/noise.svg");
@@ -43,7 +45,6 @@ sl-card {
   background-size: auto;
   background-repeat: repeat;
   -webkit-border-radius: 40px;
-
   border-radius: 40px;
   background-position: center center;
   z-index: -1;
@@ -52,7 +53,7 @@ sl-card {
   height: 100%;
   opacity: .1;
   mix-blend-mode: multiply;
-  /* transition: all .25s ease-in-out; */
+  transition: all .25s ease-in-out;
 }
 
 .card-bg .lazy-load-image-background.blur.lazy-load-image-loaded,
@@ -132,8 +133,8 @@ sl-card {
 .card:hover .card-bg img,
 card:hover .card-bg {
   opacity: .35;
-  -webkit-border-radius: 32px;
-  border-radius: 32px;
+  -webkit-border-radius: 40px;
+  border-radius: 40px;
   transform: scale(1.5) rotate(180deg);
   filter: blur(60px) brightness(1.1);
 }
@@ -232,7 +233,7 @@ card:hover .card-bg {
   border: none;
   -webkit-border-radius: 5px;
 
-  border-radius: 5px;
+  border-radius: 8px;
   color: #fff;
   cursor: pointer;
   font-size: 14px;
@@ -267,7 +268,7 @@ card:hover .card-bg {
   );
   background-repeat: no-repeat;
   background-size: 800px 200px;
-  animation: shimmer 1s linear infinite forwards;
+  animation: shimmer 2s linear infinite forwards;
 }
 
 @keyframes shimmer {

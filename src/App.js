@@ -8,6 +8,13 @@ import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/ico
 import ListView from "./components/ListView/ListView.js";
 import AppBar from "./components/AppBar/AppBar.js";
 import "./App.css";
+import { getConfig } from './modules/indexedDB.js';
+
+const defaultConfig = {
+  apiUrl: "https://api.digests.app",
+  theme: "system",
+  refresh_interval: 15,
+};
 
 registerIconLibrary("iconoir", {
   resolver: name =>
@@ -22,10 +29,8 @@ function App() {
   const [feedItems, setFeedItems] = useState([]);
   const [isListView, setIsListView] = useState(false);
   const [feedDetails, setFeedDetails] = useState([]);
-  const [refreshInterval, setRefreshInterval] = useState(() => {
-    const savedRefreshInterval = localStorage.getItem("refreshInterval");
-    return savedRefreshInterval ? Number(savedRefreshInterval) : 15;
-  });
+  const [refreshInterval, setRefreshInterval] = useState(defaultConfig.refresh_interval);
+  const [apiUrl, setApiUrl] = useState(defaultConfig.apiUrl);
   const [isLoading, setIsLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const SettingsMemo = memo(Settings);
@@ -51,7 +56,29 @@ function App() {
         );
   });
 
+   useEffect(() => {
+    (async () => {
+      try {
+        const savedRefreshInterval = await getConfig('refreshInterval', defaultConfig.refresh_interval);
+        setRefreshInterval(savedRefreshInterval ? Number(savedRefreshInterval) : defaultConfig.refresh_interval);
+      } catch (error) {
+        console.error('Error fetching refresh interval:', error);
+        setRefreshInterval(defaultConfig.refresh_interval);
+      }
+    })();
+  }, []);
   
+  useEffect(() => {
+    (async () => {
+      try {
+        const savedApiUrl = await getConfig('apiUrl', defaultConfig.apiUrl);
+        setApiUrl(savedApiUrl ? savedApiUrl : defaultConfig.apiUrl);
+      } catch (error) {
+        console.error('Error fetching API URL:', error);
+        setApiUrl(defaultConfig.apiUrl);
+      }
+    })();
+  }, []);
 
   const refreshRSSData = useCallback(() => {
     console.log("[RefreshRSSDATA] Refreshing RSS data");
@@ -130,7 +157,7 @@ function App() {
     () => {
       console.log(`Setting refresh interval to ${refreshInterval} minutes`);
       const intervalId = setInterval(() => {
-        console.log("Refreshing RSS data");
+        console.log("🚀 ~ RefreshTimer triggered ~ Refreshing RSS data");
         refreshRSSData();
       }, refreshInterval * 60 * 1000); // Convert refreshInterval from minutes to milliseconds
 
@@ -165,13 +192,8 @@ function App() {
   useEffect(() => {
     const checkScroll = () => {
       if (window.scrollY > 0) {
-        // headerRef.current.classList.add("title-bar-small", "title-bar-shadow");
         setIsScrolled(true);
       } else {
-        // headerRef.current.classList.remove(
-        //   "title-bar-small",
-        //   "title-bar-shadow"
-        // );
         setIsScrolled(false);
       }
     };
@@ -194,56 +216,6 @@ function App() {
         toggleSettings={toggleSettings}
       />
       
-    
-      {/* <header className="top-bar" ref={headerRef}>
-        <h1 className="title">Digests</h1>
-        <div className="button-container">
-          <SlIconButton
-            className="refresh"
-            name="refresh"
-            id="refreshButton"
-            size="large"
-            library="iconoir"
-            visible={false}
-
-            style={{
-              cursor: "pointer",
-              fontSize: isScrolled ? "1.5rem" : "1.5rem"
-            }}
-            onClick={refreshFeed}
-          />
-          <SlIconButton
-            className="view-toggle"
-            name={isListView ? "view-grid" : "list"}
-            size="large"
-            library="iconoir"
-            visible={false}
-
-            style={{
-              cursor: "pointer",
-
-              fontSize: isScrolled ? "1.5rem" : "1.5rem"
-            }}
-            onClick={() => setIsListView(prev => !prev)}
-          />
-          <SlIconButton
-            name={showSettings ? "xmark" : "settings"}
-            size="large"
-            library="iconoir"
-            id="settingsButton"
-            visible={false}
-            style={{
-              cursor: "pointer",
-              fontSize: isScrolled ? "1.5rem" : "1.5rem"
-            }}
-            onClick={event => {
-              toggleSettings();
-              event.currentTarget.blur();
-            }}
-          />
-        </div>
-      </header> */}
-      
       <main className={`content-container ${!isListView ? "feed-view" : ""}`}>
         {isLoading
           ? <div className="loading-indicator">
@@ -257,13 +229,14 @@ function App() {
                 feedDetails={feedDetails}
                 refreshInterval={refreshInterval}
                 setRefreshInterval={setRefreshInterval}
+                apiUrl={apiUrl}
+                setApiUrl={setApiUrl}
               />
             : isListView
               ? <ListView articles={feedItems} />
-              : <Feed feedItems={feedItems} />}
+              : <Feed feedItems={feedItems} apiUrl={apiUrl}/>}
       </main>
     </div>
-   
   );
 }
 

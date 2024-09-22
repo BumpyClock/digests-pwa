@@ -68,7 +68,7 @@ const useImageLoader = (src) => {
   return { isLoaded, isError, loadedImage };
 };
 
-const FeedCard = ({ item }) => {
+const FeedCard = ({ item , apiUrl}) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [showReaderView, setShowReaderView] = useState(false);
@@ -125,7 +125,7 @@ const FeedCard = ({ item }) => {
       }}
     >
       {!isLoaded && (
-        <SlAnimation name="pulse" duration={125} repeat>
+        <SlAnimation name="pulse" duration={250} repeat>
           <FeedCardLoader />
         </SlAnimation>
       )}
@@ -164,7 +164,7 @@ const FeedCard = ({ item }) => {
         )}
       </div>
     </SlCard>
-    {showReaderView && <ReaderView url={item.link} item={item} onClose={() => {
+    {showReaderView && <ReaderView url={item.link} item={item} apiUrl = {apiUrl} onClose={() => {
       setShowReaderView(false);
     }} />}
   </div>

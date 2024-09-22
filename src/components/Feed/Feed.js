@@ -8,7 +8,7 @@ import CustomScrollbar from '../CustomScrollbar/CustomScrollbar.js';
 
 const MemoizedFeedCard = memo(FeedCard);
 
-const Feed = ({ feedItems }) => {
+const Feed = ({ feedItems , apiUrl}) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,9 +87,9 @@ const Feed = ({ feedItems }) => {
             {items.map((item) => (
               <div key={item.id}>
                 {item.type === 'podcast' ? (
-                  <PodcastCard item={item} />
+                  <PodcastCard item={item} apiUrl={apiUrl}/>
                 ) : (
-                  <MemoizedFeedCard item={item} />
+                  <MemoizedFeedCard item={item} apiUrl={apiUrl}/>
                 )}
               </div>
             ))}

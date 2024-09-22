@@ -5,6 +5,7 @@ import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
 import "./ReaderView.css";
 import WebsiteInfo from "../website-info/website-info.js";
 
+
 function estimateReadingTime(text) {
   if (!text) return 0;
   const wordsPerMinute = 183; // Adjust this value based on your preferred reading speed
@@ -15,7 +16,7 @@ function estimateReadingTime(text) {
 
 
 
-const ReaderView = ({ url, item, onClose }) => {
+const ReaderView = ({ url, item, apiUrl, onClose }) => {
   const [article, setArticle] = useState(null);
   const isLoading = useRef(true);
   const requestSent = useRef(true);
@@ -88,9 +89,10 @@ function calculateHeaderImageInfoBottom(scrollPosition) {
     const fetchArticle = async () => {
       try {
         requestSent.current = false;
-        console.log("Fetching article content for: ", url);
+        console.log("Fetching article content for: ", url, " from: ", apiUrl);
+        const endpoint = `${apiUrl}/getreaderview`;
         const response = await axios.post(
-          `https://api.digests.app/getreaderview`,
+          endpoint,
           {
             headers: {
               // "Content-Type": "application/json"
@@ -127,7 +129,7 @@ function calculateHeaderImageInfoBottom(scrollPosition) {
       document.body.style.overflow = "";
       articleRef.current = null;
     };
-  }, [url, isLoading, headerImageInfoRef]);
+  }, [url, isLoading, headerImageInfoRef, apiUrl]);
 
 
 

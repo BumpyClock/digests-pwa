@@ -1,7 +1,14 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
 const CACHE_NAME = '9_21_24_9_51_AM';
-const apiUrl = "https://api.digests.app";
+
+var apiUrl = "";
+const DB_NAME = "digests-app";
+const STORE_NAME = "digests-config";
+const defaultConfig = {
+  apiUrl: "https://api.digests.app",
+  theme: "system",
+};
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -16,7 +23,18 @@ self.addEventListener('install', (event) => {
       });
     })
   );
-  console.log("Service worker installed");
+
+  // Usage example
+(async () => {
+  apiUrl = await getConfig('apiUrl', defaultConfig.apiUrl);
+  console.log('API URL:', apiUrl);
+
+  // Example of setting another config
+  await setConfig('theme', 'dark');
+  const theme = await getConfig('theme', 'light');
+  console.log('Theme:', theme);
+})();
+  console.log("Service worker installed with API URL: ", apiUrl);
   // Activate the service worker immediately after installation
   self.skipWaiting();
 });
@@ -32,7 +50,7 @@ self.addEventListener('activate', (event) => {
     })
   );
   // Claim control over all clients (pages) immediately
-  console.log("service worker activated");
+  console.log("service worker activated with API URL: ", apiUrl);
   self.clients.claim();
 });
 
@@ -57,8 +75,83 @@ self.addEventListener('fetch', (event) => {
 });
 
 
+self.addEventListener('message', async (event) => {
+  if (event.data && event.data.type === 'FETCH_RSS') {
+    const feedData = await fetchRSS(event.data.payload.urls);
+    // Send the fetched data back to the main thread
+    event.ports[0].postMessage({
+      type: 'RSS_DATA',
+      payload: feedData,
+    });
+  }
+});
+
+
 
 const errorMessages = ["Error: no title", "Error: no link"]; // Add your error messages here
+
+async function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, 1);
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      db.createObjectStore(STORE_NAME);
+    };
+    request.onsuccess = (event) => {
+      resolve(event.target.result);
+    };
+    request.onerror = (event) => {
+      reject(event.target.error);
+    };
+  });
+}
+
+async function getConfigFromIndexedDB(key) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readonly');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.get(key);
+    request.onsuccess = (event) => {
+      resolve(event.target.result);
+    };
+    request.onerror = (event) => {
+      reject(event.target.error);
+    };
+  });
+}
+
+async function setConfig(key, value) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.put(value, key);
+    request.onsuccess = () => {
+      resolve();
+    };
+    request.onerror = (event) => {
+      reject(event.target.error);
+    };
+  });
+}
+
+async function getConfig(key, defaultValue) {
+  // Check if the config is already in IndexedDB
+  const cachedConfig = await getConfigFromIndexedDB(key);
+  if (cachedConfig) {
+    console.log(`Config for ${key} from IndexedDB: `, cachedConfig);
+    return cachedConfig;
+  }
+
+  // If not in IndexedDB, use default value and store it in IndexedDB
+  console.log(`Config for ${key} not found in cache. Using default value: `, defaultValue);
+  await setConfig(key, defaultValue);
+  return defaultValue;
+}
+
+
+
 
 function createRequestOptions(feedUrls) {
   return {
@@ -86,6 +179,7 @@ async function fetchRSS(feedUrls) {
   try {
     
     const requestUrl = `${apiUrl}/parse`;
+    console.log("🚀 ~ fetchRSS ~ requestUrl:", requestUrl)
     const requestOptions = createRequestOptions(feedUrls);
     const response = await fetchWithTimeout(requestUrl, requestOptions);
 
@@ -191,13 +285,3 @@ async function fetchRSS(feedUrls) {
   return { feedDetails, items };
 }
 
-self.addEventListener('message', async (event) => {
-  if (event.data && event.data.type === 'FETCH_RSS') {
-    const feedData = await fetchRSS(event.data.payload.urls);
-    // Send the fetched data back to the main thread
-    event.ports[0].postMessage({
-      type: 'RSS_DATA',
-      payload: feedData,
-    });
-  }
-});
