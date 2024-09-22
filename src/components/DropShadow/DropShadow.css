@@ -8,4 +8,6 @@
     border-radius: 40px;
     transition: all .25s ease-in-out !important;
     aspect-ratio: 1 / 1;
+    max-width: 450px;
+    
 }
