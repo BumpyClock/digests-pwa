@@ -16,7 +16,7 @@ const Feed = ({ feedItems , apiUrl}) => {
   const getGutterSize = useCallback(() => {
     const width = window.innerWidth;
     if (width <= 650) return '12px';
-    else if (width <= 1050) return '24px';
+    else if (width <= 1050) return '28px';
     else return '36px';
   }, []);
 
