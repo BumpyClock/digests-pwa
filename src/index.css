@@ -1,6 +1,7 @@
 :root {
-  --dracula-background: rgba(40, 42, 54, 1);
-  --dracula-current-line: rgba(68, 71, 90, 1);
+  --dracula-background: rgba(40, 42, 54,1);
+  --dracula-current-line: rgba(68, 71, 90,1);
+  --dark-app-bar-background: rgba(48, 48, 74,.8);
   --dracula-foreground: rgba(248, 248, 242, 1);
   --dracula-comment: rgba(98, 114, 164, 1);
   --dracula-cyan: rgba(139, 233, 253, 1);
@@ -15,12 +16,16 @@
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
-  --box-shadow-standard: 0px 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0px 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --box-shadow-hover: 0px 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0px 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --light-box-shadow-standard: 0px 0px 12px -3px rgba(0, 0, 0, 0.1);
+    /* 0px 4px 6px -2px rgba(0, 0, 0, 0.05); */
+  --light-box-shadow-hover: 0px 0px 16px 05px rgba(0, 0, 0, 0.2),
+  --dark-box-shadow-standard: 0px 0px 12px -3px rgba(242, 242, 242, 0.1);
+    /* 0px 4px 6px -2px rgba(242, 242, 242, 0.05); */
+  --dark-box-shadow-hover: 0px 0px 16px 0px rgba(242,242, 242, 0.2);
+    /* 0px 8px 8px -5px rgba(242, 242, 242, 0.04); */
   --blur: blur(0.65em);
-  --light-background-color: rgba(245, 245, 245, 1);
+  --light-background-color: rgba(245, 245, 245,1);
+  --light-app-bar-background: rgba(245, 245, 245,.8);
   --light-new-tab-background-color: #f9f9fb;
   --light-theme-search-box-color: #e0e0e05a;
   --light-theme-search-box-color-active: #fff;
@@ -52,7 +57,7 @@
   --dark-blockquote-background-color: var(--dracula-current-line);
   --dark-new-tab-background-color: var(--dracula-background);
   --dark-theme-search-box-color: var(--dracula-current-line);
-  --dark-theme-search-box-color-active: rgba(0, 0, 0, 0.8);
+  --dark-theme-search-box-color-active: rgb(0, 0, 0);
   --dark-new-tab-background-color-secondary: #282A36;
   --dark-background-color-hover: var(--dracula-comment);
   --dark-foreground-color: var(--dracula-foreground);
@@ -79,6 +84,7 @@
     --background-color-secondary: var(
       --dark-new-tab-background-color-secondary
     );
+    --app-bar-background: var(--dark-app-bar-background);
     --background-color-hover: var(--dark-background-color-hover);
     --color: var(--dark-foreground-color);
     --search-box-color: var(--dark-theme-search-box-color);
@@ -88,6 +94,8 @@
     --reading-progress-container-background-color: var(
       --dark-background-color-hover
     );
+    --box-shadow-standard: var(--dark-box-shadow-standard);
+    --box-shadow-hover: var(--dark-box-shadow-hover);
     --reading-progress-color: var(--dark-accent-color);
     --progress-background: var(--dark-background-color);
     --success-color: var(--dark-success-color);
@@ -107,6 +115,7 @@
     --background-color-secondary: var(
       --light-new-tab-background-color-secondary
     );
+    --app-bar-background: var(var(--light-app-bar-background));
     --background-color-hover: var(--light-background-color-hover);
     --color: var(--light-foreground-color);
     --accent-color: var(--light-accent-color);
@@ -114,6 +123,8 @@
     --reading-progress-container-background-color: var(
       --light-background-color-hover
     );
+    --box-shadow-standard: var(--light-box-shadow-standard);
+    --box-shadow-hover: var(--light-box-shadow-hover);
     --blockquote-background-color: var(--light-blockquote-background-color);
     --reading-progress-color: var(--light-accent-color);
     --search-box-color: var(--light-theme-search-box-color);

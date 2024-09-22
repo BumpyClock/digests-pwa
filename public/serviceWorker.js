@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '9_21_24_9_51_AM';
+const CACHE_NAME = '9_22_24_3_01_PM';
 
 var apiUrl = "";
 const DB_NAME = "digests-app";
@@ -55,6 +55,12 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') {
+    // If the request is not a GET request, just fetch it from the network
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   // Network-first, fallback to cache if network fails
   event.respondWith(
     fetch(event.request)
