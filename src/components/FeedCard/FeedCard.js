@@ -9,7 +9,6 @@ import DropShadow from "../DropShadow/DropShadow.js";
 import ReaderView from "../ReaderView/ReaderView.js";
 import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
 
-
 const useImageLoader = (src) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -79,8 +78,6 @@ const FeedCard = ({ item, apiUrl }) => {
     return 16;
   }, [mouseDown, hover]);
 
-
-
   if (!isLoaded) {
     return <FeedCardLoader id={item.id} />;
   }
@@ -120,7 +117,9 @@ const FeedCard = ({ item, apiUrl }) => {
       >
         <div className="card-bg">
           <div className="noise"></div>
-          <img src={loadedImage.src} alt={item.siteTitle} />
+          {loadedImage && (
+            <img src={loadedImage.src} alt={item.siteTitle} />
+          )}
         </div>
         {!isLoaded && (
           <SlAnimation name="pulse" duration={250} repeat>
@@ -130,19 +129,15 @@ const FeedCard = ({ item, apiUrl }) => {
 
         {loadedImage && !isError && (
           <>
-          <motion.div
-            layoutId={`image-${item.id}`}
-              
-              
-            >
-            <div className="image-container">
-              <img
-                src={loadedImage.src}
-                alt={item.siteTitle}
-                style={{ width: "100%", height: "100%" }}
-              />
-            </div></motion.div>
-
+            <motion.div layoutId={`image-${item.id}`}>
+              <div className="image-container">
+                <img
+                  src={loadedImage.src}
+                  alt={item.siteTitle}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
+            </motion.div>
           </>
         )}
 
