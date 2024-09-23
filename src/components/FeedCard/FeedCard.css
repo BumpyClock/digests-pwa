@@ -225,16 +225,11 @@ card:hover .card-bg {
   text-overflow: ellipsis;
   margin: 0;
   margin-bottom: 4px;
-  font-size: 18px;
-  line-height: 1.4;
-  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 400;
 }
-.card p {
-  margin: 0;
-  margin-bottom: 12px;
-  font-size: 14px;
-  line-height: 1.33;
-}
+
 .card a {
   text-decoration: none;
   color: var(--color);
@@ -267,10 +262,12 @@ card:hover .card-bg {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 24px !important;
-  font-size: 14px;
-  font-weight: 400;
+  margin: 0 0 24px 0 !important;
+  font-size: .85rem;
+  line-height: 1.33;
+  font-weight: 00;
   width: 100%;
+
 }
 
 .shimmer-skeleton {

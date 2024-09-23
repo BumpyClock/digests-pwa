@@ -25,15 +25,15 @@ self.addEventListener('install', (event) => {
   );
 
   // Usage example
-(async () => {
-  apiUrl = await getConfig('apiUrl', defaultConfig.apiUrl);
-  console.log('API URL:', apiUrl);
+  (async () => {
+    apiUrl = await getConfig('apiUrl', defaultConfig.apiUrl);
+    console.log('API URL:', apiUrl);
 
-  // Example of setting another config
-  await setConfig('theme', 'dark');
-  const theme = await getConfig('theme', 'light');
-  console.log('Theme:', theme);
-})();
+    // Example of setting another config
+    await setConfig('theme', 'dark');
+    const theme = await getConfig('theme', 'light');
+    console.log('Theme:', theme);
+  })();
   console.log("Service worker installed with API URL: ", apiUrl);
   // Activate the service worker immediately after installation
   self.skipWaiting();
@@ -61,6 +61,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Filter out requests with unsupported schemes
+  const url = new URL(event.request.url);
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    return;
+  }
+
   // Network-first, fallback to cache if network fails
   event.respondWith(
     fetch(event.request)
@@ -80,7 +86,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-
 self.addEventListener('message', async (event) => {
   if (event.data && event.data.type === 'FETCH_RSS') {
     const feedData = await fetchRSS(event.data.payload.urls);
@@ -91,8 +96,6 @@ self.addEventListener('message', async (event) => {
     });
   }
 });
-
-
 
 const errorMessages = ["Error: no title", "Error: no link"]; // Add your error messages here
 
@@ -156,9 +159,6 @@ async function getConfig(key, defaultValue) {
   return defaultValue;
 }
 
-
-
-
 function createRequestOptions(feedUrls) {
   return {
     method: "POST",
@@ -178,12 +178,10 @@ async function fetchWithTimeout(resource, options = {}) {
   return response;
 }
 
-
 async function fetchRSS(feedUrls) {
   let feedDetails = [];
   let items = [];
   try {
-    
     const requestUrl = `${apiUrl}/parse`;
     console.log("🚀 ~ fetchRSS ~ requestUrl:", requestUrl)
     const requestOptions = createRequestOptions(feedUrls);
@@ -290,4 +288,3 @@ async function fetchRSS(feedUrls) {
 
   return { feedDetails, items };
 }
-
