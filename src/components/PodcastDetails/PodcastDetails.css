@@ -1,0 +1,118 @@
+.podcast-modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .podcast-modal-content {
+    background-color: var(--background-color);
+    border-radius: 40px;
+    padding: 8px;
+    position: relative;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    width: min-content; /* Adjust the width to fit the content */
+    min-width: 400px;
+    max-width: 100%; /* Ensure it doesn't overflow the viewport */
+  }
+  
+  .podcast-details-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .podcast-details-header-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .podcast-thumbnail {
+    max-height: 500px;
+    width: auto; /* Ensure the width is adjusted to maintain the aspect ratio */
+    border-radius: 32px;
+    margin-bottom: 20px;
+  }
+  
+  .podcast-detail-view-text-content{
+    padding:24px;
+    
+  }
+  .podcast-detail-view-text-content .podcast-info {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    max-height: 120px;
+  }
+  
+  .podcast-detail-view-text-content .podcast-info h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  .podcast-detail-view-text-content  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    padding: 0;
+  }
+  
+  .podcast-detail-view-text-content .podcast-info p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--color);
+  }
+  
+  .podcast-header-buttons {
+    position: absolute;
+    top:24px;
+    right:24px;
+    display: flex;
+    align-items: center;
+    column-gap: 12px;
+  }
+  
+  .podcast-detail-view-text-content .podcast-audio-player {
+    margin: 20px 0;
+  }
+  
+  .podcast-detail-view-text-content .scrollable-description {
+    height: 200px; /* Define a fixed height for the scrollable area */
+    overflow: hidden; /* Ensure that it only scrolls within the CustomScrollbar */
+  }
+  
+  .podcast-detail-view-text-content .podcast-description-content {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .podcast-detail-view-text-content .podcast-audio-player {
+    width: 100%;
+  }
+  
+  /* Media Query for smaller screens */
+  @media (max-width: 768px) {
+    .podcast-modal-content {
+      width: 90%; /* Make the modal responsive on smaller screens */
+      padding: 10px;
+    }
+  
+    .podcast-thumbnail {
+      max-height: 200px; /* Adjust the image size for smaller screens */
+    }
+  
+    .podcast-info h1 {
+      font-size: 1.2rem; /* Adjust the title font size */
+    }
+  
+    .scrollable-description {
+      height: 150px; /* Smaller scroll area for small screens */
+    }
+  }
+  

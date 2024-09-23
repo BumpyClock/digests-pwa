@@ -1,0 +1,6 @@
+/* Scrollbar styles for WebKit browsers (Chrome, Safari) */
+
+  
+.custom-scrollbar{
+  border-radius: 40px;
+}

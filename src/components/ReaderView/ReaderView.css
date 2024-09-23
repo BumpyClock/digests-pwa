@@ -1,25 +1,63 @@
+.modal-container sl-card {
+  --padding: 0;
+  --border-radius: 40px;
+  max-width: 950px;
+
+}
+
+.modal-container .reader-card::part(base) {
+  background-color: var(--background-color);
+  border: none;
+  border-radius: 40px;
+  transition: all .25s ease-in-out;
+}
+.reader-view-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(20px);
+  background-color: rgba(0, 0, 0, 0.85);
+  transition: all .25 ease-in-out;
+  z-index: 2000; /* Ensure it's behind the card */
+}
+.modal-container .reader-card {
+  margin:auto;
+  border-radius: 40px;
+  width: 100%;
+  height: 100%;
+  max-height: 85vh;
+  background-color: var(--background-color);
   
+}
+
 .modal-container {
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(90px);
-  margin: 0 auto;
-  overflow-y: auto;
-  /* background-color: rgba(0,0,0,.7); */
+  /* backdrop-filter: blur(20px); */
+  /* background-color: rgba(0, 0, 0, 0.85); */
   z-index: 3000;
-  overflow-y: overlay;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  justify-content: center;
+  align-items: center;
   opacity: 0;
-  transition: all .25s ease-in-out;
-  -webkit-overflow-scroll: auto;
-  -ms-overflow-style: auto;    
+  /* transition: opacity 0.25s ease-in-out; */
 }
+.modal-container .reader-card .image-container img {
+  -webkit-border-radius: 32px;
+  border-radius: 32px;
+  transform: none;
+  transition: all .25s ease-in-out;
+  position: relative;
+  width: -webkit-fill-available;
+  height: fit-content !important;
+  max-height: unset;
+}
+
 .modal-container .noise {
   position: absolute;
   background-image: url("../assets/images/noise.svg");
@@ -33,50 +71,25 @@
   opacity: .04;
 }
 
-.modal-container-content {
-  position: relative;
-  max-height: 90vh;
-  width:65vw;
-  max-width: 1000px;
-  overflow-y: overlay;
-  margin: auto;
-  box-shadow: var(--box-shadow-standard);
-  background-color: var(--background-color);
-  border-radius: 8px;
-  scrollbar-width: none;
-
+.modal-container .reader-card .image-container {
+  position: relative !important;
+  width: -webkit-fill-available;
+  height: fit-content !important;
+  border-radius: 32px;
+  overflow: hidden;
+  margin:8px;
+  max-height: none !important;
+  flex-grow: 1;
+  overflow: unset;
 }
 
-@media screen and (max-width: 750px) {
-  .modal-container-content {
-    height:100%;
-    width: 100%;
-    border-radius: 0;
-    max-height: 100vh;
-  }
-  
+.modal-container .modal-container-content {
+  border-radius: 40px;
 }
 
-@media screen and (min-width: 750px) and (max-width: 1150px) {
-  .modal-container-content {
-   width:85vw;
-  }
-  
-}
-/* Adjustments for smaller screens */
-@media (max-width: 750px) {
-  .modal-container {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-  }
 
-  .modal-content {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 0;
-  }
-}
+
+
 
 
 .modal-container.visible {
@@ -98,7 +111,7 @@
 
 .reader-view-page-content h1 {
   font-size: 1.8em;
-  margin-right: 4em;
+  /* margin-right: 4em; */
   /* margin: 1.5rem 0 */
 }
 
@@ -138,7 +151,6 @@
 .reader-view-page-text {
   padding: 0 4rem;
   height: 100%;
-  overflow:auto;
   position:relative;
   top:0em;
   /* scrollbar-width: thin; */
@@ -243,6 +255,7 @@
     height:500px;
   }
   
+  
 .reader-view-header {
   position: relative;
     top: 0px;
@@ -276,15 +289,18 @@
     color: var(--accent-color);
     cursor: pointer
   }
-  .reader-view-header-button-container{
+  .reader-card .reader-view-header-button-container{
     position:absolute;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    column-gap: 12px;
-    top:24px;
-    right:0px;
-    z-index: 3000;
+    row-gap: 12px;
+    top:12px;
+    right:-56px;
+    z-index: 9000;
+    background-color: var(--background-color);
+    border-radius: 8px;
 
   }
 
@@ -297,26 +313,81 @@
     
   }
 
+   /* Adjustments for smaller screens */
   @media screen and (max-width: 750px) {
     .reader-view-page-content {
       width: 100%;
       border-radius: 0;
       max-height: 100vh;
     }
-
-    .modal-container-content {
-      font-size: 12px;
+  
+    .reader-card {
+      border-radius: 0;
+      height: 100vh;
     }
-   
+  
+    .modal-container .reader-card {
+      font-size: 12px;
+      height: 100%;
+      width: 100%;
+      border-radius: 0;
+      max-height: 100vh;
+    }
+  
+    .reader-card .reader-view-header-button-container {
+      right: 0;
+    }
+  
+    .modal-container {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      max-height: 100vh;
+    }
+  
+    .modal-content {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 0;
+    }
   }
   
-  .reader-view-title {
-    font-size: 28px;
+  /* Adjustments for medium screens */
+  @media screen and (min-width: 750px) and (max-width: 1150px) {
+    .modal-container-content .reader-card {
+      width: 85vw;
+    }
+    .reader-card .reader-view-header-button-container {
+      right: 0;
+    }
+  }
+  
+  .reader-view-title h1{
+    font-size: 2.1rem !important;
     margin: 0;
     margin-bottom: 8px;
-    line-height: 1.2;
-    font-weight: 600;
-    color: var(--color)
+    line-height: 2.8rem;
+    font-weight: 300;
+    color: var(--color);
+    text-align: center;
+    font-size: 1.5rem;
+    margin: auto;
+    padding: 1rem 0 0 0;
+  }
+
+  .reader-view-website-info {
+   display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 8px;
+    flex-direction: row;
+    padding: 0;
+    margin: 0;
+    font-weight: 400
+  }
+
+  .modal-container .reader-card:hover .title a {
+    text-decoration: none !important;
   }
 
 .reader-view-article a {
@@ -369,10 +440,7 @@
     width: fit-content;
 }
 
-.reader-view-title {
-    font-size: 1.5rem;
-    margin: auto;
-}
+
 
 
 
@@ -464,15 +532,15 @@
 
 }
 
-.header-image-info {
-  position: absolute;
+.title {
   bottom: -1em;
   z-index: 4;
   display: flex;
   flex-direction: column;
+  row-gap: 0.5em;
   justify-content: space-between;
-  align-items: left;
-  padding: 0rem 1rem 0rem 3rem;
+  align-items: center;
+  padding: 0rem 3rem 0rem 3rem;
   transition: all .2 ease-out;
   will-change: transform, filter, height;
 }
