@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import SlCard from "@shoelace-style/shoelace/dist/react/card";
 import WebsiteInfo from "../website-info/website-info.js";
 import "./FeedCard.css";
 import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
-import DropShadow from "../DropShadow/DropShadow.js"; // Import DropShadow
+import DropShadow from "../DropShadow/DropShadow.js";
 import ReaderView from "../ReaderView/ReaderView.js";
 import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
 
-
+const MotionSlCard = motion(SlCard);
 
 const useImageLoader = (src) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -20,21 +21,19 @@ const useImageLoader = (src) => {
 
     if (src) {
       const img = new Image();
-      // img.src = `https://digests-imgproxy-a4crwf5b7a-uw.a.run.app/unsafe/rs:fit:0:300:0/g:no/plain/${encodeURIComponent(src)}@webp`;
       img.src = src;
 
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
       link.href = img.src;
       document.head.appendChild(link);
 
       const onLoad = () => {
         if (isMounted) {
-          // Check if the image is a 1x1 pixel placeholder
           if (img.width === 1 && img.height === 1) {
             setIsLoaded(true);
-            setIsError(true); // Treat it as an error or placeholder
+            setIsError(true);
           } else {
             setIsLoaded(true);
             setLoadedImage(img);
@@ -57,7 +56,7 @@ const useImageLoader = (src) => {
         isMounted = false;
         img.onload = null;
         img.onerror = null;
-        document.head.removeChild(link); // Clean up the preload link
+        document.head.removeChild(link);
       };
     } else {
       setIsLoaded(true);
@@ -68,14 +67,12 @@ const useImageLoader = (src) => {
   return { isLoaded, isError, loadedImage };
 };
 
-const FeedCard = ({ item , apiUrl}) => {
+const FeedCard = ({ item, apiUrl }) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [showReaderView, setShowReaderView] = useState(false);
 
   const { isLoaded, isError, loadedImage } = useImageLoader(item.thumbnail);
-
-  
 
   const elevation = useMemo(() => {
     if (mouseDown) return 8;
@@ -85,7 +82,9 @@ const FeedCard = ({ item , apiUrl}) => {
 
   const thumbnailUrl = useMemo(() => {
     if (Array.isArray(item.thumbnail)) {
-      return item.thumbnail.find((thumbnail) => thumbnail.url || thumbnail.link)?.url;
+      return item.thumbnail.find(
+        (thumbnail) => thumbnail.url || thumbnail.link
+      )?.url;
     }
     return item.thumbnail || null;
   }, [item.thumbnail]);
@@ -95,80 +94,100 @@ const FeedCard = ({ item , apiUrl}) => {
   }
 
   return (
-  <div
-    style={{ position: "relative" }}
-    onMouseEnter={() => setHover(true)}
-    onMouseLeave={() => {
-      setHover(false);
-      setMouseDown(false);
-    }}
-    onMouseDown={() => setMouseDown(true)}
-    onMouseUp={() => setMouseDown(false)}
-    onClick={() => {
-      if (!showReaderView) {
-        setTimeout(() => {
-          if (!showReaderView) {
-            setShowReaderView(true);
-          }
-        }, 500);
-      }
-    }}
-  >
-    <DropShadow color={item.thumbnailColor || { r: 0, g: 0, b: 0 }} elevation={elevation} />
-    <SlCard
-      className="card"
-      id={item.id}
-      style={{
-        opacity: isLoaded ? 1 : 0,
-        transition: "opacity 0.125s",
-        border: `1px solid ${item.thumbnailColor}`,
+    <div
+      style={{ position: "relative" }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => {
+        setHover(false);
+        setMouseDown(false);
+      }}
+      onMouseDown={() => setMouseDown(true)}
+      onMouseUp={() => setMouseDown(false)}
+      onClick={() => {
+        if (!showReaderView) {
+          setTimeout(() => {
+            if (!showReaderView) {
+              setShowReaderView(true);
+            }
+          }, 500);
+        }
       }}
     >
-      {!isLoaded && (
-        <SlAnimation name="pulse" duration={250} repeat>
-          <FeedCardLoader />
-        </SlAnimation>
-      )}
-     {loadedImage && !isError && (
-  <>
-    <div className="image-container">
-      <img
-        src={loadedImage.src}
-        alt={item.siteTitle}
-        style={{ width: "100%", height: "100%" }}
+      <DropShadow
+        color={item.thumbnailColor || { r: 0, g: 0, b: 0 }}
+        elevation={elevation}
       />
-    </div>
-    <div className="card-bg">
-      <img
-        src={loadedImage.src}
-        alt={item.siteTitle}
-        // style={{ width: "100%", height: "100%" }}
-      />
-      <div className="noise"></div>
-    </div>
-  </>
-)}
-      <div className="text-content" style={{ padding: isError ? "" : "12px 24px" }}>
-        <WebsiteInfo favicon={item.favicon} siteTitle={item.siteTitle} feedTitle={item.siteTitle} />
-        <h3>{item.title}</h3>
-        <div className="date">
-          <SlRelativeTime date={new Date(item.published)} />
+
+      <SlCard
+        className="card"
+        layoutId={`card-${item.id}`}
+        id={item.id}
+        style={{
+          opacity: showReaderView ? 1 : 1, // Keep the original item visible
+        }}
+      >
+        <div className="card-bg">
+          <div className="noise"></div>
+          <img src={loadedImage.src} alt={item.siteTitle} />
         </div>
-{item.description ? <p className="description">{item.description}</p> : <p className="description">{item.content}</p>}        {!thumbnailUrl && item.description && (
-          <div className="description long-description">{item.description}</div>
+        {!isLoaded && (
+          <SlAnimation name="pulse" duration={250} repeat>
+            <FeedCardLoader />
+          </SlAnimation>
         )}
-        {item.link && (
-          <a href={item.link} target="_blank" rel="noopener noreferrer">
-            Read more
-          </a>
+
+        {loadedImage && !isError && (
+          <>
+          <motion.div
+            layoutId={`image-${item.id}`}
+              
+              
+            >
+            <div className="image-container">
+              <img
+                src={loadedImage.src}
+                alt={item.siteTitle}
+                style={{ width: "100%", height: "100%" }}
+              />
+            </div></motion.div>
+
+          </>
         )}
-      </div>
-    </SlCard>
-    {showReaderView && <ReaderView url={item.link} item={item} apiUrl = {apiUrl} onClose={() => {
-      setShowReaderView(false);
-    }} />}
-  </div>
-);
+
+        <div
+          className="text-content"
+          style={{ padding: isError ? "" : "12px 24px" }}
+        >
+          <WebsiteInfo
+            favicon={item.favicon}
+            siteTitle={item.siteTitle}
+            feedTitle={item.siteTitle}
+          />
+          <h3>{item.title}</h3>
+          <div className="date">
+            <SlRelativeTime date={new Date(item.published)} />
+          </div>
+          {item.description ? (
+            <p className="description">{item.description}</p>
+          ) : (
+            <p className="description">{item.content}</p>
+          )}
+        </div>
+      </SlCard>
+      <AnimatePresence>
+        {showReaderView && (
+          <ReaderView
+            url={item.link}
+            item={item}
+            apiUrl={apiUrl}
+            onClose={() => {
+              setShowReaderView(false);
+            }}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
 };
 
 export default React.memo(FeedCard);

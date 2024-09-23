@@ -43,3 +43,9 @@
     transform: rotate(360deg);
   }
 }
+.loading-spinner {
+  display:flex;
+  justify-content:center;
+  height: -webkit-fill-available;
+  width: -webkit-fill-available;
+}

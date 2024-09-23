@@ -1,7 +1,7 @@
 sl-card {
   --padding: 0;
   --border-radius: 40px;
-  max-width: 450px;
+  max-width: 950px;
 }
 .card {
   overflow: hidden;
@@ -14,13 +14,14 @@ sl-card {
   display: flex;
   flex-direction: column;
   height: auto;
-  max-width: 450px;
+  max-width: 950px;
   margin-top: 12px;
   break-inside: avoid;
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
   transition: all .25s ease-in-out !important;
 }
+
 
 .card .date {
   font-size: 12px;
@@ -30,7 +31,7 @@ sl-card {
 }
 
 .card::part(base) {
-  background-color: transparent;
+  background-color: var(--background-color);
   border: none;
   border-radius: 40px;
   transition: all .25s ease-in-out;
@@ -46,6 +47,7 @@ sl-card {
   -webkit-border-radius: 40px;
   border-radius: 0 0 40px;
   transition: all .25s ease-in-out;
+  z-index: 2;
 }
 
 .card .card-bg .noise {
@@ -56,7 +58,7 @@ sl-card {
   -webkit-border-radius: 0 0 40px;
   border-radius: 0 0 40px;
   background-position: center center;
-  z-index: -1;
+  z-index: 1;
   top: 0;
   width: 100%;
   height: 100%;
@@ -105,8 +107,8 @@ sl-card {
 
 .card .image-container {
   position: relative;
-  /* width: 100%; */
-  /* height: 100%; */
+  width: -webkit-fill-available;
+  height: 100%;
   max-height: 320px;
   top: 0;
   left: 0;
@@ -133,6 +135,7 @@ sl-card {
   -webkit-border-radius: 32px;
   border-radius: 32px;
   max-height: 320px;
+  width: -webkit-fill-available;
   transform: scale(1);
   transition: all .25s ease-in-out !important;
 }
@@ -208,6 +211,7 @@ card:hover .card-bg {
   flex-direction: column;
   padding: 24px;
   align-items: flex-start;
+  z-index: 3;
 }
 .card:hover .text-content {
   filter: brightness(1.2);

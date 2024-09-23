@@ -1,7 +1,8 @@
 import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
+import './CustomScrollbar.css';
 
-const CustomScrollbar = ({ children, onScrollFrame }) => {
+const CustomScrollbar = ({ children, onScrollFrame, autoHeightMax }) => {
   // Function to get the value of a CSS variable
   const getCSSVariableValue = (variable) => {
     return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
@@ -12,7 +13,11 @@ const CustomScrollbar = ({ children, onScrollFrame }) => {
 
   return (
     <Scrollbars
+      className='custom-scrollbar'
       autoHide
+      autoHeight
+      autoHeightMin={100}
+      autoHeightMax={autoHeightMax || window.innerHeight}
       autoHideTimeout={1000}
       autoHideDuration={200}
       onScrollFrame={onScrollFrame} // Pass onScrollFrame prop to Scrollbars
@@ -23,6 +28,7 @@ const CustomScrollbar = ({ children, onScrollFrame }) => {
             ...style,
             backgroundColor: scrollbarThumbColor || '#888', // Fallback color if CSS variable is not set
             borderRadius: '12px',
+            position: 'absolute',
           }}
         />
       )}

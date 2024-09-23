@@ -4,7 +4,7 @@ import React, {
   useRef,
   useCallback,
 } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import axios from "axios";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
 import SlCard from "@shoelace-style/shoelace/dist/react/card";
@@ -12,7 +12,6 @@ import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
 import "./ReaderView.css";
 import WebsiteInfo from "../website-info/website-info.js";
 import CustomScrollbar from "../CustomScrollbar/CustomScrollbar.js";
-const MotionSlCard = motion(SlCard);
 
 function estimateReadingTime(text) {
   if (!text) return 0;
@@ -229,126 +228,118 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
   };
 
   return (
-    <AnimatePresence>
-      <div className="reader-view-overlay"></div>
-      <motion.div
-        className={`modal-container visible`}
-        ref={modalRef}
-        initial="hidden"
-        animate="visible"
+    <motion.div
+      className={`modal-container ${isLoading.current ? "" : "visible"}`}
+      ref={modalRef}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      variants={readerViewVariants}
+      transition={{ duration: 0.3 }}
+    ><CustomScrollbar>
+      <SlCard
+        className="card"
+        layoutId={`card-${item.id}`}
+        ref={contentcontainerRef}
         exit="exit"
-        variants={modalVariants}
-        transition={{ duration: .125, ease: "easeInOut" }}
+        transition={{ duration: 0.3 }}
+        style={{ fontSize: calculateFontSize(scrollPosition) }}
       >
-        <SlCard
-          className="reader-card"
-          layoutId={`card-${item.id}`}
-          variants={modalVariants}
-          ref={contentcontainerRef}
-          transition={{ duration: 0.125, ease: "easeInOut" }}
-        >       <div className="reader-view-header-button-container">
-        <SlIconButton
-          library="iconoir"
-          name="open-new-window"
-          class="reader-view-header-button"
-          onClick={() => {
-            window.open(url, "_blank");
-          }}
-        />
-        <SlIconButton
-          library="iconoir"
-          name="xmark"
-          class="reader-view-header-button"
-          onClick={onClose}
-        />
-      </div>     
-
-          <div className="modal-container-content" style={{ height: "100%" }}>
-          <CustomScrollbar 
-          autoHeightMax={"85vh"}
-          style={{ height: "100%" }}>
-              <div
-                exit="exit"
-                transition={{ duration: 0.125, ease: "easeInOut" }}
-                layoutId={`image-${item.id}`}
-              >
-                <div className="image-container">
-                  <img
-                    src={item.thumbnail}
-                    alt={item.siteTitle}
-                    style={{ width: "100%", height: "100%" }}
-                  />
-                </div>
+        
+                     <div className="image-container">
+                <img
+                  src={item.thumbnail}
+                  alt={item.siteTitle}
+                  style={{ width: "100%", height: "100%" }}
+                />
               </div>
-             
-
-              {isLoading.current ? (
-                <div className="loading-spinner"><SlSpinner style={{ fontSize: "3rem", margin: "auto"  }} /></div>
-              ) : (
-                article && (
-                  <motion.div
-                    className="reader-view-motion-wrapper"
-                    variants={readerViewVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="reader-view-page-content">
-                      <div
-                        className="title"
-                        ref={headerImageInfoRef}
-                        style={{
-                          bottom: calculateHeaderImageInfoBottom(
-                            scrollPosition
-                          ),
+                      <div className="reader-view-header-button-container">
+                      <SlIconButton
+                        library="iconoir"
+                        name="open-new-window"
+                        class="reader-view-header-button"
+                        onClick={() => {
+                          window.open(url, "_blank");
                         }}
-                      >
-                        
-                        <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        ><div className="reader-view-title">
-                          <h1 >
-                            {article.title}
-                          </h1></div>
-                        </a> <WebsiteInfo
-                          favicon={item.favicon}
-                          siteTitle={item.siteTitle}
-                          feedTitle={item.feedTitle}
-                          style={{
-                            marginBottom: "8px",
-                            maxWidth: "fit-content",
-                          }}
-                        />
-                        <div className="reader-view-website-info">
-                       
-                        <p className="reader-view-reading-time">
-                          {estimateReadingTime(article.textContent)} minutes
-                        </p>
-                        <p className="reader-view-reading-time">{item.author}</p>
-                        </div>
-                      </div>
-
-                      <div className="reader-view-page-text" ref={articleRef}>
-                        <div
-                          className="reader-view-article"
-                          dangerouslySetInnerHTML={{
-                            __html: article.content,
-                          }}
-                        />
-                      </div>
+                      />
+                      <SlIconButton
+                        library="iconoir"
+                        name="xmark"
+                        class="reader-view-header-button"
+                        onClick={onClose}
+                      />
                     </div>
-                  </motion.div>
-                )
-              )}
-                     </CustomScrollbar>
-
-          </div>
-        </SlCard>
-      </motion.div>
-    </AnimatePresence>
+                    
+      
+          {isLoading.current ? (
+            <SlSpinner style={{ fontSize: "3rem", margin: "2rem" }} />
+          ) : (
+            article && (
+              <motion.div
+                
+                className="reader-view-motion-wrapper"
+                variants={readerViewVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ duration: 0.3 }}
+              >
+                <div className="reader-view-page-content">
+                  
+                    
+                    <div
+                      className="header-image-info"
+                      ref={headerImageInfoRef}
+                      style={{
+                        bottom: calculateHeaderImageInfoBottom(
+                          scrollPosition
+                        ),
+                      }}
+                    >
+                      <WebsiteInfo
+                        favicon={item.favicon}
+                        siteTitle={item.siteTitle}
+                        feedTitle={item.feedTitle}
+                        style={{
+                          marginBottom: "8px",
+                          maxWidth: "fit-content",
+                        }}
+                      />
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <h1 className="reader-view-title">
+                          {article.title}
+                        </h1>
+                      </a>
+                      <p className="reader-view-reading-time">
+                        {estimateReadingTime(article.textContent)}{" "}
+                        minutes
+                      </p>
+                    </div>
+                    
+                  
+                  <div
+                    className="reader-view-page-text"
+                    ref={articleRef}
+                  >
+                    <div
+                      className="reader-view-article"
+                      dangerouslySetInnerHTML={{
+                        __html: article.content,
+                      }}
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            )
+          )}
+        
+      </SlCard>
+      </CustomScrollbar>
+    </motion.div>
   );
 };
 
