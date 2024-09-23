@@ -12,7 +12,6 @@ import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
 import "./ReaderView.css";
 import WebsiteInfo from "../website-info/website-info.js";
 import CustomScrollbar from "../CustomScrollbar/CustomScrollbar.js";
-const MotionSlCard = motion(SlCard);
 
 function estimateReadingTime(text) {
   if (!text) return 0;
@@ -34,7 +33,7 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
   const headerImageInfoRef = useRef(null);
   const viewportWidth = window.innerWidth;
 
-  const [headerImageInfoInitialized, setHeaderImageInfoInitialized] =
+  const [headerImageInfoInitialized] =
     useState(false);
 
   const dynamicTop = useRef(0);
@@ -45,34 +44,34 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
     );
   }
 
-  function calculateFontSize(scrollPosition) {
-    const maxScrollForFontSizeChange = 500;
-    let minFontSize;
-    let maxFontSize;
+  // function calculateFontSize(scrollPosition) {
+  //   const maxScrollForFontSizeChange = 500;
+  //   let minFontSize;
+  //   let maxFontSize;
 
-    if (viewportWidth < 450) {
-      maxFontSize = 10;
-      minFontSize = 8;
-    } else if (viewportWidth < 650) {
-      maxFontSize = 12;
-      minFontSize = 10;
-    } else if (viewportWidth >= 600 && viewportWidth < 1200) {
-      minFontSize = 14;
-      maxFontSize = 16;
-    } else {
-      minFontSize = 14;
-      maxFontSize = 16;
-    }
+  //   if (viewportWidth < 450) {
+  //     maxFontSize = 10;
+  //     minFontSize = 8;
+  //   } else if (viewportWidth < 650) {
+  //     maxFontSize = 12;
+  //     minFontSize = 10;
+  //   } else if (viewportWidth >= 600 && viewportWidth < 1200) {
+  //     minFontSize = 14;
+  //     maxFontSize = 16;
+  //   } else {
+  //     minFontSize = 14;
+  //     maxFontSize = 16;
+  //   }
 
-    const scaleFactor = Math.max(
-      0,
-      Math.min(1, scrollPosition / maxScrollForFontSizeChange)
-    );
-    const fontSize =
-      maxFontSize - scaleFactor * (maxFontSize - minFontSize);
+  //   const scaleFactor = Math.max(
+  //     0,
+  //     Math.min(1, scrollPosition / maxScrollForFontSizeChange)
+  //   );
+  //   const fontSize =
+  //     maxFontSize - scaleFactor * (maxFontSize - minFontSize);
 
-    return `${fontSize}px`;
-  }
+  //   return `${fontSize}px`;
+  // }
 
   function calculateHeaderImageInfoBottom(scrollPosition) {
     const maxScroll = 500;
@@ -171,7 +170,7 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
         articleElement.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [articleRef.current, isLoading.current]);
+  }, []);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);

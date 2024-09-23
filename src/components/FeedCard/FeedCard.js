@@ -9,7 +9,6 @@ import DropShadow from "../DropShadow/DropShadow.js";
 import ReaderView from "../ReaderView/ReaderView.js";
 import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
 
-const MotionSlCard = motion(SlCard);
 
 const useImageLoader = (src) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -80,14 +79,7 @@ const FeedCard = ({ item, apiUrl }) => {
     return 16;
   }, [mouseDown, hover]);
 
-  const thumbnailUrl = useMemo(() => {
-    if (Array.isArray(item.thumbnail)) {
-      return item.thumbnail.find(
-        (thumbnail) => thumbnail.url || thumbnail.link
-      )?.url;
-    }
-    return item.thumbnail || null;
-  }, [item.thumbnail]);
+
 
   if (!isLoaded) {
     return <FeedCardLoader id={item.id} />;
