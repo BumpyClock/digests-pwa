@@ -55,6 +55,16 @@ function App() {
           ]
         );
   });
+   // Add this useEffect to check the user agent and set the background color
+  //  useEffect(() => {
+  //   if (window.isElectron) {
+  //     console.log("Detected Electron environment; setting background color to transparent");
+  //     document.body.style.backgroundColor = 'green !important';
+  //   } else if (window.isElectron === false || window.isElectron === undefined) {
+  //     console.log("Not an Electron app; setting background color to white");
+  //     document.body.style.backgroundColor = 'var(--background-color)';
+  //   }
+  // }, []);
 
    useEffect(() => {
     (async () => {
@@ -83,6 +93,7 @@ function App() {
   const refreshRSSData = useCallback(() => {
     console.log("[RefreshRSSDATA] Refreshing RSS data");
 
+   
     if (navigator.serviceWorker.controller) {
       // Service worker is active, send a message
       navigator.serviceWorker.ready.then((registration) => {
@@ -129,6 +140,7 @@ function App() {
     };
   }, [refreshRSSData]);
   
+ 
 
   const refreshFeed = useCallback(() => {
     setIsLoading(true); // Set loading to true when refresh starts

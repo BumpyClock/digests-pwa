@@ -7,7 +7,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 // Check user agent and set body background color to transparent if it matches any version of Digest-electron
 if (/Digest-electron\/\d+\.\d+\.\d+/.test(navigator.userAgent)) {
-  document.body.style.backgroundColor = 'transparent';
+  document.body.style.backgroundColor = 'transparent !important';
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

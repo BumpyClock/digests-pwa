@@ -185,6 +185,9 @@ async function fetchRSS(feedUrls) {
   let feedDetails = [];
   let items = [];
   try {
+    if (apiUrl === "") {
+      apiUrl = await getConfig('apiUrl', defaultConfig.apiUrl);
+    }
     const requestUrl = `${apiUrl}/parse`;
     console.log("🚀 ~ fetchRSS ~ requestUrl:", requestUrl)
     const requestOptions = createRequestOptions(feedUrls);
