@@ -1,10 +1,7 @@
 import React from 'react';
 import SlCard from "@shoelace-style/shoelace/dist/react/card";
+import SlSkeleton from "@shoelace-style/shoelace/dist/react/skeleton";
 import './FeedCardLoader.css';
-
-const ShimmerSkeleton = ({ style }) => (
-  <div className="shimmer-skeleton" style={style}></div>
-);
 
 const FeedCardLoader = ({ id }) => {
   const skeletonStyle = { height: '20px', marginTop: '10px' };
@@ -12,13 +9,13 @@ const FeedCardLoader = ({ id }) => {
   return (
     <div className="card-wrapper">
       <SlCard className="card" id={id}>
-        <div className="image-container shimmer-skeleton"></div>
+        <SlSkeleton className="image-container" effect="pulse" />
         <div className='card-bg'>
-          <ShimmerSkeleton />
+          <SlSkeleton effect="pulse" />
         </div>
         <div className="text-content">
-          <ShimmerSkeleton style={{ height: '20px', width: '50%' }} />
-          {Array(6).fill().map((_, i) => <ShimmerSkeleton key={i} style={skeletonStyle} />)}
+          <SlSkeleton style={{ height: '20px', width: '50%' }} effect="pulse" />
+          {Array(6).fill().map((_, i) => <SlSkeleton key={i} style={skeletonStyle} effect="pulse" />)}
         </div>
       </SlCard>
     </div>

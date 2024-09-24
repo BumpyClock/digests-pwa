@@ -1,0 +1,99 @@
+.feed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .feed-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: white;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .feed-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .feed-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 16px;
+  }
+  
+  .feed-info {
+    flex-grow: 1;
+  }
+  
+  .feed-title {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+  
+  .feed-url {
+    font-size: 0.875rem;
+    color: #666;
+    text-decoration: none;
+    margin-top: 4px;
+  }
+  
+  .feed-url:hover {
+    text-decoration: underline;
+  }
+  
+  .feed-actions {
+    margin-top: 8px;
+  }
+  
+  .similar-feeds-btn,
+  .following-btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+  
+  .similar-feeds-btn {
+    margin-right: 8px;
+  }
+  
+  .similar-feeds-btn:hover,
+  .following-btn:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .feed-description {
+    margin-bottom: 16px;
+  }
+  
+  .feed-description p {
+    margin: 0 0 8px;
+    color: #444;
+  }
+  
+  .feed-description ul {
+    padding-left: 20px;
+    margin: 0;
+  }
+  
+  .feed-description ul li {
+    list-style: disc;
+    font-size: 0.875rem;
+    color: #555;
+  }
+  
+  .feed-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: #888;
+  }
+  
