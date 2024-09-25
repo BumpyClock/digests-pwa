@@ -5,7 +5,7 @@
     box-shadow: none;
     /* background: white; */
     max-width: 120px;
-    width: fit-content;
+    width: auto;
     
     height: 50% !important;
     max-height: 20px !important;
@@ -32,6 +32,8 @@
     margin: 0 !important;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
+    line-clamp:1;
+
 }
 
 .website-info {
