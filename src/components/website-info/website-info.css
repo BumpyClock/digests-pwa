@@ -5,7 +5,7 @@
     box-shadow: none;
     /* background: white; */
     max-width: 120px;
-    width: 50%!important;
+    width: fit-content;
     
     height: 50% !important;
     max-height: 20px !important;

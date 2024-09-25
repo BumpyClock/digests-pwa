@@ -112,9 +112,7 @@
 @media (prefers-color-scheme: light) {
   body {
     --background-color: var(--light-new-tab-background-color);
-    --background-color-secondary: var(
-      --light-new-tab-background-color-secondary
-    );
+    --background-color-secondary: var(--light-new-tab-background-color-secondary);
     --app-bar-background: var(var(--light-app-bar-background));
     --background-color-hover: var(--light-background-color-hover);
     --color: var(--light-foreground-color);

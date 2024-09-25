@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^13.5.0",
     "dompurify": "^3.0.8",
     "framer-motion": "^10.18.0",
+    "iconoir-react": "^7.9.0",
     "jsdom": "^23.2.0",
     "react": "^18.2.0",
     "react-content-loader": "^6.2.1",

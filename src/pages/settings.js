@@ -7,6 +7,7 @@ import {
 } from "@shoelace-style/shoelace/dist/react/";
 import "./settings.css";
 import FeedList from "../components/FeedList/FeedList.js"; // Make sure this path is correct for FeedList
+import { Iconoir } from "iconoir-react";
 
 function Settings({
   feedUrls,
@@ -138,11 +139,16 @@ function Settings({
       </div>
 
       {urlError && <p className="error-message">{urlError}</p>}
-      <div className="settings-section">
-      <div id="subscribed-feeds-list">
+      <div className="settings-section" style={{ display: "inline-block", width:"100%" }}> 
+        <div className="infoContainer">
+          <h3>Subscribed Feeds</h3>
+          <p>Manage your subscribed feeds.</p>
+          </div>
+          <div id="subscribed-feeds-list">
         {feedDetails && feedDetails.length > 0 ? (
           <FeedList
             feeds={feedDetails}
+            onRemoveFeed={handleRemoveFeed} // Pass the handleRemoveFeed function
           />
         ) : (
           <p>No feeds found. Please add some feeds.</p>

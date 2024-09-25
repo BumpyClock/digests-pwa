@@ -1,46 +1,89 @@
 .feed-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    
+  height: fit-content;
+
+  }
+
+  .feed-list sl-card{
+    border-radius: 24px;
+    border:none;
+    --padding:0px;
+    background-color: var(--background-color-secondary);
+    
+
   }
   
-  .feed-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    background-color: white;
-    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+  .feed-card::part(base){
+    background-color: var(--background-color-secondary);
+    border: none;
+    border:1px solid var(--border-color) !important;
+    border-radius: 24px;
+
+    height: auto;
+    break-inside: avoid;
+    box-shadow: var(--box-shadow-standard);
     max-width: 600px;
     margin: 0 auto;
+    width: -webkit-fill-available;
+  }
+
+  .feed-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+
+    padding: 16px;
+    break-inside: avoid;
+    flex-grow:1;
   }
   
   .feed-card-header {
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
   }
   
   .feed-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
     margin-right: 16px;
+    /* border: 1px solid var(--border-color); */
+    border-radius: 4px;
+    object-fit: cover;
+    
   }
   
   .feed-info {
-    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    row-gap: 4px;
   }
   
   .feed-title {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.05rem;
+    padding: 0;
   }
   
-  .feed-url {
+  .feed-url , .feed-url a{
     font-size: 0.875rem;
-    color: #666;
+    width: -webkit-fill-available;
+    color: var(--color);
+    opacity: 0.9;
     text-decoration: none;
-    margin-top: 4px;
+    line-height: 1;
+    margin: 0px;
+    display:-webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
   }
   
   .feed-url:hover {
@@ -72,11 +115,20 @@
   
   .feed-description {
     margin-bottom: 16px;
+    color: var(--color);
+    opacity: 0.8; 
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
   }
   
   .feed-description p {
     margin: 0 0 8px;
-    color: #444;
+    font-size: .8rem;
+    
   }
   
   .feed-description ul {

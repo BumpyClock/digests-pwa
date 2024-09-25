@@ -1,8 +1,9 @@
 import React,{useMemo,useState} from 'react';
-import { SlIcon, SlCard } from '@shoelace-style/shoelace/dist/react';
+import { SlIcon, SlCard , SlRelativeTime} from '@shoelace-style/shoelace/dist/react';
 import './PodcastCard.css';
 import DropShadow from '../DropShadow/DropShadow.js'; // Import DropShadow
 import PodcastDetails from '../PodcastDetails/PodcastDetails.js'; // Import PodcastDetails
+import WebsiteInfo from '../website-info/website-info.js'; // Import WebsiteInfo
 
 
 const PodcastCard = ({ item }) => {
@@ -38,13 +39,16 @@ const PodcastCard = ({ item }) => {
     }}
   >
     <DropShadow color={item.thumbnailColor || {r:0,g:0,b:0}} elevation={elevation}/> 
-    <SlCard className="card" id={item.id}>
+    <SlCard className="card podcast-card" id={item.id}>
     
       {/* Card Image */}
-      <div className="image-container">
+      <div className="podcast-image-header" >
+        <div className='background-image' style={{backgroundImage: `url(${item.thumbnail})`}}></div>
+      <div className="icon-container">
         {item.feedImage && (
-          <img src={item.feedImage} alt={item.title} className="podcast-card-image" />
+          <img src={item.feedImage} alt={item.title}  />
         )}
+      </div>
       </div>
       <div className="card-bg">
       <img
@@ -57,17 +61,23 @@ const PodcastCard = ({ item }) => {
 
       {/* Card Content */}
       <div className="text-content">
-        {/* Title */}
+        {/* Title */}<WebsiteInfo
+            favicon={"./assets/icons/podcast.svg"}
+            siteTitle={item.feedTitle}
+            feedTitle={item.siteTitle}
+          />
         <h3 className="podcast-title">{item.title}</h3>
+        <div className="date"><SlRelativeTime date={new Date(item.published)} /></div>
+
 
         {/* Description */}
         <p className="description">{item.description}</p>
 
         {/* Podcast Audio Player */}
-        <audio controls className="podcast-audio-player">
+        {/* <audio controls className="podcast-audio-player">
           <source src={item.enclosures[0].url} type="audio/mpeg" />
           Your browser does not support the audio element.
-        </audio>
+        </audio> */}
 
         {/* External Link */}
         {item.externalLink && (
@@ -77,13 +87,8 @@ const PodcastCard = ({ item }) => {
         )}
       </div>
 
-      {/* Footer Date and Icon */}
-      <div className="card-footer">
-        <span className="date">{item.date}</span>
-        <span className="icon">
-          <SlIcon name="play-circle" />
-        </span>
-      </div>
+   
+     
     </SlCard>
     {showPodcastDetails&& <PodcastDetails url={item.link} item={item} onClose={() => {
       setShowPodcastDetails(false);

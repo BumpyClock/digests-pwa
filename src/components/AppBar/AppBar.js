@@ -36,7 +36,7 @@ const AppBar = ({ isScrolled, refreshFeed, isListView, setIsListView, showSettin
 <SlIconButton
           className="icon-button"
           name="rss-feed"
-          id="podcastButton"
+          id="rssFeedButton"
           size="large"
           library="iconoir"
           style={{
@@ -48,7 +48,7 @@ const AppBar = ({ isScrolled, refreshFeed, isListView, setIsListView, showSettin
 <SlIconButton
           className="icon-button"
           name="bookmark"
-          id="rssButton"
+          id="bookmarkButton"
           size="large"
           library="iconoir"
           style={{
