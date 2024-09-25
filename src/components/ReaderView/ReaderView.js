@@ -264,7 +264,7 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
 
           <div className="modal-container-content" style={{ height: "100%" }}>
           <CustomScrollbar 
-          autoHeightMax={"85vh"}
+          autoHeightMax={"95vh"}
           style={{ height: "100%" }}>
               <div
                 exit="exit"
