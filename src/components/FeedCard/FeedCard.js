@@ -9,6 +9,12 @@ import DropShadow from "../DropShadow/DropShadow.js";
 import ReaderView from "../ReaderView/ReaderView.js";
 import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
 
+function decodeHtmlEntities(text) {
+  const textArea = document.createElement('textarea');
+  textArea.innerHTML = text;
+  return textArea.value;
+}
+
 const useImageLoader = (src) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -150,7 +156,7 @@ const FeedCard = ({ item, apiUrl }) => {
             siteTitle={item.siteTitle}
             feedTitle={item.siteTitle}
           />
-          <h3>{item.title}</h3>
+          <h3>{decodeHtmlEntities(item.title)}</h3>
           <div className="date">
             <SlRelativeTime date={new Date(item.published)} />
           </div>
