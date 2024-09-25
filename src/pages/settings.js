@@ -7,7 +7,6 @@ import {
 } from "@shoelace-style/shoelace/dist/react/";
 import "./settings.css";
 import FeedList from "../components/FeedList/FeedList.js"; // Make sure this path is correct for FeedList
-import { Iconoir } from "iconoir-react";
 
 function Settings({
   feedUrls,

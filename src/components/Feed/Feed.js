@@ -8,7 +8,8 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { debounce } from 'lodash';
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar.js';
 
-
+const MemoizedFeedCard = memo(FeedCard);
+const MemoizedPodcastCard = memo(PodcastCard);
 const Feed = ({ feedItems, apiUrl, filterType }) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -124,9 +125,9 @@ const Feed = ({ feedItems, apiUrl, filterType }) => {
           <Masonry key={filterType} gutter={gutterSize}>
             {items.map((item) => (
               item.type === 'podcast' ? (
-                <PodcastCard key={'podcast' + item.id} item={item} apiUrl={apiUrl} />
+                <MemoizedPodcastCard key={'podcast' + item.id} item={item} apiUrl={apiUrl} />
               ) : (
-                <FeedCard key={'rss' + item.id} item={item} apiUrl={apiUrl} />
+                <MemoizedFeedCard key={'rss' + item.id} item={item} apiUrl={apiUrl} />
               )
             ))}
           </Masonry>
