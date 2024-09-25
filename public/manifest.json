@@ -2,7 +2,7 @@
   "short_name": "Digests",
   "description": "Simple RSS Reader",
   "name": "Digests - RSS Reader",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "icons": [
     {
       "src": "favicon.ico",

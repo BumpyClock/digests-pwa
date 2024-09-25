@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '9_25_24_9_45_AM';
+const CACHE_NAME = '9_25_24_10_29_AM';
 
 var apiUrl = "";
 const DB_NAME = "digests-app";
@@ -173,12 +173,17 @@ function createRequestOptions(feedUrls) {
 }
 
 async function fetchWithTimeout(resource, options = {}) {
-  const { timeout = 30*1000 } = options; // 30-second timeout
+  const { timeout = 30 * 1000 } = options; // 30-second timeout
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
-  const response = await fetch(resource, { ...options, signal: controller.signal });
-  clearTimeout(id);
-  return response;
+  try {
+    const response = await fetch(resource, { ...options, signal: controller.signal });
+    clearTimeout(id);
+    return response;
+  } catch (error) {
+    clearTimeout(id);
+    throw error;
+  }
 }
 
 async function fetchRSS(feedUrls) {
