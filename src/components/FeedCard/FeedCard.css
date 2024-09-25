@@ -8,20 +8,18 @@ sl-card {
   position: relative;
   padding: 0;
   row-gap: 0;
-    -webkit-border-radius: 40px;
+  -webkit-border-radius: 40px;
   border-radius: 40px;
-    width: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   height: auto;
   max-width: 950px;
-  margin-top: 12px;
   break-inside: avoid;
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
   transition: all .25s ease-in-out !important;
 }
-
 
 .card .date {
   font-size: 12px;
@@ -39,7 +37,7 @@ sl-card {
 
 .card .card-bg {
   position: absolute;
-  top:0;
+  top: 0;
   left: 0;
   width: 100%;
   /* opacity: .35; */
@@ -74,7 +72,7 @@ sl-card {
   z-index: -2;
   filter: blur(60px) brightness(.9);
   opacity: .35;
-  transform: scale(1.4) ;
+  transform: scale(1.4);
   transition: all .25s ease-in-out;
   border-radius: 40px;
 }
@@ -88,7 +86,7 @@ sl-card {
   border-radius: 40px;
   z-index: -2;
   opacity: .15;
-  transform: scale(1.1) ;
+  transform: scale(1.1);
   transition: all .35s ease-in-out;
   /* transition: none !; */
 }
@@ -161,7 +159,7 @@ card:hover .card-bg {
 .card:active .card-bg img {
   background: var(--active-color);
   filter: blur(90px) brightness(.7);
-  transform: scale(1) ;
+  transform: scale(1);
   transition: all .25s ease-in-out;
   border-radius: 40px;
 }
@@ -268,7 +266,6 @@ card:hover .card-bg {
   line-height: 1.33;
   font-weight: 400;
   width: 100%;
-
 }
 
 .shimmer-skeleton {
@@ -286,7 +283,6 @@ card:hover .card-bg {
   background-size: 800px 200px;
   animation: shimmer 2s linear infinite forwards;
 }
-
 @keyframes shimmer {
   0% {
     background-position: -800px 0;

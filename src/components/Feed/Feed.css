@@ -13,7 +13,7 @@
 
 .feed {
     margin : auto;
-    padding:0px 64px 0px 64px;
+    padding:64px 64px 0px 64px;
     /* height: calc(100vh - 74px); */
     /* scrollbar-width: thin; */
 }
@@ -27,7 +27,7 @@
     }
 
     .feed{
-        padding:0px 32px 0px 32px;
+        padding:32px 32px 0px 32px;
     }
 }
 
@@ -37,7 +37,7 @@
         column-count: 2;
     }
     .feed{
-        padding:0px 32px 0px 32px;
+        padding:32px 32px 0px 32px;
     }
 }
 
@@ -54,7 +54,7 @@
         column-count: 4;
     }
     .feed{
-        padding:0px 32px 0px 32px;
+        padding:32px 32px 0px 32px;
     }
 }
 @media (min-width: 1900px) {
