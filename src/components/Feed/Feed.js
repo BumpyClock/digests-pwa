@@ -60,21 +60,16 @@ const Feed = ({ feedItems, apiUrl, filterType }) => {
     }
   }, [feedItems, filterType]);
 
-  // Effect to reset items and hasMore when filterType changes
-  useEffect(() => {
-    console.log('Filter type changed:', filterType);
-    console.log('Filtered feed items:', filteredFeedItems);
-    console.log('resetting items');
-    console.log('Items after reset:', items);
 
-    setItems([]); // Reset items
-    setHasMore(true); // Reset hasMore
-    setIsLoading(true); // Optionally set loading to true during reset
-  
-    // Scroll to top when the filter changes
-    
-  
-    // Load initial items based on the new filterType
+  useEffect(() => {
+    setItems([]);
+    setHasMore(true);
+    setIsLoading(true);
+
+
+
+
+
     if (filteredFeedItems.length > 0) {
       const newItems = filteredFeedItems.slice(0, stepSize);
       setItems(newItems);
@@ -90,7 +85,7 @@ const Feed = ({ feedItems, apiUrl, filterType }) => {
 
   }, [filterType, filteredFeedItems, stepSize]);
 
-  // Updated fetchMoreData to use latest state
+
   const fetchMoreData = useCallback(() => {
     setItems(prevItems => {
       const currentLength = prevItems.length;
@@ -111,7 +106,7 @@ const Feed = ({ feedItems, apiUrl, filterType }) => {
     const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
     if (scrollPercentage >= 90 && hasMore && !isLoading) {
-      fetchMoreData();  // Fetch more data when the user scrolls 90% of the content
+      fetchMoreData();
     }
   }, [fetchMoreData, hasMore, isLoading]);
 
@@ -129,9 +124,9 @@ const Feed = ({ feedItems, apiUrl, filterType }) => {
           <Masonry key={filterType} gutter={gutterSize}>
             {items.map((item) => (
               item.type === 'podcast' ? (
-                <PodcastCard key={'podcast'+item.id} item={item} apiUrl={apiUrl}/>
+                <PodcastCard key={'podcast' + item.id} item={item} apiUrl={apiUrl} />
               ) : (
-                <FeedCard key={'rss'+item.id} item={item} apiUrl={apiUrl}/>
+                <FeedCard key={'rss' + item.id} item={item} apiUrl={apiUrl} />
               )
             ))}
           </Masonry>
