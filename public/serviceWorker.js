@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '9_25_24_9_13_AM';
+const CACHE_NAME = '9_25_24_9_30_AM';
 
 var apiUrl = "";
 const DB_NAME = "digests-app";
