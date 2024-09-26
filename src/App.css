@@ -48,4 +48,6 @@
   justify-content:center;
   height: -webkit-fill-available;
   width: -webkit-fill-available;
+  padding: 6rem;
+  margin:6rem;
 }

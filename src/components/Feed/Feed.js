@@ -1,17 +1,21 @@
-import React, { useState, useEffect, useCallback, memo } from 'react';
+// Feed.js
+
+import React, { useState, useEffect, useCallback, memo, useMemo, useRef } from 'react';
 import FeedCard from '../FeedCard/FeedCard.js';
-import PodcastCard from '../PodcastCard/PodcastCard.js'; // Import PodcastCard
+import PodcastCard from '../PodcastCard/PodcastCard.js';
 import './Feed.css';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { debounce } from 'lodash';
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar.js';
 
 const MemoizedFeedCard = memo(FeedCard);
-
-const Feed = ({ feedItems , apiUrl}) => {
+const MemoizedPodcastCard = memo(PodcastCard);
+const Feed = ({ feedItems, apiUrl, filterType }) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+
+  const scrollRef = useRef(null); // Reference to the CustomScrollbar
 
   const getGutterSize = useCallback(() => {
     const width = window.innerWidth;
@@ -46,52 +50,85 @@ const Feed = ({ feedItems , apiUrl}) => {
     };
   }, [handleResize]);
 
-  useEffect(() => {
-    if (feedItems.length > 0) {
-      const newItems = feedItems.slice(0, stepSize);
-      setItems(newItems);
-      setHasMore(feedItems.length > newItems.length);
-      setIsLoading(false);
+  // Memoize the filtered feed items based on filterType
+  const filteredFeedItems = useMemo(() => {
+    if (filterType === 'podcast') {
+      return feedItems.filter(item => item.type === 'podcast');
+    } else if (filterType === 'rss') {
+      return feedItems.filter(item => item.type === 'rss' || item.type === 'article');
+    } else {
+      return feedItems;
     }
-  }, [feedItems, stepSize]);
+  }, [feedItems, filterType]);
+
+
+  useEffect(() => {
+    setItems([]);
+    setHasMore(true);
+    setIsLoading(true);
+
+
+
+
+
+    if (filteredFeedItems.length > 0) {
+      const newItems = filteredFeedItems.slice(0, stepSize);
+      setItems(newItems);
+      setHasMore(filteredFeedItems.length > newItems.length);
+    } else {
+      setItems([]);
+      setHasMore(false);
+    }
+    setIsLoading(false);
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+
+  }, [filterType, filteredFeedItems, stepSize]);
+
 
   const fetchMoreData = useCallback(() => {
-    if (!hasMore || items.length >= feedItems.length) {
-      setHasMore(false);
-      return;
-    }
+    setItems(prevItems => {
+      const currentLength = prevItems.length;
+      const totalLength = filteredFeedItems.length;
 
-    const newItems = feedItems.slice(items.length, items.length + stepSize);
-    setItems(prevItems => [...prevItems, ...newItems]);
-  }, [items, feedItems, stepSize, hasMore]);
+      if (currentLength >= totalLength) {
+        setHasMore(false);
+        return prevItems;
+      }
+
+      const newItems = filteredFeedItems.slice(currentLength, currentLength + stepSize);
+      return [...prevItems, ...newItems];
+    });
+  }, [filteredFeedItems, stepSize]);
 
   const handleScrollFrame = useCallback((values) => {
     const { scrollTop, scrollHeight, clientHeight } = values;
     const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
-    if (scrollPercentage >= 90) {
-      fetchMoreData();  // Fetch more data when the user scrolls 90% of the content
+    if (scrollPercentage >= 90 && hasMore && !isLoading) {
+      fetchMoreData();
     }
-  }, [fetchMoreData]);
+  }, [fetchMoreData, hasMore, isLoading]);
 
   return isLoading ? (
     <div className="loading-indicator">Loading...</div>
+  ) : items.length === 0 ? (
+    <div className="no-items-indicator">No items to display.</div>
   ) : (
-    <CustomScrollbar onScrollFrame={handleScrollFrame}>
+    <CustomScrollbar onScrollFrame={handleScrollFrame} ref={scrollRef}>
       <div className="feed">
         <ResponsiveMasonry
           columnsCountBreakPoints={{ 320: 1, 550: 2, 850: 3, 1201: 4, 1601: 4, 1801: 4, 1901: 5, 2201: 6 }}
           style={{ maxWidth: '2400px', margin: '0 auto' }}
         >
-          <Masonry gutter={gutterSize}>
+          <Masonry key={filterType} gutter={gutterSize}>
             {items.map((item) => (
-              <div key={item.id}>
-                {item.type === 'podcast' ? (
-                  <PodcastCard item={item} apiUrl={apiUrl}/>
-                ) : (
-                  <MemoizedFeedCard item={item} apiUrl={apiUrl}/>
-                )}
-              </div>
+              item.type === 'podcast' ? (
+                <MemoizedPodcastCard key={'podcast' + item.id} item={item} apiUrl={apiUrl} />
+              ) : (
+                <MemoizedFeedCard key={'rss' + item.id} item={item} apiUrl={apiUrl} />
+              )
             ))}
           </Masonry>
         </ResponsiveMasonry>

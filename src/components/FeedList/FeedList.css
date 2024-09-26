@@ -1,0 +1,154 @@
+.feed-list {
+    
+  height: fit-content;
+
+  }
+
+  .feed-list sl-card{
+    border-radius: 24px;
+    border:none;
+    --padding:0px;
+    background-color: var(--background-color-secondary);
+    
+
+  }
+  
+  .feed-card::part(base){
+    background-color: var(--background-color-secondary);
+    border: none;
+    border:1px solid var(--border-color) !important;
+    border-radius: 24px;
+
+    height: auto;
+    break-inside: avoid;
+    box-shadow: var(--box-shadow-standard);
+    max-width: 600px;
+    margin: 0 auto;
+    width: -webkit-fill-available;
+  }
+
+  .feed-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+
+    padding: 16px;
+    break-inside: avoid;
+    flex-grow:1;
+  }
+  
+  .feed-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  
+  .feed-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    margin-right: 16px;
+    /* border: 1px solid var(--border-color); */
+    border-radius: 4px;
+    object-fit: cover;
+    
+  }
+  
+  .feed-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    row-gap: 4px;
+  }
+  
+  .feed-title {
+    margin: 0;
+    font-size: 1.05rem;
+    padding: 0;
+  }
+  
+  .feed-url , .feed-url a{
+    font-size: 0.875rem;
+    width: -webkit-fill-available;
+    color: var(--color);
+    opacity: 0.9;
+    text-decoration: none;
+    line-height: 1;
+    margin: 0px;
+    display:-webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp:1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+  }
+  
+  .feed-url:hover {
+    text-decoration: underline;
+  }
+  
+  .feed-actions {
+    margin-top: 8px;
+  }
+  
+  .similar-feeds-btn,
+  .following-btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+  
+  .similar-feeds-btn {
+    margin-right: 8px;
+  }
+  
+  .similar-feeds-btn:hover,
+  .following-btn:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .feed-description {
+    margin-bottom: 16px;
+    color: var(--color);
+    opacity: 0.8; 
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp:1;
+
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+  }
+  
+  .feed-description p {
+    margin: 0 0 8px;
+    font-size: .8rem;
+    
+  }
+  
+  .feed-description ul {
+    padding-left: 20px;
+    margin: 0;
+  }
+  
+  .feed-description ul li {
+    list-style: disc;
+    font-size: 0.875rem;
+    color: #555;
+  }
+  
+  .feed-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: #888;
+  }
+  

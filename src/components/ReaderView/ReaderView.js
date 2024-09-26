@@ -21,6 +21,8 @@ function estimateReadingTime(text) {
   return readingTimeInMinutes;
 }
 
+
+
 const ReaderView = ({ url, item, apiUrl, onClose }) => {
   const [article, setArticle] = useState(null);
   const isLoading = useRef(true);
@@ -264,7 +266,7 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
 
           <div className="modal-container-content" style={{ height: "100%" }}>
           <CustomScrollbar 
-          autoHeightMax={"85vh"}
+          autoHeightMax={"95vh"}
           style={{ height: "100%" }}>
               <div
                 exit="exit"
@@ -304,15 +306,11 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
                         }}
                       >
                         
-                        <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        ><div className="reader-view-title">
+                       <div className="reader-view-title">
                           <h1 >
                             {article.title}
                           </h1></div>
-                        </a> <WebsiteInfo
+                         <WebsiteInfo
                           favicon={item.favicon}
                           siteTitle={item.siteTitle}
                           feedTitle={item.feedTitle}

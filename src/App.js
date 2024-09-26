@@ -1,4 +1,6 @@
-import React, { useState, useCallback, useEffect, memo } from "react";
+// App.js
+
+import React, { useState, useCallback, useEffect, memo } from "react"; 
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import Feed from "./components/Feed/Feed.js";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
@@ -35,6 +37,9 @@ function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const SettingsMemo = memo(Settings);
   const [showSettings, setShowSettings] = useState(false);
+  const [filterType, setFilterType] = useState('all'); // 'all', 'podcast', or 'rss'
+
+  // Initialize feedUrls from localStorage or default feeds
   const [feedUrls, setFeedUrls] = useState(() => {
     const savedFeedUrls = localStorage.getItem("feedUrls");
     return savedFeedUrls
@@ -56,7 +61,8 @@ function App() {
         );
   });
 
-   useEffect(() => {
+  // Fetch saved configurations
+  useEffect(() => {
     (async () => {
       try {
         const savedRefreshInterval = await getConfig('refreshInterval', defaultConfig.refresh_interval);
@@ -67,7 +73,7 @@ function App() {
       }
     })();
   }, []);
-  
+
   useEffect(() => {
     (async () => {
       try {
@@ -80,11 +86,11 @@ function App() {
     })();
   }, []);
 
+  // Function to refresh RSS data
   const refreshRSSData = useCallback(() => {
     console.log("[RefreshRSSDATA] Refreshing RSS data");
 
     if (navigator.serviceWorker.controller) {
-      // Service worker is active, send a message
       navigator.serviceWorker.ready.then((registration) => {
         const messageChannel = new MessageChannel();
         messageChannel.port1.onmessage = (event) => {
@@ -103,18 +109,17 @@ function App() {
         );
       });
     } else {
-      // Service worker is not active yet; will wait for it to become active
       console.log("Service worker not active yet; waiting for activation.");
     }
   }, [feedUrls]);
 
+  // Handle service worker controller change
   useEffect(() => {
     const onControllerChange = () => {
       console.log("Service worker has taken control; refreshing RSS data.");
       refreshRSSData();
     };
-  
-    // Check if the service worker is controlling the page
+
     if (navigator.serviceWorker.controller) {
       console.log("Service worker already controlling the page; fetching RSS data.");
       refreshRSSData();
@@ -122,16 +127,14 @@ function App() {
       console.log("Service worker not active yet. Waiting for activation...");
       navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
     }
-  
-    // Cleanup the event listener on component unmount
+
     return () => {
       navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
     };
   }, [refreshRSSData]);
-  
 
   const refreshFeed = useCallback(() => {
-    setIsLoading(true); // Set loading to true when refresh starts
+    setIsLoading(true);
     console.log("Refreshing feed");
     refreshRSSData();
   }, [refreshRSSData]);
@@ -142,6 +145,7 @@ function App() {
     },
     [feedUrls]
   );
+
   const toggleSettings = useCallback(() => {
     setShowSettings(prev => !prev);
   }, []);
@@ -153,15 +157,15 @@ function App() {
     [feedUrls, refreshRSSData]
   );
 
+  // Set up automatic refresh based on refreshInterval
   useEffect(
     () => {
       console.log(`Setting refresh interval to ${refreshInterval} minutes`);
       const intervalId = setInterval(() => {
         console.log("🚀 ~ RefreshTimer triggered ~ Refreshing RSS data");
         refreshRSSData();
-      }, refreshInterval * 60 * 1000); // Convert refreshInterval from minutes to milliseconds
+      }, refreshInterval * 60 * 1000);
 
-      // Save the refresh interval to localStorage
       localStorage.setItem("refreshInterval", refreshInterval.toString());
 
       return () => clearInterval(intervalId);
@@ -189,6 +193,7 @@ function App() {
     };
   }, []);
 
+  // Check if the window is scrolled
   useEffect(() => {
     const checkScroll = () => {
       if (window.scrollY > 0) {
@@ -214,8 +219,9 @@ function App() {
         setIsListView={setIsListView}
         showSettings={showSettings}
         toggleSettings={toggleSettings}
+        filterType={filterType}
+        setFilterType={setFilterType}
       />
-      
       <main className={`content-container ${!isListView ? "feed-view" : ""}`}>
         {isLoading
           ? <div className="loading-indicator">
@@ -234,7 +240,11 @@ function App() {
               />
             : isListView
               ? <ListView articles={feedItems} />
-              : <Feed feedItems={feedItems} apiUrl={apiUrl}/>}
+              : <Feed
+                  feedItems={feedItems}
+                  apiUrl={apiUrl}
+                  filterType={filterType} // Pass filterType to Feed component
+                />}
       </main>
     </div>
   );

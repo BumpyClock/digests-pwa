@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '9_23_24_1_01_AM';
+const CACHE_NAME = '9_25_24_10_29_AM';
 
 var apiUrl = "";
 const DB_NAME = "digests-app";
@@ -74,7 +74,10 @@ self.addEventListener('fetch', (event) => {
         // Clone response and store a copy in the cache
         const responseClone = response.clone();
         caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseClone);
+          // Ensure only GET requests are cached
+          if (event.request.method === 'GET') {
+            cache.put(event.request, responseClone);
+          }
         });
         return response;
       })
@@ -170,18 +173,26 @@ function createRequestOptions(feedUrls) {
 }
 
 async function fetchWithTimeout(resource, options = {}) {
-  const { timeout = 10000 } = options; // 10-second timeout
+  const { timeout = 30 * 1000 } = options; // 30-second timeout
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
-  const response = await fetch(resource, { ...options, signal: controller.signal });
-  clearTimeout(id);
-  return response;
+  try {
+    const response = await fetch(resource, { ...options, signal: controller.signal });
+    clearTimeout(id);
+    return response;
+  } catch (error) {
+    clearTimeout(id);
+    throw error;
+  }
 }
 
 async function fetchRSS(feedUrls) {
   let feedDetails = [];
   let items = [];
   try {
+    if (apiUrl === "") {
+      apiUrl = await getConfig('apiUrl', defaultConfig.apiUrl);
+    }
     const requestUrl = `${apiUrl}/parse`;
     console.log("🚀 ~ fetchRSS ~ requestUrl:", requestUrl)
     const requestOptions = createRequestOptions(feedUrls);

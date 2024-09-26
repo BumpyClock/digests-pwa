@@ -1,6 +1,6 @@
 {
   "name": "digests-pwa",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^13.5.0",
     "dompurify": "^3.0.8",
     "framer-motion": "^10.18.0",
+    "iconoir-react": "^7.9.0",
     "jsdom": "^23.2.0",
     "react": "^18.2.0",
     "react-content-loader": "^6.2.1",
