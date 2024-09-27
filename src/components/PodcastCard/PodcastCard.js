@@ -6,7 +6,7 @@ import PodcastDetails from '../PodcastDetails/PodcastDetails.js'; // Import Podc
 import WebsiteInfo from '../website-info/website-info.js'; // Import WebsiteInfo
 
 
-const PodcastCard = ({ item }) => {
+const PodcastCard = ({ item , AiFeatures}) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [showPodcastDetails, setShowPodcastDetails] = useState(false);
@@ -90,7 +90,7 @@ const PodcastCard = ({ item }) => {
    
      
     </SlCard>
-    {showPodcastDetails&& <PodcastDetails url={item.link} item={item} onClose={() => {
+    {showPodcastDetails&& <PodcastDetails url={item.link} item={item} AiFeatures={AiFeatures} onClose={() => {
       setShowPodcastDetails(false);
     }} />}
     </div>

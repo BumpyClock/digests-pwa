@@ -290,7 +290,7 @@
     color: var(--accent-color);
     cursor: pointer
   }
-  .reader-card .reader-view-header-button-container{
+.reader-view-header-button-container{
     position:absolute;
     display: flex;
     flex-direction: column;
@@ -364,14 +364,14 @@
   }
   
   .reader-view-title h1{
-    font-size: 2.1rem !important;
+    font-size: 2.1em !important;
     margin: 0;
     margin-bottom: 8px;
-    line-height: 2.8rem;
+    line-height: 2.8em;
     font-weight: 300;
     color: var(--color);
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.5em;
     margin: auto;
     padding: 1rem 0 0 0;
   }

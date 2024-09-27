@@ -18,7 +18,15 @@
   
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <link rel="favicon" href="%PUBLIC_URL%/favicon.ico" />
-
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/dark.css"
+  />
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/light.css"
+/>
+  
     
     <link
     rel="preload"
@@ -109,15 +117,19 @@ https://cdn.jsdelivr.net/npm/@mozilla/readability@0.5.0/Readability.min.js
         function updateThemeColor() {
           const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
           const style = getComputedStyle(document.documentElement);
+          const body = document.querySelector('body');
+
   
           if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             // Dark mode
             const darkThemeColor = style.getPropertyValue('--dark-new-tab-background-color').trim();
             themeColorMetaTag.setAttribute('content', darkThemeColor);
+            body.classList.add('sl-theme-dark');
           } else {
             // Light mode or no preference
             const lightThemeColor = style.getPropertyValue('--light-new-tab-background-color').trim();
             themeColorMetaTag.setAttribute('content', lightThemeColor);
+            body.classList.remove('sl-theme-dark');
           }
         }
   

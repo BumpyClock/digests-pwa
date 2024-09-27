@@ -1,5 +1,3 @@
-// App.js
-
 import React, { useState, useCallback, useEffect, memo } from "react"; 
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import Feed from "./components/Feed/Feed.js";
@@ -10,13 +8,7 @@ import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/ico
 import ListView from "./components/ListView/ListView.js";
 import AppBar from "./components/AppBar/AppBar.js";
 import "./App.css";
-import { getConfig } from './modules/indexedDB.js';
-
-const defaultConfig = {
-  apiUrl: "https://api.digests.app",
-  theme: "system",
-  refresh_interval: 15,
-};
+import { getConfig, setConfig, defaultConfig } from './modules/indexedDB.js';
 
 registerIconLibrary("iconoir", {
   resolver: name =>
@@ -31,59 +23,69 @@ function App() {
   const [feedItems, setFeedItems] = useState([]);
   const [isListView, setIsListView] = useState(false);
   const [feedDetails, setFeedDetails] = useState([]);
-  const [refreshInterval, setRefreshInterval] = useState(defaultConfig.refresh_interval);
+  const [refreshInterval, setRefreshInterval] = useState(defaultConfig.refreshInterval);
   const [apiUrl, setApiUrl] = useState(defaultConfig.apiUrl);
   const [isLoading, setIsLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const SettingsMemo = memo(Settings);
   const [showSettings, setShowSettings] = useState(false);
   const [filterType, setFilterType] = useState('all'); // 'all', 'podcast', or 'rss'
+  const [AiFeatures, setAiFeatures] = useState(defaultConfig.AiFeatures);
+  const [feedUrls, setFeedUrls] = useState([]);
 
-  // Initialize feedUrls from localStorage or default feeds
-  const [feedUrls, setFeedUrls] = useState(() => {
-    const savedFeedUrls = localStorage.getItem("feedUrls");
-    return savedFeedUrls
-      ? (
-          console.log(
-            "Found existing feed configuration",
-            JSON.parse(savedFeedUrls)
-          ),
-          JSON.parse(savedFeedUrls)
-        )
-      : (
-          console.log(
-            "No feeds found, starting with a couple of default feeds"
-          ),
-          [
-            "https://engadget.com/rss.xml",
-            "https://www.theverge.com/rss/index.xml"
-          ]
-        );
-  });
+  // Fetch saved feedUrls
+  useEffect(() => {
+    async function fetchConfig() {
+      try {
+        const configValue = await getConfig('feedUrls');
+        setFeedUrls(configValue || defaultConfig.feedUrls);
+      } catch (error) {
+        console.error('Error fetching feed URLs:', error);
+        setFeedUrls(defaultConfig.feedUrls);
+      }
+    }
+    fetchConfig();
+  }, []);
+
+  // Fetch AI features flag
+  useEffect(() => {
+    async function fetchConfig() {
+      try {
+        const configValue = await getConfig('AiFeatures');
+        setAiFeatures(configValue || defaultConfig.AiFeatures);
+      } catch (error) {
+        console.error('Error fetching AI features flag:', error);
+        setAiFeatures(defaultConfig.AiFeatures);
+      }
+    }
+    fetchConfig();
+  }, []);
 
   // Fetch saved configurations
   useEffect(() => {
-    (async () => {
+    async function fetchConfig() {
       try {
-        const savedRefreshInterval = await getConfig('refreshInterval', defaultConfig.refresh_interval);
+        const savedRefreshInterval = await getConfig('refreshInterval');
         setRefreshInterval(savedRefreshInterval ? Number(savedRefreshInterval) : defaultConfig.refresh_interval);
       } catch (error) {
         console.error('Error fetching refresh interval:', error);
         setRefreshInterval(defaultConfig.refresh_interval);
       }
-    })();
+    }
+    fetchConfig();
   }, []);
 
   useEffect(() => {
-    (async () => {
+    async function fetchConfig() {
       try {
-        const savedApiUrl = await getConfig('apiUrl', defaultConfig.apiUrl);
-        setApiUrl(savedApiUrl ? savedApiUrl : defaultConfig.apiUrl);
+        const savedApiUrl = await getConfig('apiUrl');
+        setApiUrl(savedApiUrl || defaultConfig.apiUrl);
       } catch (error) {
         console.error('Error fetching API URL:', error);
         setApiUrl(defaultConfig.apiUrl);
       }
-    })();
+    }
+    fetchConfig();
   }, []);
 
   // Function to refresh RSS data
@@ -100,13 +102,17 @@ function App() {
             setIsLoading(false);
           }
         };
+        if (registration.active) {
+          if (feedUrls.length > 0) {
+
         registration.active.postMessage(
           {
             type: "FETCH_RSS",
             payload: { urls: feedUrls },
           },
           [messageChannel.port2]
-        );
+          
+        );}}
       });
     } else {
       console.log("Service worker not active yet; waiting for activation.");
@@ -139,39 +145,32 @@ function App() {
     refreshRSSData();
   }, [refreshRSSData]);
 
-  useEffect(
-    () => {
-      localStorage.setItem("feedUrls", JSON.stringify(feedUrls));
-    },
-    [feedUrls]
-  );
+  useEffect(() => {
+    if (feedUrls.length > 0) {
+      setConfig("feedUrls", feedUrls);
+    }
+  }, [feedUrls]);
 
   const toggleSettings = useCallback(() => {
     setShowSettings(prev => !prev);
   }, []);
 
-  useEffect(
-    () => {
-      refreshRSSData();
-    },
-    [feedUrls, refreshRSSData]
-  );
+  useEffect(() => {
+    refreshRSSData();
+  }, [feedUrls, refreshRSSData]);
 
   // Set up automatic refresh based on refreshInterval
-  useEffect(
-    () => {
-      console.log(`Setting refresh interval to ${refreshInterval} minutes`);
-      const intervalId = setInterval(() => {
-        console.log("🚀 ~ RefreshTimer triggered ~ Refreshing RSS data");
-        refreshRSSData();
-      }, refreshInterval * 60 * 1000);
+  useEffect(() => {
+    console.log(`Setting refresh interval to ${refreshInterval} minutes`);
+    const intervalId = setInterval(() => {
+      console.log("🚀 ~ RefreshTimer triggered ~ Refreshing RSS data");
+      refreshRSSData();
+    }, refreshInterval * 60 * 1000);
 
-      localStorage.setItem("refreshInterval", refreshInterval.toString());
+    localStorage.setItem("refreshInterval", refreshInterval.toString());
 
-      return () => clearInterval(intervalId);
-    },
-    [refreshInterval, refreshRSSData]
-  );
+    return () => clearInterval(intervalId);
+  }, [refreshInterval, refreshRSSData]);
 
   // Listen for messages from the service worker
   useEffect(() => {
@@ -237,13 +236,16 @@ function App() {
                 setRefreshInterval={setRefreshInterval}
                 apiUrl={apiUrl}
                 setApiUrl={setApiUrl}
+                AiFeatures={AiFeatures}
+                setAiFeatures={setAiFeatures}
               />
             : isListView
               ? <ListView articles={feedItems} />
               : <Feed
                   feedItems={feedItems}
                   apiUrl={apiUrl}
-                  filterType={filterType} // Pass filterType to Feed component
+                  filterType={filterType} 
+                  AiFeatures={AiFeatures}
                 />}
       </main>
     </div>

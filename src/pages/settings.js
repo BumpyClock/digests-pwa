@@ -3,10 +3,11 @@ import {
   SlButton,
   SlInput,
   SlIcon,
-  SlSpinner,
+  SlSpinner, SlSwitch
 } from "@shoelace-style/shoelace/dist/react/";
 import "./settings.css";
 import FeedList from "../components/FeedList/FeedList.js"; // Make sure this path is correct for FeedList
+import { setConfig } from "../modules/indexedDB.js"; // Import setConfig from indexedDB
 
 function Settings({
   feedUrls,
@@ -14,6 +15,8 @@ function Settings({
   feedDetails,
   refreshInterval,
   setRefreshInterval,
+  AiFeatures,
+  setAiFeatures,
 }) {
   const [newFeedUrl, setNewFeedUrl] = useState("");
   const [urlError, setUrlError] = useState("");
@@ -59,8 +62,8 @@ function Settings({
   </head>
   <body>
     ${feedUrls
-      .map((url) => `<outline type="rss" xmlUrl="${url}" />`)
-      .join("\n    ")}
+        .map((url) => `<outline type="rss" xmlUrl="${url}" />`)
+        .join("\n    ")}
   </body>
 </opml>`;
     const blob = new Blob([opmlContent], { type: "text/xml" });
@@ -109,6 +112,19 @@ function Settings({
     fileInputRef.current.click();
   };
 
+  const handleAiFeatureSwitch = async (event) => {
+    const isChecked = event.target.checked;
+    setAiFeatures(isChecked);
+    try{
+      await setConfig("AiFeatures", isChecked);
+    }
+    catch(error){
+      console.error("Error setting AiFeatures:", error);
+    }
+    console.log("🚀 ~ handleAiFeatureSwitch ~ isChecked:", isChecked)
+
+  };
+
   return (
     <div className="settings-container">
       <h2>Settings</h2>
@@ -138,21 +154,21 @@ function Settings({
       </div>
 
       {urlError && <p className="error-message">{urlError}</p>}
-      <div className="settings-section" style={{ display: "inline-block", width:"100%" }}> 
+      <div className="settings-section" style={{ display: "inline-block", width: "100%" }}>
         <div className="infoContainer">
           <h3>Subscribed Feeds</h3>
           <p>Manage your subscribed feeds.</p>
-          </div>
-          <div id="subscribed-feeds-list">
-        {feedDetails && feedDetails.length > 0 ? (
-          <FeedList
-            feeds={feedDetails}
-            onRemoveFeed={handleRemoveFeed} // Pass the handleRemoveFeed function
-          />
-        ) : (
-          <p>No feeds found. Please add some feeds.</p>
-        )}
-      </div>
+        </div>
+        <div id="subscribed-feeds-list">
+          {feedDetails && feedDetails.length > 0 ? (
+            <FeedList
+              feeds={feedDetails}
+              onRemoveFeed={handleRemoveFeed} // Pass the handleRemoveFeed function
+            />
+          ) : (
+            <p>No feeds found. Please add some feeds.</p>
+          )}
+        </div>
       </div>
 
       <div className="settings-section">
@@ -166,6 +182,14 @@ function Settings({
           value={refreshInterval}
           onChange={(e) => setRefreshInterval(e.target.value)}
         />
+      </div>
+      <div className="settings-section">
+        <div className="infoContainer">
+          <h3>A.I. Features</h3>
+          <p>Enable or disable AI features</p>
+        </div>
+        <SlSwitch name="AiFeatureSwitch" checked={AiFeatures}
+        onSlChange={handleAiFeatureSwitch} />
       </div>
     </div>
   );

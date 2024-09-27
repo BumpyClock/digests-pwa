@@ -5,5 +5,9 @@
         "node_modules{,/**}",
         ".vscode{,/**}"
     ],
-    "appService.showBuildDuringDeployPrompt": false
+    "appService.showBuildDuringDeployPrompt": false,
+    
+        "html.customData": ["./node_modules/@shoelace-style/shoelace/dist/vscode.html-custom-data.json"]
+      
+      
 }

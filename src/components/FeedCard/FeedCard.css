@@ -45,7 +45,7 @@ sl-card {
   -webkit-border-radius: 40px;
   border-radius: 0 0 40px;
   transition: all .25s ease-in-out;
-  z-index: 2;
+  z-index: 1;
 }
 
 .card .card-bg .noise {
@@ -115,6 +115,7 @@ sl-card {
   -webkit-border-radius: 32px;
   margin: 8px;
   border-radius: 32px;
+  z-index:2
 }
 
 .card .image-container .lazy-load-image-background.blur.lazy-load-image-loaded {

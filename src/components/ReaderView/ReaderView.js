@@ -247,6 +247,7 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
           variants={modalVariants}
           ref={contentcontainerRef}
           transition={{ duration: 0.125, ease: "easeInOut" }}
+          
         >       <div className="reader-view-header-button-container">
         <SlIconButton
           library="iconoir"
