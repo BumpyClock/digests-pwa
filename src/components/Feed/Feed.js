@@ -106,7 +106,7 @@ const Feed = ({ feedItems, apiUrl, filterType }) => {
     const { scrollTop, scrollHeight, clientHeight } = values;
     const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
-    if (scrollPercentage >= 90 && hasMore && !isLoading) {
+    if (scrollPercentage >= 50 && hasMore && !isLoading) {
       fetchMoreData();
     }
   }, [fetchMoreData, hasMore, isLoading]);
