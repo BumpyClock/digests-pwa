@@ -17,54 +17,30 @@ const TextToSpeechPlayer = ({ articleText, apiUrl, onHighlight }) => {
     console.log('API URL:', `${apiUrl}/streamaudio`);
     setLoading(true);
 
-    const words = articleText.split(/\s+/);
-    const textChunks = [];
-    let currentChunk = '';
-
-    words.forEach((word) => {
-      if ((currentChunk + word).length <= 100) {
-        currentChunk += `${word} `;
-      } else {
-        textChunks.push(currentChunk.trim());
-        currentChunk = `${word} `;
-      }
-    });
-
-    if (currentChunk) {
-      textChunks.push(currentChunk.trim());
-    }
-
     try {
-      const audioBlobs = [];
-      for (const chunk of textChunks) {
-        const response = await axios.post(
-          `${apiUrl}/streamaudio`,
-          { text: chunk },
-          {
-            headers: { 'Content-Type': 'application/json' }, // Ensure correct headers
-            responseType: 'arraybuffer', // Expect binary data
-            cancelToken: cancelToken.token, // Pass the cancel token
-          }
-        );
-
-        console.log('Audio data received:', response.data);
-        console.log('Response headers:', response.headers);
-
-        // Create a blob from the audio data
-        const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
-        console.log('Audio Blob:', audioBlob);
-
-        if (audioBlob.size === 0) {
-          throw new Error('Received empty audio blob.');
+      const response = await axios.post(
+        `${apiUrl}/streamaudio`,
+        { text: articleText },
+        {
+          headers: { 'Content-Type': 'application/json' }, // Ensure correct headers
+          responseType: 'arraybuffer', // Expect binary data
+          cancelToken: cancelToken.token, // Pass the cancel token
         }
+      );
 
-        audioBlobs.push(audioBlob);
+      console.log('Audio data received:', response.data);
+      console.log('Response headers:', response.headers);
+
+      // Create a blob from the audio data
+      const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
+      console.log('Audio Blob:', audioBlob);
+
+      if (audioBlob.size === 0) {
+        throw new Error('Received empty audio blob.');
       }
 
-      // Concatenate all audio blobs
-      const combinedBlob = new Blob(audioBlobs, { type: 'audio/mpeg' });
-      const audioUrl = URL.createObjectURL(combinedBlob);
-      console.log('Combined Audio URL:', audioUrl);
+      const audioUrl = URL.createObjectURL(audioBlob);
+      console.log('Audio URL:', audioUrl);
 
       // Set up the audio element
       if (audioRef.current) {
