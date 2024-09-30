@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@wavesurfer/react": "^1.0.7",
     "dompurify": "^3.0.8",
     "framer-motion": "^10.18.0",
     "html-react-parser": "^5.1.16",
@@ -26,6 +27,7 @@
     "react-virtualized": "^9.22.5",
     "stream-http": "^3.2.0",
     "tinycolor2": "^1.6.0",
+    "wavesurfer.js": "^7.8.6",
     "web-vitals": "^2.1.4",
     "xml2js": "^0.6.2"
   },

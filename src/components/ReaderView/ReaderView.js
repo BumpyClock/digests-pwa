@@ -280,6 +280,12 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
             />
             <SlIconButton
               library="iconoir"
+              name="sparks"
+              class="reader-view-header-button"
+              onClick={onClose}
+            />
+            <SlIconButton
+              library="iconoir"
               name="xmark"
               class="reader-view-header-button"
               onClick={onClose}

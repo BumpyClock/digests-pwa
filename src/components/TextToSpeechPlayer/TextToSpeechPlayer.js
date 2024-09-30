@@ -1,219 +1,140 @@
-import React, { useState, useEffect, useRef } from 'react';
+// TextToSpeechPlayer.js
+
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import WaveSurfer from 'wavesurfer.js';
+import { SlIconButton } from '@shoelace-style/shoelace/dist/react/';
+import './TextToSpeechPlayer.css';
 
-const TextToSpeechPlayer = ({ articleText, apiUrl, articleUrl, onHighlight }) => {
+const TextToSpeechPlayer = ({ articleText, apiUrl, articleUrl }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [playbackSpeed, setPlaybackSpeed] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const audioRef = useRef(null);
-  const intervalRef = useRef(null);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
+  const [loading, setLoading] = useState(true); // Start with loading as true
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [error, setError] = useState(null);
 
-  // Add a state to track if audio has been fetched
-  const [audioFetched, setAudioFetched] = useState(false);
+  const wavesurferRef = useRef(null);
+  const waveformRef = useRef(null); // Reference to the waveform container
 
-  const fetchAudio = async (cancelToken) => {
-    console.log('fetchAudio called');
-    console.log('API URL:', `${apiUrl}/streamaudio`);
-    setLoading(true);
+  useEffect(() => {
+    // Ensure that the WaveSurfer is initialized after the component mounts
+    if (waveformRef.current && !wavesurferRef.current) {
+      // Initialize WaveSurfer with custom render function
+      wavesurferRef.current = WaveSurfer.create({
+        container: waveformRef.current,
+        waveColor: 'rgba(150, 150, 150,1)',
+        progressColor: 'rgba(50, 50, 50,.7)',
+       
+      });
 
-    try {
-      const response = await axios.post(
-        `${apiUrl}/streamaudio`,
-        { text: articleText ,
-          url: articleUrl
-        },
-        {
-          headers: { 'Content-Type': 'application/json' }, // Ensure correct headers
-          responseType: 'arraybuffer', // Expect binary data
-          cancelToken: cancelToken.token, // Pass the cancel token
+      // Fetch audio and load it into WaveSurfer
+      const fetchAudio = async () => {
+        try {
+          const response = await axios.post(
+            `${apiUrl}/streamaudio`,
+            { text: articleText, url: articleUrl },
+            {
+              headers: { 'Content-Type': 'application/json' },
+              responseType: 'arraybuffer',
+            }
+          );
+
+          const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
+          const url = URL.createObjectURL(audioBlob);
+          setAudioUrl(url);
+
+          if (wavesurferRef.current) {
+            wavesurferRef.current.load(url);
+            wavesurferRef.current.on('ready', () => {
+              wavesurferRef.current.setPlaybackRate(playbackSpeed);
+              wavesurferRef.current.play();
+              setIsPlaying(true);
+              setLoading(false); // Audio is ready
+            });
+          }
+        } catch (err) {
+          console.error('Error fetching audio:', err);
+          setError('Failed to generate audio. Please try again later.');
+          setLoading(false);
         }
-      );
+      };
 
-      console.log('Audio data received:', response.data);
-      console.log('Response headers:', response.headers);
-
-      // Create a blob from the audio data
-      const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
-      console.log('Audio Blob:', audioBlob);
-
-      if (audioBlob.size === 0) {
-        throw new Error('Received empty audio blob.');
-      }
-
-      const audioUrl = URL.createObjectURL(audioBlob);
-      console.log('Audio URL:', audioUrl);
-
-      // Set up the audio element
-      if (audioRef.current) {
-        audioRef.current.src = audioUrl;
-        audioRef.current.playbackRate = playbackSpeed;
-      }
-
-      setAudioFetched(true); // Mark audio as fetched
-      setLoading(false);
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        console.log('Request canceled:', error.message);
-      } else {
-        console.error('Error fetching audio:', error);
-        if (error.response) {
-          console.error('Error response data:', error.response.data);
-        }
-      }
-      setLoading(false);
+      fetchAudio();
     }
-  };
 
-  const playAudio = () => {
-    console.log('playAudio called');
-    if (audioRef.current) {
-      audioRef.current.play()
-        .then(() => {
-          console.log('Audio playback started');
-          setIsPlaying(true);
-        })
-        .catch((error) => {
-          console.error('Error playing audio:', error);
-        });
-    }
-  };
-
-  const pauseAudio = () => {
-    console.log('pauseAudio called');
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      console.log('Audio playback paused');
-    }
-  };
-
-  const stopAudio = () => {
-    console.log('stopAudio called');
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setIsPlaying(false);
-      if (onHighlight) {
-        onHighlight(null); // Reset highlighting
+    // Clean up function to destroy WaveSurfer instance
+    return () => {
+      if (wavesurferRef.current) {
+        wavesurferRef.current.destroy();
+        wavesurferRef.current = null;
       }
-      clearInterval(intervalRef.current);
-      console.log('Audio playback stopped and reset');
-    }
-  };
+      if (audioUrl) {
+        URL.revokeObjectURL(audioUrl);
+      }
+    };
+    //eslint-disable-next-line
+  }, [apiUrl, articleText, articleUrl]);
 
   const togglePlayPause = () => {
-    console.log('togglePlayPause called');
-    if (isPlaying) {
-      pauseAudio();
-      clearInterval(intervalRef.current);
-    } else {
-      if (!audioFetched) { // Check if audio has been fetched
-        const cancelToken = axios.CancelToken.source();
-        fetchAudio(cancelToken).then(() => {
-          playAudio();
-        });
-      } else {
-        playAudio();
-      }
+    if (wavesurferRef.current) {
+      wavesurferRef.current.playPause();
+      setIsPlaying(wavesurferRef.current.isPlaying());
     }
   };
 
-  const handleSpeedChange = (e) => {
-    const newSpeed = parseFloat(e.target.value);
-    console.log(`Playback speed changed to ${newSpeed}x`);
+  const handleSpeedClick = (e) => {
+    e.preventDefault();
+    let newSpeed;
+    if (e.ctrlKey || e.metaKey) {
+      // Ctrl + click or Cmd + click: decrease speed
+      newSpeed = playbackSpeed - 0.2;
+      if (newSpeed < 1.0) {
+        newSpeed = 2.0;
+      }
+    } else {
+      // Regular click: increase speed
+      newSpeed = playbackSpeed + 0.2;
+      if (newSpeed > 2.0) {
+        newSpeed = 1.0;
+      }
+    }
+    // Round to one decimal place
+    newSpeed = Math.round(newSpeed * 10) / 10;
+
     setPlaybackSpeed(newSpeed);
-    if (audioRef.current) {
-      audioRef.current.playbackRate = newSpeed;
+    if (wavesurferRef.current) {
+      wavesurferRef.current.setPlaybackRate(newSpeed);
     }
   };
-
-  useEffect(() => {
-    const audioElement = audioRef.current;
-    // Clean up on unmount
-    return () => {
-      console.log('Component unmounting, cleaning up');
-      
-      if (audioElement) {
-        audioElement.pause();
-        audioElement.src = '';
-      }
-      clearInterval(intervalRef.current);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isPlaying && audioRef.current) {
-      // Wait for the audio to load metadata to get duration
-      const handleLoadedMetadata = () => {
-        console.log('loadedmetadata event fired');
-        const words = articleText.split(/\s+/);
-        const totalWords = words.length;
-        const estimatedDuration = audioRef.current.duration * 1000; // in milliseconds
-        const interval = estimatedDuration / totalWords;
-
-        console.log(`Estimated duration: ${estimatedDuration}ms for ${totalWords} words`);
-        console.log(`Highlight interval set to ${interval}ms`);
-
-        let wordIndex = 0;
-        intervalRef.current = setInterval(() => {
-          if (wordIndex < totalWords) {
-            if (onHighlight) {
-              onHighlight(wordIndex);
-            }
-            wordIndex += 1;
-          } else {
-            clearInterval(intervalRef.current);
-            console.log('Completed highlighting all words');
-          }
-        }, interval);
-      };
-
-      const audioElement = audioRef.current;
-      audioElement.addEventListener('loadedmetadata', handleLoadedMetadata);
-
-      // Cleanup
-      return () => {
-        if (audioElement) {
-          audioElement.removeEventListener('loadedmetadata', handleLoadedMetadata);
-        }
-      };
-    } else {
-      // If not playing, clear any existing intervals
-      clearInterval(intervalRef.current);
-      console.log('Not playing, cleared any existing intervals');
-    }
-  }, [isPlaying, articleText, onHighlight]);
 
   return (
     <div className="tts-player">
-      <button onClick={togglePlayPause} disabled={loading}>
-        {loading ? 'Loading...' : isPlaying ? 'Pause' : 'Play'}
-      </button>
-      <label>
-        Speed:
-        <input
-          type="range"
-          min="0.5"
-          max="2"
-          value={playbackSpeed}
-          step="0.1"
-          onChange={handleSpeedChange}
-        />
-        {playbackSpeed}x
-      </label>
-      <button onClick={stopAudio} disabled={!isPlaying && !loading}>
-        Stop
-      </button>
-      <audio
-        ref={audioRef}
-        onEnded={() => {
-          console.log('Audio ended');
-          setIsPlaying(false);
-          if (onHighlight) {
-            onHighlight(null);
-          }
-        }}
-      />
+      <div id="waveform" ref={waveformRef}>
+        {loading && <div className="waveform-skeleton"></div>}
+      </div>
+
+      {error ? (
+        <div className="error-message">{error}</div>
+      ) : (
+        <div className='playback-control-container'>
+          <SlIconButton
+            className="icon-button"
+            onClick={togglePlayPause}
+            disabled={loading}
+            library="iconoir"
+            name={isPlaying ? 'pause' : 'play'}
+            size="large"
+            style={{ cursor: 'pointer' }}
+          />
+          <div
+            className="playback-speed-control"
+            onClick={handleSpeedClick}
+            title="Click to increase speed. Ctrl+Click to decrease speed."
+          >
+            {`${playbackSpeed.toFixed(1)}x`}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
