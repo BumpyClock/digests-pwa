@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   SlButton,
   SlInput,
@@ -22,6 +22,27 @@ function Settings({
   const [urlError, setUrlError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef();
+
+  useEffect(() => {
+    if (feedUrls.length === 0) {
+      setFeedUrls(getConfig('feedUrls'));
+    }
+    if (refreshInterval === 0) {
+      setRefreshInterval(getConfig('refreshInterval'));
+    }
+    if (OpenAIKey === "") {
+      setOpenAIKey(getConfig('openAIKey'));
+    }
+  });
+
+  useEffect(() => {
+    setConfig('feedUrls', feedUrls);
+    setConfig('feedDetails', feedDetails);
+  } , [feedUrls, feedDetails]);
+
+  useEffect(() => {
+    setConfig('refreshInterval', refreshInterval);
+  } , [refreshInterval]);
 
   const isValidUrl = (url) => {
     const pattern = new RegExp("^(https?:\\/\\/)", "i");
@@ -122,6 +143,10 @@ function Settings({
     <div className="settings-container">
       <h2>Settings</h2>
       <div className="settings-section">
+        <div className="infoContainer">
+          <h3>Manage Feeds</h3>
+          <p>Add, remove, and import feeds.</p>
+        </div>
         <div className="subscription-form">
           {isLoading && <SlSpinner />}
           <SlInput

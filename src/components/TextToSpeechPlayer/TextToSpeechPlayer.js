@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
-const TextToSpeechPlayer = ({ articleText, apiUrl, onHighlight }) => {
+const TextToSpeechPlayer = ({ articleText, apiUrl, articleUrl, onHighlight }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const audioRef = useRef(null);
   const intervalRef = useRef(null);
 
@@ -20,7 +19,9 @@ const TextToSpeechPlayer = ({ articleText, apiUrl, onHighlight }) => {
     try {
       const response = await axios.post(
         `${apiUrl}/streamaudio`,
-        { text: articleText },
+        { text: articleText ,
+          url: articleUrl
+        },
         {
           headers: { 'Content-Type': 'application/json' }, // Ensure correct headers
           responseType: 'arraybuffer', // Expect binary data
@@ -92,7 +93,6 @@ const TextToSpeechPlayer = ({ articleText, apiUrl, onHighlight }) => {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
       setIsPlaying(false);
-      setCurrentWordIndex(0);
       if (onHighlight) {
         onHighlight(null); // Reset highlighting
       }
@@ -128,12 +128,14 @@ const TextToSpeechPlayer = ({ articleText, apiUrl, onHighlight }) => {
   };
 
   useEffect(() => {
+    const audioElement = audioRef.current;
     // Clean up on unmount
     return () => {
       console.log('Component unmounting, cleaning up');
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = '';
+      
+      if (audioElement) {
+        audioElement.pause();
+        audioElement.src = '';
       }
       clearInterval(intervalRef.current);
     };
@@ -155,7 +157,6 @@ const TextToSpeechPlayer = ({ articleText, apiUrl, onHighlight }) => {
         let wordIndex = 0;
         intervalRef.current = setInterval(() => {
           if (wordIndex < totalWords) {
-            setCurrentWordIndex(wordIndex);
             if (onHighlight) {
               onHighlight(wordIndex);
             }
@@ -167,12 +168,13 @@ const TextToSpeechPlayer = ({ articleText, apiUrl, onHighlight }) => {
         }, interval);
       };
 
-      audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
+      const audioElement = audioRef.current;
+      audioElement.addEventListener('loadedmetadata', handleLoadedMetadata);
 
       // Cleanup
       return () => {
-        if (audioRef.current) {
-          audioRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        if (audioElement) {
+          audioElement.removeEventListener('loadedmetadata', handleLoadedMetadata);
         }
       };
     } else {
@@ -207,7 +209,6 @@ const TextToSpeechPlayer = ({ articleText, apiUrl, onHighlight }) => {
         onEnded={() => {
           console.log('Audio ended');
           setIsPlaying(false);
-          setCurrentWordIndex(0);
           if (onHighlight) {
             onHighlight(null);
           }

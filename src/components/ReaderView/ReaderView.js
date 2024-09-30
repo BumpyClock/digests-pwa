@@ -36,11 +36,11 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
   const headerImageInfoRef = useRef(null);
   const viewportWidth = window.innerWidth;
   const [showTextToSpeech, setShowTextToSpeech] = useState(false);
-  const [highlightedWordIndex, setHighlightedWordIndex] = useState(null);
+  // const [highlightedWordIndex, setHighlightedWordIndex] = useState(null);
 
-  const handleHighlight = (wordIndex) => {
-    setHighlightedWordIndex(wordIndex);
-  };
+  // const handleHighlight = (wordIndex) => {
+  //   setHighlightedWordIndex(wordIndex);
+  // };
 
   const [headerImageInfoInitialized] = useState(false);
 
@@ -216,30 +216,30 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
   };
 
   // Parsing and transforming the article content
-  let globalWordIndex = 0;
+  // let globalWordIndex = 0;
 
-  const transform = (node) => {
-    if (node.type === 'text') {
-      const words = node.data.split(/(\s+)/).map((word) => {
-        if (/\s+/.test(word)) {
-          return word; // Preserve whitespace
-        }
-        const index = globalWordIndex;
-        globalWordIndex += 1;
-        return (
-          <span
-            key={index}
-            className={
-              index === highlightedWordIndex ? 'highlighted-word' : ''
-            }
-          >
-            {word}
-          </span>
-        );
-      });
-      return <>{words}</>;
-    }
-  };
+  // const transform = (node) => {
+  //   if (node.type === 'text') {
+  //     const words = node.data.split(/(\s+)/).map((word) => {
+  //       if (/\s+/.test(word)) {
+  //         return word; // Preserve whitespace
+  //       }
+  //       const index = globalWordIndex;
+  //       globalWordIndex += 1;
+  //       return (
+  //         <span
+  //           key={index}
+  //           className={
+  //             index === highlightedWordIndex ? 'highlighted-word' : ''
+  //           }
+  //         >
+  //           {word}
+  //         </span>
+  //       );
+  //     });
+  //     return <>{words}</>;
+  //   }
+  // };
 
  
 
@@ -363,7 +363,8 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
                         <TextToSpeechPlayer
                           articleText={article.textContent}
                           apiUrl={apiUrl}
-                          onHighlight={handleHighlight}
+                          articleUrl={url}
+                          // onHighlight={handleHighlight}
                         />
                       )}
 
