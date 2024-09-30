@@ -1,291 +1,259 @@
 
-:root {
-  --spacing: 24px;
+.settings-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px
+}
+.settings-container h1,
+.settings-container h2 {
+  margin-bottom: 1rem;
+  font-family: var(--font-family)
+}
+.settings-container ul {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 2rem
+}
+.settings-container ul li {
+  margin-bottom: .5rem
+}
+.subscription-form {
+  display: flex;
+  margin-bottom: 2rem;
+  column-gap: 8px;
+  justify-content: center;
+  width: 100%;
+}
+.subscription-form input {
+  flex-grow: 1;
+  padding: .5rem;
+  margin-right: .5rem;
+  border: 1px solid #ccc
+}
+.subscription-form button {
+  padding: .5rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer
+}
+.subscription-form button:hover {
+  background-color: #0056b3
+}
+.settings-container #back-to-main {
+  padding: .5rem;
+  background-color: #ccc;
+  color: #333;
+  border: none;
+  cursor: pointer
+}
+.settings-container #back-to-main:hover {
+  background-color: #999
+}
+.list-item:hover .remove-feed-button {
+  visibility: visible;
+  transition: var(--transition-fast);
+  
+  transition: var(--transition-standard)
+}
+.list-item .remove-feed-button {
+  font-size: small;
+ 
+  height: fit-content;
+  width: fit-content;
+  border: none;
+  background-color: var(--background-color-secondary);
+  cursor: pointer;
+  border-radius: 0 0x 12px 12px
+}
+.list-item:hover .remove-feed-button:hover {
+  color: var(--background-color-secondary);
+
+}
+#subscribed-feeds-list {
+  width: 100%;
+  row-gap: 24px;
+  column-gap: 24px;
+  max-width: 1200px;
+  margin: 24px auto;
+  transition: all .25s ease-in-out
+}
+.list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  overflow: hidden;
+  height:-webkit-fill-available;
+  width: -webkit-fill-available;
+  justify-content: space-between;
+  transition: var(--transition-standard);
+}
+
+.list-item .feed-card-footer {
+  display: flex;
+  justify-content: center;
+  width: -webkit-fill-available;
+  padding: 12px;
+  /* margin-top: 12px; */
+  align-items: center;
 }
 
 
+#subscribed-feeds-list .list-item:hover {
+  box-shadow: var(--box-shadow-hover);
+  transform: scale(1.05)
+}
 
+.list-item p{
+  margin-bottom: 24px;
+}
+#subscribed-feeds-list .list-item .background-image-container {
+  width: 130%;
+  height: 130%;
+  border-radius: 7px;
+  overflow: hidden;
+  filter: blur(35px) brightness(1.5);
+  z-index: -1;
+  opacity: .85
+}
+#subscribed-feeds-list .list-item .remove-feed-button span {
+  font-size: medium;
+  font-weight: 600;
+  font-family: var(--font-family);
+  color: var(--accent-color)
+}
+#subscribed-feeds-list .list-item .website-info h3 {
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp:2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  width: 100%
+}
+#subscribed-feeds-list .list-item .website-info p {
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 600;
+  opacity: .8;
+  color: var(--color);
+  display: -webkit-box;
+  text-align: center;
+  margin-bottom: 0;
+  -webkit-line-clamp: 2;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  width: -webkit-fill-available;
+  min-height: 24px;
+}
 
+#subscribed-feeds-list .website-info  img {
+  width: fit-content;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  max-width: 64px !important ;
+  max-height: 64px;
+  height: fit-content;
+  border-radius: 7px;
+  object-fit: contain
+} 
 
-.settings-container {
-  padding: var(--spacing);
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px
-  }
-  .settings-container h1,
-  .settings-container h2 {
-    margin-bottom: 1rem;
-    font-family: var(--font-family)
-  }
-  .settings h2 {
-    font-size: var(--font-size-large);
-    color: var(--accent-color);
-  }
-  .settings-container ul {
-    list-style-type: none;
-    padding: 0;
-    margin-bottom: 2rem
-  }
-  .settings-container ul li {
-    margin-bottom: .5rem
-  }
-  .subscription-form {
-    display: flex;
-    margin-bottom: 2rem;
-    column-gap: 8px;
-    justify-content: center;
-    width: 100%;
-  }
-  .subscription-form input {
-    flex-grow: 1;
-    padding: .5rem;
-    margin-right: .5rem;
-    border: 1px solid #ccc
-  }
-  .subscription-form button {
-    padding: .5rem;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer
-  }
-  .subscription-form button:hover {
-    background-color: #0056b3
-  }
-  .settings-container #back-to-main {
-    padding: .5rem;
-    background-color: #ccc;
-    color: #333;
-    border: none;
-    cursor: pointer
-  }
-  .settings-container #back-to-main:hover {
-    background-color: #999
-  }
-  .list-item:hover .remove-feed-button {
-    visibility: visible;
-    transition: var(--transition-fast);
-    
-    transition: var(--transition-standard)
-  }
-  .list-item .remove-feed-button {
-    position: absolute;
-    visibility: hidden;
-    bottom: 0;
-    width: -webkit-fill-available;
-    width: 100%;
-    font-size: small;
-   
-    height: fit-content;
-    width: fit-content;
-    border: none;
-    background-color: var(--background-color-secondary);
-    cursor: pointer;
-    border-radius: 0 0x 12px 12px
-  }
-  .list-item:hover .remove-feed-button:hover {
-    color: var(--background-color-secondary);
+#subscribed-feeds-list .website-info .feed-url , #subscribed-feeds-list .website-info p{
+  width: -webkit-fill-available;
+  height: fit-content;
+  line-height: 1.33;
+  margin:0px;
 
-  }
-  #subscribed-feeds-list {
-    list-style-type: none;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    row-gap: var(--spacing);
-    column-gap: var(--spacing);
-    margin: var(--spacing) auto;
-    padding: 0;
-    width: 100%;
-    row-gap: 24px;
-    column-gap: 24px;
-    max-width: 1200px;
-    margin: 24px auto;
-    transition: all .25s ease-in-out
-  }
-  .list-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: center;
-    overflow: hidden;
-    height:-webkit-fill-available;
-    width: -webkit-fill-available;
-    justify-content: space-between;
-    transition: var(--transition-standard);
-  }
+}
+#subscribed-feeds-list .website-info .site-title , #subscribed-feeds-list .website-info h3{
+  width: -webkit-fill-available;
+  margin:0px;
+  display:flex;
+  row-gap: 4px;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+#subscribed-feeds-list .list-item .website-info {
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color);
+  display: flex;
+  flex-direction: row;
+  width: -webkit-fill-available !important;
+  max-width: unset !important;
+  padding:24px 24px 8px 24px;
+  column-gap: 16px;
+}
+.feed-list sl-card{
+  width: 100% !important;
+  box-shadow: var(--box-shadow-standard);
+  border:1px solid var(--border-color);
+}
 
-  .list-item .feed-card-footer {
-    display: flex;
-    justify-content: center;
-    width: -webkit-fill-available;
-    padding: 12px;
-    /* margin-top: 12px; */
-    align-items: center;
-  }
+.list-item .website-info .card::part(base) , .list-item .website-info .card, .list-item .website-info .sl-card {
+  width: -webkit-fill-available !important;
+  border:1px solid var(--border-color);
+  background-color: var(--background-color-secondary);
+}
 
- 
-  #subscribed-feeds-list .list-item:hover {
-    box-shadow: var(--box-shadow-hover);
-    transform: scale(1.05)
-  }
- 
-  .list-item p{
-    margin-bottom: 24px;
-  }
-  #subscribed-feeds-list .list-item .background-image-container {
-    width: 130%;
-    height: 130%;
-    border-radius: 7px;
-    overflow: hidden;
-    filter: blur(35px) brightness(1.5);
-    z-index: -1;
-    opacity: .85
-  }
-  #subscribed-feeds-list .list-item .remove-feed-button span {
-    font-size: medium;
-    font-weight: 600;
-    font-family: var(--font-family);
-    color: var(--accent-color)
-  }
-  #subscribed-feeds-list .list-item .website-info h3 {
-    font-family: var(--font-family);
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--color);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp:2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.5;
-    width: 100%
-  }
-  #subscribed-feeds-list .list-item .website-info p {
-    font-family: var(--font-family);
-    font-size: 12px;
-    font-weight: 600;
-    opacity: .8;
-    color: var(--color);
-    display: -webkit-box;
-    text-align: center;
-    margin-bottom: 0;
-    -webkit-line-clamp: 2;
-    line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden !important;
-    text-overflow: ellipsis;
-    width: -webkit-fill-available;
-    min-height: 24px;
-  }
+#subscribed-feeds-list .description{
+  padding: 0px 24px 12px 24px;
+  width: -webkit-fill-available;
+  margin:0 !important;
+}
 
-  #subscribed-feeds-list .website-info  img {
-    width: fit-content;
-    min-width: 48px !important;
-    min-height: 48px !important;
-    max-width: 64px !important ;
-    max-height: 64px;
-    height: fit-content;
-    border-radius: 7px;
-    object-fit: contain
-  } 
+.settings-section {
+  display: flex;
+  padding: 24px;
+  box-shadow: var(--box-shadow-standard);
+  border-radius: 12px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+  border: 1px solid var(--border-color);
+  background-color: var(--background-color-secondary);
+  transition: var(--transition-fast);
+  max-width: 1200px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+.settings-section:hover {
+  box-shadow: var(--box-shadow-hover);
+  transform: scale(1.01)
+}
+.settings-section .infoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0;
+  row-gap: 8px
+}
+.settings-section .infoContainer h3 {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color);
+  margin: 0;
+}
+.settings-section .infoContainer p {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color);
+  opacity: .7;
+  margin: 0;
+}
 
-  #subscribed-feeds-list .website-info .feed-url , #subscribed-feeds-list .website-info p{
-    width: -webkit-fill-available;
-    height: fit-content;
-    line-height: 1.33;
-    margin:0px;
-
-  }
-  #subscribed-feeds-list .website-info .site-title , #subscribed-feeds-list .website-info h3{
-    width: -webkit-fill-available;
-    margin:0px;
-    display:flex;
-    row-gap: 4px;
-    justify-content: flex-start;
-    flex-direction: column;
-  }
-  #subscribed-feeds-list .list-item .website-info {
-    font-family: var(--font-family);
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color);
-    display: flex;
-    flex-direction: row;
-    width: -webkit-fill-available !important;
-    max-width: unset !important;
-    padding:24px 24px 8px 24px;
-    column-gap: 16px;
-  }
-  .feed-list sl-card{
-    width: 100% !important;
-    box-shadow: var(--box-shadow-standard);
-    border:1px solid var(--border-color);
-  }
-
-  .list-item .website-info .card::part(base) , .list-item .website-info .card, .list-item .website-info .sl-card {
-    width: -webkit-fill-available !important;
-    border:1px solid var(--border-color);
-    background-color: var(--background-color-secondary);
-  }
-  
-  #subscribed-feeds-list .description{
-    padding: 0px 24px 12px 24px;
-    width: -webkit-fill-available;
-    margin:0 !important;
-  }
-
-  .settings-section {
-    display: flex;
-    padding: 24px;
-    box-shadow: var(--box-shadow-standard);
-    border-radius: 12px;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin: auto;
-    border: 1px solid var(--border-color);
-    background-color: var(--background-color-secondary);
-    transition: var(--transition-fast);
-    max-width: 1200px;
-    margin-bottom: 24px;
-    width: 100%;
-  }
-  .settings-section:hover {
-    box-shadow: var(--box-shadow-hover);
-    transform: scale(1.01)
-  }
-  .settings-section .infoContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    margin: 0;
-    row-gap: 8px
-  }
-  .settings-section .infoContainer h3 {
-    font-size: 16px;
-    font-weight: 400;
-    color: var(--color);
-    margin: 0;
-  }
-  .settings-section .infoContainer p {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--color);
-    opacity: .7;
-    margin: 0;
-  }
-
-  .error-message {
-    color: red;
-    /* other styling as needed */
-  }
-
-  @media (max-width: 600px) {
-    #subscribed-feeds-list {
-      flex-direction: column;
-    }
-  }
+.error-message {
+  color: red;
+  /* other styling as needed */
+}

@@ -1,5 +1,12 @@
 const DB_NAME = "digests-app";
 const STORE_NAME = "digests-config";
+const defaultConfig = {
+  apiUrl: "https://api.digests.app",
+  theme: "system",
+  refresh_interval: 15,
+  
+};
+
 
 async function openDB() {
     return new Promise((resolve, reject) => {
@@ -48,18 +55,24 @@ async function openDB() {
   }
   
   
-  async function getConfig(key, defaultValue) {
+  async function getConfig(key) {
     // Check if the config is already in IndexedDB
     const cachedConfig = await getConfigFromIndexedDB(key);
     if (cachedConfig) {
       console.log(`Config for ${key} from IndexedDB: `, cachedConfig);
       return cachedConfig;
     }
-  
-    // If not in IndexedDB, use default value and store it in IndexedDB
-    console.log(`Config for ${key} not found in cache. Using default value: `, defaultValue);
-    await setConfig(key, defaultValue);
-    return defaultValue;
+
+    var tempDefaultConfig = defaultConfig[key];
+    if (tempDefaultConfig) {
+      console.log(`Config for ${key} not found in cache. Using default value: `, tempDefaultConfig);
+      await setConfig(key, tempDefaultConfig);
+      return tempDefaultConfig;
+    } else {
+      console.log('No default config found for key: ', key);
+      await setConfig(key, '');
+      return '';
+    }
   }
 
-  export { getConfig, setConfig };
+  export { getConfig, setConfig, defaultConfig };

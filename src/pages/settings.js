@@ -6,6 +6,7 @@ import {
   SlSpinner,
 } from "@shoelace-style/shoelace/dist/react/";
 import "./settings.css";
+import {defaultConfig, getConfig, setConfig} from "../modules/indexedDB.js";
 import FeedList from "../components/FeedList/FeedList.js"; // Make sure this path is correct for FeedList
 
 function Settings({
@@ -14,6 +15,8 @@ function Settings({
   feedDetails,
   refreshInterval,
   setRefreshInterval,
+  OpenAIKey,
+  setOpenAIKey,
 }) {
   const [newFeedUrl, setNewFeedUrl] = useState("");
   const [urlError, setUrlError] = useState("");
@@ -100,6 +103,12 @@ function Settings({
     setIsLoading(false);
   };
 
+  const handleOpenAIKey = (key) => {
+    setOpenAIKey(key);
+    console.log("Setting OpenAI key:", key);
+    setConfig('openAIKey', key);
+  }
+
   const handleRemoveFeed = (url) => {
     console.log("Removing feed:", url);
     setFeedUrls(feedUrls.filter((feedUrl) => feedUrl.trim() !== url.trim()));
@@ -167,6 +176,36 @@ function Settings({
           onChange={(e) => setRefreshInterval(e.target.value)}
         />
       </div>
+      <div className="settings-section" id="openAISection">
+        <div className="infoContainer">
+          <h3>Enable AI Features</h3>
+          <p>Enter your OpenAI API key to use the AI summarization feature and text to speech.</p>
+          </div>
+          <SlInput
+            id="openAIKey"
+            type="password"
+            label="API Key:"
+            placeholder="sk-XXXXXXXXXXXXXXXXXXXXXXXX"
+            onSlInput={(e) => handleOpenAIKey(e.target.value)}
+          />
+        
+        </div>
+
+        <div className="settings-section">
+          <div className="infoContainer">
+            <h3>API endpoint</h3>
+            <p>Set a custom API endpoint. For advanced users only</p>
+          </div>
+          
+          <SlInput
+            id="apiUrl"
+            type="url"
+            label="API URL:"
+            placeholder="https://api.example.com"
+            onSlInput={(e) => setConfig('apiUrl', e.target.value)}
+          />
+          <SlButton onClick={() => setConfig('apiUrl', defaultConfig.apiUrl)}>Reset to Default</SlButton>
+          </div>
     </div>
   );
 }
