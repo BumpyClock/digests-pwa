@@ -1,12 +1,12 @@
 /* eslint-disable no-restricted-globals */
 // Activate the new service worker and take control of the pages
-const CACHE_NAME = '10_01_24_2_24_PM';
+const CACHE_NAME = '10_01_24_2_50_PM';
 
 var apiUrl = "";
 const DB_NAME = "digests-app";
 const STORE_NAME = "digests-config";
 const defaultConfig = {
-  apiUrl: "http://localhost:8000",
+  apiUrl: "https://api.digests.app",
   theme: "system",
 };
 
