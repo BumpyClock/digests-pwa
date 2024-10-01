@@ -10,7 +10,7 @@ import CustomScrollbar from '../CustomScrollbar/CustomScrollbar.js';
 
 const MemoizedFeedCard = memo(FeedCard);
 const MemoizedPodcastCard = memo(PodcastCard);
-const Feed = ({ feedItems, apiUrl, filterType }) => {
+const Feed = ({ feedItems, apiUrl, filterType, openAIKey}) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -125,9 +125,9 @@ const Feed = ({ feedItems, apiUrl, filterType }) => {
           <Masonry key={filterType} gutter={gutterSize}>
             {items.map((item) => (
               item.type === 'podcast' ? (
-                <MemoizedPodcastCard key={'podcast' + item.id} item={item} apiUrl={apiUrl} />
+                <MemoizedPodcastCard key={'podcast' + item.id} item={item} apiUrl={apiUrl} openAIKey={openAIKey} />
               ) : (
-                <MemoizedFeedCard key={'rss' + item.id} item={item} apiUrl={apiUrl} />
+                <MemoizedFeedCard key={'rss' + item.id} item={item} apiUrl={apiUrl} openAIKey={openAIKey} />
               )
             ))}
           </Masonry>

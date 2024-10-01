@@ -1,17 +1,20 @@
+// ReaderView.js
+
 import React, {
   useState,
   useEffect,
   useRef,
   useCallback,
-} from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
-import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
-import SlCard from "@shoelace-style/shoelace/dist/react/card";
-import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
-import "./ReaderView.css";
-import WebsiteInfo from "../website-info/website-info.js";
-import CustomScrollbar from "../CustomScrollbar/CustomScrollbar.js";
+} from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
+import SlSpinner from '@shoelace-style/shoelace/dist/react/spinner';
+import SlCard from '@shoelace-style/shoelace/dist/react/card';
+import SlIconButton from '@shoelace-style/shoelace/dist/react/icon-button';
+import './ReaderView.css';
+import WebsiteInfo from '../website-info/website-info.js';
+import CustomScrollbar from '../CustomScrollbar/CustomScrollbar.js';
+import TextToSpeechPlayer from '../TextToSpeechPlayer/TextToSpeechPlayer.js';
 
 function estimateReadingTime(text) {
   if (!text) return 0;
@@ -21,9 +24,7 @@ function estimateReadingTime(text) {
   return readingTimeInMinutes;
 }
 
-
-
-const ReaderView = ({ url, item, apiUrl, onClose }) => {
+const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
   const [article, setArticle] = useState(null);
   const isLoading = useRef(true);
   const requestSent = useRef(true);
@@ -34,46 +35,23 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
   const scrollPositionRef = useRef(scrollPosition);
   const headerImageInfoRef = useRef(null);
   const viewportWidth = window.innerWidth;
+  const [showTextToSpeech, setShowTextToSpeech] = useState(false);
+  // const [highlightedWordIndex, setHighlightedWordIndex] = useState(null);
 
-  const [headerImageInfoInitialized] =
-    useState(false);
+  // const handleHighlight = (wordIndex) => {
+  //   setHighlightedWordIndex(wordIndex);
+  // };
+
+  const [headerImageInfoInitialized] = useState(false);
 
   const dynamicTop = useRef(0);
+
   function calculateHeaderHeight(scrollPosition) {
     return Math.max(
       500 - Math.pow(scrollPosition / 100, 1.5) * 50,
       200
     );
   }
-
-  // function calculateFontSize(scrollPosition) {
-  //   const maxScrollForFontSizeChange = 500;
-  //   let minFontSize;
-  //   let maxFontSize;
-
-  //   if (viewportWidth < 450) {
-  //     maxFontSize = 10;
-  //     minFontSize = 8;
-  //   } else if (viewportWidth < 650) {
-  //     maxFontSize = 12;
-  //     minFontSize = 10;
-  //   } else if (viewportWidth >= 600 && viewportWidth < 1200) {
-  //     minFontSize = 14;
-  //     maxFontSize = 16;
-  //   } else {
-  //     minFontSize = 14;
-  //     maxFontSize = 16;
-  //   }
-
-  //   const scaleFactor = Math.max(
-  //     0,
-  //     Math.min(1, scrollPosition / maxScrollForFontSizeChange)
-  //   );
-  //   const fontSize =
-  //     maxFontSize - scaleFactor * (maxFontSize - minFontSize);
-
-  //   return `${fontSize}px`;
-  // }
 
   function calculateHeaderImageInfoBottom(scrollPosition) {
     const maxScroll = 500;
@@ -101,7 +79,7 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
         !contentcontainerRef.current.contains(event.target)
       ) {
         onClose();
-        document.body.style.overflow = "";
+        document.body.style.overflow = '';
         articleRef.current = null;
       }
     },
@@ -110,29 +88,37 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
 
   useEffect(() => {
     // Disable background scrolling
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
 
     const fetchArticle = async () => {
       try {
         requestSent.current = false;
-        console.log("Fetching article content for: ", url, " from: ", apiUrl);
+        console.log(
+          'Fetching article content for: ',
+          url,
+          ' from: ',
+          apiUrl
+        );
         const endpoint = `${apiUrl}/getreaderview`;
         const response = await axios.post(endpoint, {
           headers: {},
           urls: [url],
         });
 
-        if (response.status === 200 && response.data[0].status === "ok") {
+        if (
+          response.status === 200 &&
+          response.data[0].status === 'ok'
+        ) {
           setArticle({
             content: response.data[0].content,
             title: response.data[0].title,
             textContent: response.data[0].textContent,
           });
         } else {
-          setArticle({ content: "Error getting article content" });
+          setArticle({ content: 'Error getting article content' });
         }
       } catch (error) {
-        console.error("Error fetching the page content:", error);
+        console.error('Error fetching the page content:', error);
       }
       isLoading.current = false;
     };
@@ -142,10 +128,10 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
     }
 
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
       articleRef.current = null;
     };
-  }, [url, isLoading, headerImageInfoRef, apiUrl]);
+  }, [url, apiUrl]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -167,32 +153,32 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
 
     const articleElement = articleRef.current;
     if (articleElement) {
-      articleElement.addEventListener("scroll", handleScroll);
+      articleElement.addEventListener('scroll', handleScroll);
       return () => {
-        articleElement.removeEventListener("scroll", handleScroll);
+        articleElement.removeEventListener('scroll', handleScroll);
       };
     }
   }, []);
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [handleClickOutside]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         onClose();
-        document.body.style.overflow = "";
+        document.body.style.overflow = '';
         articleRef.current = null;
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [onClose]);
 
@@ -207,7 +193,7 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
         );
         dynamicTop.current = initialDynamicTop;
       } else {
-        console.error("Header image info ref not found");
+        console.error('Header image info ref not found');
       }
     };
 
@@ -229,6 +215,35 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
     exit: { opacity: 0 },
   };
 
+  // Parsing and transforming the article content
+  // let globalWordIndex = 0;
+
+  // const transform = (node) => {
+  //   if (node.type === 'text') {
+  //     const words = node.data.split(/(\s+)/).map((word) => {
+  //       if (/\s+/.test(word)) {
+  //         return word; // Preserve whitespace
+  //       }
+  //       const index = globalWordIndex;
+  //       globalWordIndex += 1;
+  //       return (
+  //         <span
+  //           key={index}
+  //           className={
+  //             index === highlightedWordIndex ? 'highlighted-word' : ''
+  //           }
+  //         >
+  //           {word}
+  //         </span>
+  //       );
+  //     });
+  //     return <>{words}</>;
+  //   }
+  // };
+
+ 
+
+
   return (
     <AnimatePresence>
       <div className="reader-view-overlay"></div>
@@ -239,52 +254,72 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
         animate="visible"
         exit="exit"
         variants={modalVariants}
-        transition={{ duration: .125, ease: "easeInOut" }}
+        transition={{ duration: 0.125, ease: 'easeInOut' }}
       >
         <SlCard
           className="reader-card"
           layoutId={`card-${item.id}`}
           variants={modalVariants}
           ref={contentcontainerRef}
-          transition={{ duration: 0.125, ease: "easeInOut" }}
-        >       <div className="reader-view-header-button-container">
-        <SlIconButton
-          library="iconoir"
-          name="open-new-window"
-          class="reader-view-header-button"
-          onClick={() => {
-            window.open(url, "_blank");
-          }}
-        />
-        <SlIconButton
-          library="iconoir"
-          name="xmark"
-          class="reader-view-header-button"
-          onClick={onClose}
-        />
-      </div>     
+          transition={{ duration: 0.125, ease: 'easeInOut' }}
+        >
+          <div className="reader-view-header-button-container">
+            <SlIconButton
+              library="iconoir"
+              name="open-new-window"
+              class="reader-view-header-button"
+              onClick={() => {
+                window.open(url, '_blank');
+              }}
+            />
+            <SlIconButton
+              library="iconoir"
+              name="headset-bolt"
+              class="reader-view-header-button"
+              onClick={() => setShowTextToSpeech(!showTextToSpeech)}
+            />
+            <SlIconButton
+              library="iconoir"
+              name="sparks"
+              class="reader-view-header-button"
+              onClick={onClose}
+            />
+            <SlIconButton
+              library="iconoir"
+              name="xmark"
+              class="reader-view-header-button"
+              onClick={onClose}
+            />
+          </div>
 
-          <div className="modal-container-content" style={{ height: "100%" }}>
-          <CustomScrollbar 
-          autoHeightMax={"95vh"}
-          style={{ height: "100%" }}>
+          <div
+            className="modal-container-content"
+            style={{ height: '100%' }}
+          >
+            <CustomScrollbar
+              autoHeightMax={'95vh'}
+              style={{ height: '100%' }}
+            >
               <div
                 exit="exit"
-                transition={{ duration: 0.125, ease: "easeInOut" }}
+                transition={{ duration: 0.125, ease: 'easeInOut' }}
                 layoutId={`image-${item.id}`}
               >
                 <div className="image-container">
                   <img
                     src={item.thumbnail}
                     alt={item.siteTitle}
-                    style={{ width: "100%", height: "100%" }}
+                    style={{ width: '100%', height: '100%' }}
                   />
                 </div>
               </div>
-             
 
               {isLoading.current ? (
-                <div className="loading-spinner"><SlSpinner style={{ fontSize: "3rem", margin: "auto"  }} /></div>
+                <div className="loading-spinner">
+                  <SlSpinner
+                    style={{ fontSize: '3rem', margin: 'auto' }}
+                  />
+                </div>
               ) : (
                 article && (
                   <motion.div
@@ -305,30 +340,44 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
                           ),
                         }}
                       >
-                        
-                       <div className="reader-view-title">
-                          <h1 >
-                            {article.title}
-                          </h1></div>
-                         <WebsiteInfo
+                        <div className="reader-view-title">
+                          <h1>{article.title}</h1>
+                        </div>
+                        <WebsiteInfo
                           favicon={item.favicon}
                           siteTitle={item.siteTitle}
                           feedTitle={item.feedTitle}
                           style={{
-                            marginBottom: "8px",
-                            maxWidth: "fit-content",
+                            marginBottom: '8px',
+                            maxWidth: 'fit-content',
                           }}
                         />
                         <div className="reader-view-website-info">
-                       
-                        <p className="reader-view-reading-time">
-                          {estimateReadingTime(article.textContent)} minutes
-                        </p>
-                        <p className="reader-view-reading-time">{item.author}</p>
+                          <p className="reader-view-reading-time">
+                            {estimateReadingTime(
+                              article.textContent
+                            )}{' '}
+                            minutes
+                          </p>
+                          <p className="reader-view-reading-time">
+                            {item.author}
+                          </p>
                         </div>
                       </div>
 
-                      <div className="reader-view-page-text" ref={articleRef}>
+                      {showTextToSpeech && article && (
+                        <TextToSpeechPlayer
+                          articleText={article.textContent}
+                          apiUrl={apiUrl}
+                          articleUrl={url}
+                          // onHighlight={handleHighlight}
+                        />
+                      )}
+
+                      <div
+                        className="reader-view-page-text"
+                        ref={articleRef}
+                      >
                         <div
                           className="reader-view-article"
                           dangerouslySetInnerHTML={{
@@ -340,8 +389,7 @@ const ReaderView = ({ url, item, apiUrl, onClose }) => {
                   </motion.div>
                 )
               )}
-                     </CustomScrollbar>
-
+            </CustomScrollbar>
           </div>
         </SlCard>
       </motion.div>

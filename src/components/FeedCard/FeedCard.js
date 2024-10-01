@@ -71,7 +71,7 @@ const useImageLoader = (src) => {
   return { isLoaded, isError, loadedImage };
 };
 
-const FeedCard = ({ item, apiUrl }) => {
+const FeedCard = ({ item, apiUrl , openAIKey}) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [showReaderView, setShowReaderView] = useState(false);
@@ -173,6 +173,7 @@ const FeedCard = ({ item, apiUrl }) => {
             url={item.link}
             item={item}
             apiUrl={apiUrl}
+            openAIKey={openAIKey}
             onClose={() => {
               setShowReaderView(false);
             }}

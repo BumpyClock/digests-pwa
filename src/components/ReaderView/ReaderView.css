@@ -693,3 +693,23 @@
     border-radius: 0; /* Remove border radius if any */
   }
 }
+
+/* ReaderView.css */
+
+.highlighted-word {
+  background-color: yellow;
+}
+
+.tts-player {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.tts-player button {
+  margin-right: 10px;
+}
+
+.tts-player label {
+  margin-right: 10px;
+}

@@ -6,7 +6,7 @@ var apiUrl = "";
 const DB_NAME = "digests-app";
 const STORE_NAME = "digests-config";
 const defaultConfig = {
-  apiUrl: "https://api.digests.app",
+  apiUrl: "http://localhost:8000",
   theme: "system",
 };
 

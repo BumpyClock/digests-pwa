@@ -10,13 +10,9 @@ import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/ico
 import ListView from "./components/ListView/ListView.js";
 import AppBar from "./components/AppBar/AppBar.js";
 import "./App.css";
-import { getConfig } from './modules/indexedDB.js';
+import { getConfig, defaultConfig } from './modules/indexedDB.js';
 
-const defaultConfig = {
-  apiUrl: "https://api.digests.app",
-  theme: "system",
-  refresh_interval: 15,
-};
+
 
 registerIconLibrary("iconoir", {
   resolver: name =>
@@ -38,6 +34,7 @@ function App() {
   const SettingsMemo = memo(Settings);
   const [showSettings, setShowSettings] = useState(false);
   const [filterType, setFilterType] = useState('all'); // 'all', 'podcast', or 'rss'
+  const [openAIKey, setOpenAIKey] = useState("");
 
   // Initialize feedUrls from localStorage or default feeds
   const [feedUrls, setFeedUrls] = useState(() => {
@@ -60,6 +57,18 @@ function App() {
           ]
         );
   });
+
+  useEffect(()=> {
+    (async () => {
+      try {
+        const savedOpenAIKey = await getConfig('openAIKey', '');
+        setOpenAIKey(savedOpenAIKey ? savedOpenAIKey : '');
+      } catch (error) {
+        console.error('No OpenAPI key is set. Set one on the Settings Page to use AI features.', error);
+        setOpenAIKey('');
+      }
+    })();
+  })
 
   // Fetch saved configurations
   useEffect(() => {
@@ -237,13 +246,16 @@ function App() {
                 setRefreshInterval={setRefreshInterval}
                 apiUrl={apiUrl}
                 setApiUrl={setApiUrl}
+                openAIKey={openAIKey}
+                setOpenAIKey={setOpenAIKey}
               />
             : isListView
               ? <ListView articles={feedItems} />
               : <Feed
                   feedItems={feedItems}
                   apiUrl={apiUrl}
-                  filterType={filterType} // Pass filterType to Feed component
+                  filterType={filterType} 
+                  openAIKey={openAIKey}
                 />}
       </main>
     </div>
