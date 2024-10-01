@@ -108,6 +108,7 @@ const FeedCard = ({ item, apiUrl , openAIKey}) => {
         }
       }}
     >
+      <div className="card-wrapper">
       <DropShadow
         color={item.thumbnailColor || { r: 0, g: 0, b: 0 }}
         elevation={elevation}
@@ -167,6 +168,7 @@ const FeedCard = ({ item, apiUrl , openAIKey}) => {
           )}
         </div>
       </SlCard>
+      </div>
       <AnimatePresence>
         {showReaderView && (
           <ReaderView

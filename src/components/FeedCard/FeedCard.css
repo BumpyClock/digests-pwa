@@ -3,7 +3,7 @@ sl-card {
   --border-radius: 40px;
   max-width: 950px;
 }
-.card {
+.card-wrapper .card, .card {
   overflow: hidden;
   position: relative;
   padding: 0;
@@ -20,6 +20,24 @@ sl-card {
   backdrop-filter: var(--blur);
   transition: all .25s ease-in-out !important;
 }
+.card-wrapper {
+  background: transparent;
+  border-radius: 40px;
+  box-shadow: none;
+  transition: all .25s ease-in-out !important;
+  box-shadow: none;
+}
+.card-wrapper:hover {
+background:transparent;
+border-radius: 40px;
+box-shadow: none;
+transition: all .25s ease-in-out !important;
+}
+
+.card-wrapper:active{
+  transform:scale3d(.99,.99,.99);
+  transition: all .25s ease-in-out !important;
+}
 
 .card .date {
   font-size: 12px;
@@ -28,14 +46,14 @@ sl-card {
   opacity: .65;
 }
 
-.card::part(base) {
+.card-wrapper .card::part(base), .card::part(base) {
   background-color: var(--background-color);
   border: none;
   border-radius: 40px;
   transition: all .25s ease-in-out;
 }
 
-.card .card-bg {
+.card-wrapper .card .card-bg, .card .card-bg {
   position: absolute;
   top: 0;
   left: 0;
