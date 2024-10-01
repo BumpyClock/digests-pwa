@@ -353,15 +353,16 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
                           }}
                         />
                         <div className="reader-view-website-info">
+                        <p className="reader-view-reading-time">
+                            {item.author}
+                          </p>
                           <p className="reader-view-reading-time">
                             {estimateReadingTime(
                               article.textContent
                             )}{' '}
-                            minutes
+                            minute read
                           </p>
-                          <p className="reader-view-reading-time">
-                            {item.author}
-                          </p>
+                          
                         </div>
                       </div>
 

@@ -239,8 +239,8 @@
     font-weight: var(--font-weight-medium)!important;
     font-size: 14px !important;
    
-    margin: 8px 0!important;
-    margin-bottom: 4px;
+    margin: 4px 0!important;
+   
     opacity: .7
   }
   .reader-view-reading-time p {
@@ -321,6 +321,14 @@
       border-radius: 0;
       max-height: 100vh;
     }
+
+    .reader-view-page-content .title {
+      padding: 0 2rem;
+      font-size: 1.2rem;
+      row-gap: .25rem;
+    
+    }
+    
   
     .reader-card {
       border-radius: 0;
@@ -351,6 +359,10 @@
       max-height: 100%;
       border-radius: 0;
     }
+
+    .reader-view-page-text {
+      padding:0 2rem;
+    }
   }
   
   /* Adjustments for medium screens */
@@ -380,12 +392,15 @@
    display: flex;
     justify-content: center;
     align-items: center;
-    column-gap: 8px;
-    flex-direction: row;
+    row-gap: 8px;
+    flex-direction: column;
     padding: 0;
     margin: 0;
     font-weight: 400
   }
+  .reader-view-website-info p {
+   line-height: 1;
+   }
 
   .modal-container .reader-card:hover .title a {
     text-decoration: none !important;
