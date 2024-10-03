@@ -10,13 +10,18 @@ import CustomScrollbar from '../CustomScrollbar/CustomScrollbar.js';
 
 const MemoizedFeedCard = memo(FeedCard);
 const MemoizedPodcastCard = memo(PodcastCard);
-const Feed = ({ feedItems, apiUrl, filterType, openAIKey}) => {
+
+const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
-  const scrollRef = useRef(null); // Reference to the CustomScrollbar
+  // Define itemsPerPage outside of state
+  const itemsPerPage = 20;
 
+  const scrollRef = useRef(null);
+
+  // Function to calculate gutter size
   const getGutterSize = useCallback(() => {
     const width = window.innerWidth;
     if (width <= 650) return '12px';
@@ -24,31 +29,22 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey}) => {
     else return '36px';
   }, []);
 
-  const getStepSize = useCallback(() => {
-    const width = window.innerWidth;
-    if (width <= 350) return 4;
-    else if (width <= 750) return 8;
-    else if (width <= 900) return 12;
-    else return 20;
-  }, []);
-
   const [gutterSize, setGutterSize] = useState(getGutterSize());
-  const [stepSize, setStepSize] = useState(getStepSize());
 
-  const debouncedSetStepSize = debounce(setStepSize, 300);
-  const debouncedSetGutterSize = debounce(setGutterSize, 300);
+  // Debounce the gutter size update to optimize performance
+  const debouncedSetGutterSize = useCallback(debounce(setGutterSize, 300), [setGutterSize, getGutterSize]);
 
   const handleResize = useCallback(() => {
-    debouncedSetStepSize(getStepSize());
     debouncedSetGutterSize(getGutterSize());
-  }, [debouncedSetStepSize, debouncedSetGutterSize, getStepSize, getGutterSize]);
+  }, [debouncedSetGutterSize, getGutterSize]);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
+      debouncedSetGutterSize.cancel(); // Cancel any pending debounced calls on unmount
     };
-  }, [handleResize]);
+  }, [handleResize, debouncedSetGutterSize]);
 
   // Memoize the filtered feed items based on filterType
   const filteredFeedItems = useMemo(() => {
@@ -61,57 +57,48 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey}) => {
     }
   }, [feedItems, filterType]);
 
-
   useEffect(() => {
-    setItems([]);
-    setHasMore(true);
-    setIsLoading(true);
-
-
-
-
-
-    if (filteredFeedItems.length > 0) {
-      const newItems = filteredFeedItems.slice(0, stepSize);
-      setItems(newItems);
-      setHasMore(filteredFeedItems.length > newItems.length);
-    } else {
-      setItems([]);
-      setHasMore(false);
-    }
+    // Initialize items with the first set
+    const initialItems = filteredFeedItems.slice(0, itemsPerPage);
+    setItems(initialItems);
+    setHasMore(filteredFeedItems.length > itemsPerPage);
     setIsLoading(false);
     if (scrollRef.current) {
       scrollRef.current.scrollTop = 0;
     }
-
-  }, [filterType, filteredFeedItems, stepSize]);
-
+  }, [filterType, filteredFeedItems]);
 
   const fetchMoreData = useCallback(() => {
-    setItems(prevItems => {
-      const currentLength = prevItems.length;
-      const totalLength = filteredFeedItems.length;
-
-      if (currentLength >= totalLength) {
-        setHasMore(false);
-        return prevItems;
-      }
-
-      const newItems = filteredFeedItems.slice(currentLength, currentLength + stepSize);
-      return [...prevItems, ...newItems];
-    });
-  }, [filteredFeedItems, stepSize]);
+    if (hasMore && !isLoading) {
+      setIsLoading(true);
+      console.log('Fetching more data...');
+      setTimeout(() => {
+        const currentLength = items.length;
+        const moreItems = filteredFeedItems.slice(currentLength, currentLength + itemsPerPage);
+        setItems(prevItems => [...prevItems, ...moreItems]);
+        setHasMore(filteredFeedItems.length > currentLength + itemsPerPage);
+        setIsLoading(false);
+        console.log('Fetched more data.');
+      }, 500); // Simulate network delay
+    }
+  }, [hasMore, isLoading, items.length, filteredFeedItems]);
 
   const handleScrollFrame = useCallback((values) => {
     const { scrollTop, scrollHeight, clientHeight } = values;
     const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
-    if (scrollPercentage >= 50 && hasMore && !isLoading) {
+    // Debugging logs
+    // console.log(`Scroll Top: ${scrollTop}, Scroll Height: ${scrollHeight}, Client Height: ${clientHeight}, Scroll Percentage: ${scrollPercentage}`);
+
+    if (scrollPercentage >= 80 && hasMore && !isLoading) { // Fetch more when 80% scrolled
+      console.log('Scroll reached 80%, fetching more data...');
       fetchMoreData();
     }
   }, [fetchMoreData, hasMore, isLoading]);
 
-  return isLoading ? (
+  const visibleItems = items; // Display all loaded items
+
+  return isLoading && items.length === 0 ? (
     <div className="loading-indicator">Loading...</div>
   ) : items.length === 0 ? (
     <div className="no-items-indicator">No items to display.</div>
@@ -119,19 +106,35 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey}) => {
     <CustomScrollbar onScrollFrame={handleScrollFrame} ref={scrollRef}>
       <div className="feed">
         <ResponsiveMasonry
-          columnsCountBreakPoints={{ 320: 1, 550: 2, 850: 3, 1201: 4, 1601: 4, 1801: 4, 1901: 5, 2201: 6 }}
-          style={{ maxWidth: '2400px', margin: '0 auto' }}
+          columnsCountBreakPoints={{ 320:1, 650: 2, 1050: 3, 1500: 4 }}
         >
-          <Masonry key={filterType} gutter={gutterSize}>
-            {items.map((item) => (
-              item.type === 'podcast' ? (
-                <MemoizedPodcastCard key={'podcast' + item.id} item={item} apiUrl={apiUrl} openAIKey={openAIKey} />
-              ) : (
-                <MemoizedFeedCard key={'rss' + item.id} item={item} apiUrl={apiUrl} openAIKey={openAIKey} />
-              )
-            ))}
+          <Masonry gutter={gutterSize}>
+            {visibleItems.map((item) => {
+              if (item.type === 'podcast') {
+                return (
+                  <MemoizedPodcastCard
+                    key={item.id}
+                    item={item}
+                    apiUrl={apiUrl}
+                    openAIKey={openAIKey}
+                  />
+                );
+              } else {
+                return (
+                  <MemoizedFeedCard
+                    key={item.id}
+                    item={item}
+                    apiUrl={apiUrl}
+                    openAIKey={openAIKey}
+                  />
+                );
+              }
+            })}
           </Masonry>
         </ResponsiveMasonry>
+        {isLoading && hasMore && (
+          <div className="loading-more-indicator">Loading more items...</div>
+        )}
       </div>
     </CustomScrollbar>
   );
