@@ -1,10 +1,11 @@
+// FeedCard.js
+
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SlCard from "@shoelace-style/shoelace/dist/react/card";
 import WebsiteInfo from "../website-info/website-info.js";
 import "./FeedCard.css";
 import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
-import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import DropShadow from "../DropShadow/DropShadow.js";
 import ReaderView from "../ReaderView/ReaderView.js";
 import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
@@ -84,8 +85,12 @@ const FeedCard = ({ item, apiUrl , openAIKey}) => {
     return 16;
   }, [mouseDown, hover]);
 
-  if (!isLoaded) {
-    return <FeedCardLoader id={item.id} />;
+    if (!isLoaded) {
+    return (
+      <AnimatePresence >
+        <FeedCardLoader id={item.id} />
+      </AnimatePresence>
+    );
   }
 
   return (
@@ -109,65 +114,60 @@ const FeedCard = ({ item, apiUrl , openAIKey}) => {
       }}
     >
       <div className="card-wrapper">
-      <DropShadow
-        color={item.thumbnailColor || { r: 0, g: 0, b: 0 }}
-        elevation={elevation}
-      />
+        <DropShadow
+          color={item.thumbnailColor || { r: 0, g: 0, b: 0 }}
+          elevation={elevation}
+        />
 
-      <SlCard
-        className="card"
-        layoutId={`card-${item.id}`}
-        id={item.id}
-        style={{
-          opacity: showReaderView ? 1 : 1, // Keep the original item visible
-        }}
-      >
-        <div className="card-bg">
-          <div className="noise"></div>
-          {loadedImage && (
-            <img src={loadedImage.src} alt={item.siteTitle} />
-          )}
-        </div>
-        {!isLoaded && (
-          <SlAnimation name="pulse" duration={250} repeat>
-            <FeedCardLoader />
-          </SlAnimation>
-        )}
-
-        {loadedImage && !isError && (
-          <>
-            <motion.div layoutId={`image-${item.id}`}>
-              <div className="image-container">
-                <img
-                  src={loadedImage.src}
-                  alt={item.siteTitle}
-                  style={{ width: "100%", height: "100%" }}
-                />
-              </div>
-            </motion.div>
-          </>
-        )}
-
-        <div
-          className="text-content"
-          style={{ padding: isError ? "" : "12px 24px" }}
+        <SlCard
+          className="card"
+          layoutId={`card-${item.id}`}
+          id={item.id}
+          style={{
+            opacity: showReaderView ? 1 : 1, // Keep the original item visible
+          }}
         >
-          <WebsiteInfo
-            favicon={item.favicon}
-            siteTitle={item.siteTitle}
-            feedTitle={item.siteTitle}
-          />
-          <h3>{decodeHtmlEntities(item.title)}</h3>
-          <div className="date">
-            <SlRelativeTime date={new Date(item.published)} />
+          <div className="card-bg">
+            <div className="noise"></div>
+            {loadedImage && (
+              <img src={loadedImage.src} alt={item.siteTitle} />
+            )}
           </div>
-          {item.description ? (
-            <p className="description">{item.description}</p>
-          ) : (
-            <p className="description">{item.content}</p>
+
+          {loadedImage && !isError && (
+            <>
+              <motion.div layoutId={`image-${item.id}`}>
+                <div className="image-container">
+                  <img
+                    src={loadedImage.src}
+                    alt={item.siteTitle}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </div>
+              </motion.div>
+            </>
           )}
-        </div>
-      </SlCard>
+
+          <div
+            className="text-content"
+            style={{ padding: isError ? "" : "12px 24px" }}
+          >
+            <WebsiteInfo
+              favicon={item.favicon}
+              siteTitle={item.siteTitle}
+              feedTitle={item.siteTitle}
+            />
+            <h3>{decodeHtmlEntities(item.title)}</h3>
+            <div className="date">
+              <SlRelativeTime date={new Date(item.published)} />
+            </div>
+            {item.description ? (
+              <p className="description">{item.description}</p>
+            ) : (
+              <p className="description">{item.content}</p>
+            )}
+          </div>
+        </SlCard>
       </div>
       <AnimatePresence>
         {showReaderView && (

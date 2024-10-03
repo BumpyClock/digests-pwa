@@ -32,7 +32,7 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
   const [gutterSize, setGutterSize] = useState(getGutterSize());
 
   // Debounce the gutter size update to optimize performance
-  const debouncedSetGutterSize = useCallback(debounce(setGutterSize, 300), [setGutterSize, getGutterSize]);
+  const debouncedSetGutterSize = useMemo(() => debounce(setGutterSize, 300), [setGutterSize]);
 
   const handleResize = useCallback(() => {
     debouncedSetGutterSize(getGutterSize());
