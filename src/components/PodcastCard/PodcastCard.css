@@ -10,7 +10,6 @@
   flex-direction: column;
   height: auto;
   max-width: 950px;
-  margin-top: 12px;
   break-inside: avoid;
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
@@ -35,17 +34,20 @@
     border-radius: 4px;
     overflow: hidden;
     position: relative;
+    
+    width: -webkit-fill-available;
    
   
     
 
   }
 
-  .podcast-card .background-image {
+  .podcast-card .background-image , .podcast-image-header .background-image img {
     width: 100%;
-    height: fit-content;
+    height: -webkit-fill-available;
     min-height: 150px;
     object-fit: cover;
+    max-height: unset;
     border-radius: 24px;
     transition: all .25s ease-in-out;
     filter: blur(35px) brightness(.7);
@@ -55,12 +57,14 @@
     left:0;
   }
 
-  .podcast-card .podcast-image-header .icon-container, .podcast-card .podcast-image-header .icon-container img {
+  .podcast-image-header .icon-container,  .podcast-image-header .icon-container img {
     width: 96px !important;
     height: 96px !important;
     min-height: 32px !important;
     margin:auto;
     border-radius: 4px;
     object-fit: cover;
+    z-index: 2;
+    position: relative;
     
   }

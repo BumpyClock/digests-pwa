@@ -73,11 +73,7 @@ const PodcastCard = ({ item }) => {
         {/* Description */}
         <p className="description">{item.description}</p>
 
-        {/* Podcast Audio Player */}
-        {/* <audio controls className="podcast-audio-player">
-          <source src={item.enclosures[0].url} type="audio/mpeg" />
-          Your browser does not support the audio element.
-        </audio> */}
+        
 
         {/* External Link */}
         {item.externalLink && (

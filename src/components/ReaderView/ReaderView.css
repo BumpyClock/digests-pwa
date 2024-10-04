@@ -290,7 +290,7 @@
     color: var(--accent-color);
     cursor: pointer
   }
-  .reader-card .reader-view-header-button-container{
+.reader-view-header-button-container{
     position:absolute;
     display: flex;
     flex-direction: column;
@@ -298,7 +298,7 @@
     align-items: center;
     row-gap: 12px;
     top:12px;
-    right:-8%;
+    right:-74px;
     z-index: 9000;
     background-color: var(--background-color);
     border-radius: 8px;
