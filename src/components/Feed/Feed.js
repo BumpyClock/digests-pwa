@@ -106,7 +106,7 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
     <CustomScrollbar onScrollFrame={handleScrollFrame} ref={scrollRef}>
       <div className="feed">
         <ResponsiveMasonry
-          columnsCountBreakPoints={{ 320:1, 650: 2, 1050: 3, 1500: 4 }}
+          columnsCountBreakPoints={{ 320:1, 650: 2, 1050: 3, 1500: 4, 1700:5, 2000:6,2500:7,3000:8 }}
         >
           <Masonry gutter={gutterSize}>
             {visibleItems.map((item) => {

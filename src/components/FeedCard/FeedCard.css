@@ -26,6 +26,7 @@ sl-card {
   box-shadow: none;
   transition: all .25s ease-in-out !important;
   box-shadow: none;
+  margin:none;
 }
 .card-wrapper:hover {
 background:transparent;

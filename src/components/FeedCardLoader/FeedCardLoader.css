@@ -4,7 +4,6 @@
     position: relative;
     width: 100%;
     max-width: 950px;
-    margin: 16px auto; /* Center the loader with some vertical spacing */
     border-radius: 40px;
     background: var(--background-color);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
