@@ -90,7 +90,7 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
     // Debugging logs
     // console.log(`Scroll Top: ${scrollTop}, Scroll Height: ${scrollHeight}, Client Height: ${clientHeight}, Scroll Percentage: ${scrollPercentage}`);
 
-    if (scrollPercentage >= 80 && hasMore && !isLoading) { // Fetch more when 80% scrolled
+    if (scrollPercentage >= 60 && hasMore && !isLoading) { // Fetch more when 80% scrolled
       console.log('Scroll reached 80%, fetching more data...');
       fetchMoreData();
     }
