@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
-import { SlIconButton, SlTooltip, SlTag, SlButton, SlDetails, SlSkeleton } from "@shoelace-style/shoelace/dist/react";
+import { SlIconButton,  SlDetails, SlSkeleton } from "@shoelace-style/shoelace/dist/react";
 import "./PodcastDetails.css";
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar';
 import { AnimatePresence } from 'framer-motion';
@@ -107,13 +107,9 @@ const PodcastDetails = ({ url, item, AiFeatures, onClose }) => {
     if (scrollableDescriptionRef.current) {
       setParentHeight(scrollableDescriptionRef.current.clientHeight);
     }
-  }, [scrollableDescriptionRef.current]);
+  }, []);
 
-  const requestPlaybackFromTimestamp = (timestamp) => {
-    if (podcastPlayerRef.current) {
-      podcastPlayerRef.current.setPlaybackTime(timestamp);
-    }
-  };
+
 
   return (
     <AnimatePresence>
