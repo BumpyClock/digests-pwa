@@ -731,3 +731,58 @@
 .tts-player label {
   margin-right: 10px;
 }
+
+
+/* ReaderView.css */
+
+.article-summary {
+  margin: 24px 4rem;
+  padding: 0 2rem;
+  background-color: var(--blockquote-background-color);
+  border-radius: 32px;
+  border: 1px solid var(--border-color);
+}
+
+.article-summary h2 {
+  margin-bottom: 12px;
+}
+
+.summary-header {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.summary-header h3 {
+  margin-bottom: 0px;
+  font-size: 1.2rem;
+
+}
+
+.summary-header caption {
+  font-size: .8rem;
+  color: var(--color);
+  opacity: .8;
+  width: 100%;
+  text-align: left;
+}
+
+.summary-error {
+  margin: 24px 0;
+  padding: 16px;
+  background-color: #ffe6e6;
+  border-radius: 8px;
+  color: #cc0000;
+}
+
+.summarize-loading {
+  display: flex;
+  align-items: center;
+  margin: 24px 0;
+}
+
+.summarize-loading p {
+  margin-left: 12px;
+  font-size: 1rem;
+  color: #555;
+}

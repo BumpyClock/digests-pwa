@@ -3,7 +3,7 @@ const STORE_NAME = "digests-config";
 const defaultConfig = {
   apiUrl: "https://api.digests.app",
   theme: "system",
-  refresh_interval: 15,
+  refresh_interval: 30,
   
 };
 

@@ -12,8 +12,6 @@ import AppBar from "./components/AppBar/AppBar.js";
 import "./App.css";
 import { getConfig, defaultConfig } from './modules/indexedDB.js';
 
-
-
 registerIconLibrary("iconoir", {
   resolver: name =>
     `https://cdn.jsdelivr.net/gh/lucaburgio/iconoir@latest/icons/regular/${name}.svg`
@@ -58,7 +56,8 @@ function App() {
         );
   });
 
-  useEffect(()=> {
+  // Fetch openAIKey once on mount
+  useEffect(() => {
     (async () => {
       try {
         const savedOpenAIKey = await getConfig('openAIKey', '');
@@ -68,9 +67,9 @@ function App() {
         setOpenAIKey('');
       }
     })();
-  })
+  }, []); // Added empty dependency array to prevent infinite loop
 
-  // Fetch saved configurations
+  // Fetch saved refreshInterval
   useEffect(() => {
     (async () => {
       try {
@@ -83,6 +82,7 @@ function App() {
     })();
   }, []);
 
+  // Fetch saved apiUrl
   useEffect(() => {
     (async () => {
       try {
@@ -142,45 +142,40 @@ function App() {
     };
   }, [refreshRSSData]);
 
+  // Function to manually refresh feed
   const refreshFeed = useCallback(() => {
     setIsLoading(true);
     console.log("Refreshing feed");
     refreshRSSData();
   }, [refreshRSSData]);
 
-  useEffect(
-    () => {
-      localStorage.setItem("feedUrls", JSON.stringify(feedUrls));
-    },
-    [feedUrls]
-  );
+  // Persist feedUrls to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("feedUrls", JSON.stringify(feedUrls));
+  }, [feedUrls]);
 
+  // Toggle Settings visibility
   const toggleSettings = useCallback(() => {
     setShowSettings(prev => !prev);
   }, []);
 
-  useEffect(
-    () => {
-      refreshRSSData();
-    },
-    [feedUrls, refreshRSSData]
-  );
+  // Fetch RSS data on feedUrls change
+  useEffect(() => {
+    refreshRSSData();
+  }, [feedUrls, refreshRSSData]);
 
   // Set up automatic refresh based on refreshInterval
-  useEffect(
-    () => {
-      console.log(`Setting refresh interval to ${refreshInterval} minutes`);
-      const intervalId = setInterval(() => {
-        console.log("🚀 ~ RefreshTimer triggered ~ Refreshing RSS data");
-        refreshRSSData();
-      }, refreshInterval * 60 * 1000);
+  useEffect(() => {
+    console.log(`Setting refresh interval to ${refreshInterval} minutes`);
+    const intervalId = setInterval(() => {
+      console.log("🚀 ~ RefreshTimer triggered ~ Refreshing RSS data");
+      refreshRSSData();
+    }, refreshInterval * 60 * 1000);
 
-      localStorage.setItem("refreshInterval", refreshInterval.toString());
+    localStorage.setItem("refreshInterval", refreshInterval.toString());
 
-      return () => clearInterval(intervalId);
-    },
-    [refreshInterval, refreshRSSData]
-  );
+    return () => clearInterval(intervalId);
+  }, [refreshInterval, refreshRSSData]);
 
   // Listen for messages from the service worker
   useEffect(() => {

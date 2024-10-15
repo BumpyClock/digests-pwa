@@ -1,13 +1,16 @@
 // Feed.js
 
-import React, { useState, useEffect, useCallback, memo, useMemo, useRef } from 'react';
-import FeedCard from '../FeedCard/FeedCard.js';
-import PodcastCard from '../PodcastCard/PodcastCard.js';
+import React, { useState, useEffect, useCallback, memo, useMemo, useRef, Suspense } from 'react';
 import './Feed.css';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { debounce } from 'lodash';
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar.js';
 
+// Lazy load FeedCard and PodcastCard for performance
+const FeedCard = React.lazy(() => import('../FeedCard/FeedCard.js'));
+const PodcastCard = React.lazy(() => import('../PodcastCard/PodcastCard.js'));
+
+// Memoize the FeedCard and PodcastCard to prevent unnecessary re-renders
 const MemoizedFeedCard = memo(FeedCard);
 const MemoizedPodcastCard = memo(PodcastCard);
 
@@ -15,13 +18,14 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const itemsRef = useRef([]); // Holds existing items without causing re-renders
+  const [isReaderViewOpen, setIsReaderViewOpen] = useState(false); // Tracks ReaderView state
 
-  // Define itemsPerPage outside of state
   const itemsPerPage = 20;
 
   const scrollRef = useRef(null);
 
-  // Function to calculate gutter size
+  // Function to calculate gutter size based on window width
   const getGutterSize = useCallback(() => {
     const width = window.innerWidth;
     if (width <= 650) return '12px';
@@ -31,7 +35,7 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
 
   const [gutterSize, setGutterSize] = useState(getGutterSize());
 
-  // Debounce the gutter size update to optimize performance
+  // Debounce gutter size updates to optimize performance
   const debouncedSetGutterSize = useMemo(() => debounce(setGutterSize, 300), [setGutterSize]);
 
   const handleResize = useCallback(() => {
@@ -42,11 +46,11 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
-      debouncedSetGutterSize.cancel(); // Cancel any pending debounced calls on unmount
+      debouncedSetGutterSize.cancel(); // Clean up debounce on unmount
     };
   }, [handleResize, debouncedSetGutterSize]);
 
-  // Memoize the filtered feed items based on filterType
+  // Memoize filtered feed items based on filterType
   const filteredFeedItems = useMemo(() => {
     if (filterType === 'podcast') {
       return feedItems.filter(item => item.type === 'podcast');
@@ -57,46 +61,67 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
     }
   }, [feedItems, filterType]);
 
+  // Fetch initial set of items when filterType or feedItems change
   useEffect(() => {
-    // Initialize items with the first set
-    const initialItems = filteredFeedItems.slice(0, itemsPerPage);
-    setItems(initialItems);
-    setHasMore(filteredFeedItems.length > itemsPerPage);
-    setIsLoading(false);
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = 0;
+    if (!isReaderViewOpen) {
+      const initialItems = filteredFeedItems.slice(0, itemsPerPage);
+      setItems(initialItems);
+      itemsRef.current = initialItems; // Update ref
+      setHasMore(filteredFeedItems.length > itemsPerPage);
+      setIsLoading(false);
+      if (scrollRef.current) {
+        scrollRef.current.scrollTop = 0; // Reset scroll position
+      }
     }
-  }, [filterType, filteredFeedItems]);
+  }, [filterType, filteredFeedItems, isReaderViewOpen, itemsPerPage]);
 
+  // Function to fetch more data
   const fetchMoreData = useCallback(() => {
-    if (hasMore && !isLoading) {
+    if (hasMore && !isLoading && !isReaderViewOpen) {
       setIsLoading(true);
       console.log('Fetching more data...');
       setTimeout(() => {
-        const currentLength = items.length;
+        const currentLength = itemsRef.current.length;
         const moreItems = filteredFeedItems.slice(currentLength, currentLength + itemsPerPage);
-        setItems(prevItems => [...prevItems, ...moreItems]);
-        setHasMore(filteredFeedItems.length > currentLength + itemsPerPage);
-        setIsLoading(false);
-        console.log('Fetched more data.');
-      }, 500); // Simulate network delay
+        if (moreItems.length > 0) {
+          const updatedItems = [...itemsRef.current, ...moreItems];
+          itemsRef.current = updatedItems; // Update ref
+          setItems(updatedItems); // Trigger UI update
+          setHasMore(filteredFeedItems.length > currentLength + itemsPerPage);
+          setIsLoading(false);
+          console.log('Fetched more data.');
+        } else {
+          setIsLoading(false);
+        }
+      }, 500); // Simulated network delay
     }
-  }, [hasMore, isLoading, items.length, filteredFeedItems]);
+  }, [hasMore, isLoading, filteredFeedItems, isReaderViewOpen, itemsPerPage]);
 
-  const handleScrollFrame = useCallback((values) => {
+  // Debounced scroll handler to prevent rapid function calls
+  const debouncedHandleScrollFrame = useMemo(() => debounce((values) => {
     const { scrollTop, scrollHeight, clientHeight } = values;
     const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
-    // Debugging logs
-    // console.log(`Scroll Top: ${scrollTop}, Scroll Height: ${scrollHeight}, Client Height: ${clientHeight}, Scroll Percentage: ${scrollPercentage}`);
-
-    if (scrollPercentage >= 60 && hasMore && !isLoading) { // Fetch more when 80% scrolled
-      console.log('Scroll reached 80%, fetching more data...');
+    if (scrollPercentage >= 60 && hasMore && !isLoading && !isReaderViewOpen) {
+      console.log('Scroll reached 60%, fetching more data...');
       fetchMoreData();
     }
-  }, [fetchMoreData, hasMore, isLoading]);
+  }, 200), [fetchMoreData, hasMore, isLoading, isReaderViewOpen]);
 
-  const visibleItems = items; // Display all loaded items
+  const handleScrollFrame = useCallback((values) => {
+    debouncedHandleScrollFrame(values);
+  }, [debouncedHandleScrollFrame]);
+
+  // Memoized handlers for ReaderView
+  const handleReaderViewOpen = useCallback(() => {
+    setIsReaderViewOpen(true);
+  }, []);
+
+  const handleReaderViewClose = useCallback(() => {
+    setIsReaderViewOpen(false);
+  }, []);
+
+  const visibleItems = useMemo(() => items, [items]); // Memoize to prevent unnecessary computations
 
   return isLoading && items.length === 0 ? (
     <div className="loading-indicator">Loading...</div>
@@ -106,30 +131,30 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
     <CustomScrollbar onScrollFrame={handleScrollFrame} ref={scrollRef}>
       <div className="feed">
         <ResponsiveMasonry
-          columnsCountBreakPoints={{ 320:1, 650: 2, 1050: 3, 1500: 4, 1700:5, 2000:6,2500:7,3000:8 }}
+          columnsCountBreakPoints={{ 320: 1, 650: 2, 1050: 3, 1500: 4, 1700: 5, 2000: 6, 2500: 7, 3000: 8 }}
         >
           <Masonry gutter={gutterSize}>
-            {visibleItems.map((item) => {
-              if (item.type === 'podcast') {
-                return (
+            {visibleItems.map((item) => (
+              <Suspense fallback={<div className="loading-card">Loading...</div>} key={item.id}>
+                {item.type === 'podcast' ? (
                   <MemoizedPodcastCard
-                    key={item.id}
                     item={item}
                     apiUrl={apiUrl}
                     openAIKey={openAIKey}
+                    onReaderViewOpen={handleReaderViewOpen}
+                    onReaderViewClose={handleReaderViewClose}
                   />
-                );
-              } else {
-                return (
+                ) : (
                   <MemoizedFeedCard
-                    key={item.id}
                     item={item}
                     apiUrl={apiUrl}
                     openAIKey={openAIKey}
+                    onReaderViewOpen={handleReaderViewOpen}
+                    onReaderViewClose={handleReaderViewClose}
                   />
-                );
-              }
-            })}
+                )}
+              </Suspense>
+            ))}
           </Masonry>
         </ResponsiveMasonry>
         {isLoading && hasMore && (

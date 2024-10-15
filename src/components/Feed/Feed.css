@@ -18,7 +18,51 @@
     /* scrollbar-width: thin; */
 }
 
+.loading-indicator,
+.no-items-indicator,
+.loading-more-indicator {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2rem;
+  color: #555;
+}
 
+.loading-card {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  color: #999;
+}
+
+.new-items-notification {
+    position: fixed;
+    top: 80px; /* Adjust based on your AppBar height */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4caf50; /* Green background */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 1000;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .new-items-notification:hover {
+    background-color: #45a049;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .new-items-notification {
+      width: 90%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+  }
 
 /* For mobile devices */
 @media (max-width: 600px) {

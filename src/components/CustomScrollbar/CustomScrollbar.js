@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import './CustomScrollbar.css';
 
-const CustomScrollbar = ({ children, onScrollFrame, autoHeightMax }) => {
+const CustomScrollbar = forwardRef(({ children, onScrollFrame, autoHeightMax }, ref) => {
   // Function to get the value of a CSS variable
   const getCSSVariableValue = (variable) => {
     return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
@@ -13,6 +13,7 @@ const CustomScrollbar = ({ children, onScrollFrame, autoHeightMax }) => {
 
   return (
     <Scrollbars
+      ref={ref} // Forward the ref to the Scrollbars component
       className='custom-scrollbar'
       autoHide
       autoHeight
@@ -36,6 +37,6 @@ const CustomScrollbar = ({ children, onScrollFrame, autoHeightMax }) => {
       {children}
     </Scrollbars>
   );
-};
+});
 
 export default CustomScrollbar;

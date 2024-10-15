@@ -1,5 +1,3 @@
-// FeedCard.js
-
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SlCard from "@shoelace-style/shoelace/dist/react/card";
@@ -72,26 +70,33 @@ const useImageLoader = (src) => {
   return { isLoaded, isError, loadedImage };
 };
 
-const FeedCard = ({ item, apiUrl , openAIKey}) => {
+// Helper function to check if the URL is a GIF or MP4
+const isGifOrMp4 = (url) => {
+  const extension = url.split('.').pop().toLowerCase();
+  return extension === 'gif' || extension === 'mp4';
+};
+
+const FeedCard = ({ item, apiUrl, openAIKey }) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [showReaderView, setShowReaderView] = useState(false);
 
-  const { isLoaded, isError, loadedImage } = useImageLoader(item.thumbnail);
+   // Modify the thumbnail URL if it is not a GIF or MP4
+  const thumbnailUrl = useMemo(() => {
+    if (item.thumbnail && !isGifOrMp4(item.thumbnail)) {
+      const sanitizedThumbnail = item.thumbnail.replace('?', '%3F');
+      return `https://digests-imgproxy-b4c984c91acd.herokuapp.com/insecure/rs:fill:600/g:sm/format:webp/plain/${sanitizedThumbnail}`;
+    }
+    return item.thumbnail;
+  }, [item.thumbnail]);
+
+  const { isLoaded, isError, loadedImage } = useImageLoader(thumbnailUrl);
 
   const elevation = useMemo(() => {
     if (mouseDown) return 8;
     if (hover) return 32;
     return 16;
   }, [mouseDown, hover]);
-
-    if (!isLoaded) {
-    return (
-      <AnimatePresence >
-        <FeedCardLoader id={item.id} />
-      </AnimatePresence>
-    );
-  }
 
   return (
     <div
@@ -113,62 +118,83 @@ const FeedCard = ({ item, apiUrl , openAIKey}) => {
         }
       }}
     >
-      <div className="card-wrapper">
-        <DropShadow
-          color={item.thumbnailColor || { r: 0, g: 0, b: 0 }}
-          elevation={elevation}
-        />
-
-        <SlCard
-          className="card"
-          layoutId={`card-${item.id}`}
-          id={item.id}
-          style={{
-            opacity: showReaderView ? 1 : 1, // Keep the original item visible
-          }}
-        >
-          <div className="card-bg">
-            <div className="noise"></div>
-            {loadedImage && (
-              <img src={loadedImage.src} alt={item.siteTitle} />
-            )}
-          </div>
-
-          {loadedImage && !isError && (
-            <>
-              <motion.div layoutId={`image-${item.id}`}>
-                <div className="image-container">
-                  <img
-                    src={loadedImage.src}
-                    alt={item.siteTitle}
-                    style={{ width: "100%", height: "100%" }}
-                  />
-                </div>
-              </motion.div>
-            </>
-          )}
-
-          <div
-            className="text-content"
-            style={{ padding: isError ? "" : "12px 24px" }}
+      <AnimatePresence>
+        {!isLoaded ? (
+          <motion.div
+            key="loader"
+            layoutId={`card-${item.id}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <WebsiteInfo
-              favicon={item.favicon}
-              siteTitle={item.siteTitle}
-              feedTitle={item.siteTitle}
-            />
-            <h3>{decodeHtmlEntities(item.title)}</h3>
-            <div className="date">
-              <SlRelativeTime date={new Date(item.published)} />
+            <FeedCardLoader id={item.id} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="card"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="card-wrapper">
+              <DropShadow
+                color={item.thumbnailColor || { r: 0, g: 0, b: 0 }}
+                elevation={elevation}
+              />
+
+              <SlCard
+                className="card"
+                layoutId={`card-${item.id}`}
+                id={item.id}
+                style={{
+                  opacity: showReaderView ? 1 : 1, // Keep the original item visible
+                }}
+              >
+                <div className="card-bg">
+                  <div className="noise"></div>
+                  {loadedImage && (
+                    <img src={loadedImage.src} alt={item.siteTitle} />
+                  )}
+                </div>
+
+                {loadedImage && !isError && (
+                  <>
+                    <div layoutId={`image-${item.id}`}>
+                      <div className="image-container">
+                        <img
+                          src={loadedImage.src}
+                          alt={item.siteTitle}
+                          style={{ width: "100%", height: "100%" }}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                <div
+                  className="text-content"
+                  style={{ padding: isError ? "" : "12px 24px" }}
+                >
+                  <WebsiteInfo
+                    favicon={item.favicon}
+                    siteTitle={item.siteTitle}
+                    feedTitle={item.siteTitle}
+                  />
+                  <h3>{decodeHtmlEntities(item.title)}</h3>
+                  <div className="date">
+                    <SlRelativeTime date={new Date(item.published)} />
+                  </div>
+                  {item.description ? (
+                    <p className="description">{item.description}</p>
+                  ) : (
+                    <p className="description">{item.content}</p>
+                  )}
+                </div>
+              </SlCard>
             </div>
-            {item.description ? (
-              <p className="description">{item.description}</p>
-            ) : (
-              <p className="description">{item.content}</p>
-            )}
-          </div>
-        </SlCard>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {showReaderView && (
           <ReaderView
