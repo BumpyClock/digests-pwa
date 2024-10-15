@@ -84,7 +84,7 @@ const FeedCard = ({ item, apiUrl, openAIKey }) => {
    // Modify the thumbnail URL if it is not a GIF or MP4
   const thumbnailUrl = useMemo(() => {
     if (item.thumbnail && !isGifOrMp4(item.thumbnail)) {
-      const sanitizedThumbnail = item.thumbnail.replace('?', '%3F');
+      // const sanitizedThumbnail = item.thumbnail.replace('?', '%3F');
       return `https://www.digests.app/cdn-cgi/image/fit=scale-down,width=450,format=auto,metadata=copyright,onerror=redirect/${item.thumbnail}`;
 
       // return `https://digests-imgproxy-b4c984c91acd.herokuapp.com/insecure/rs:fill:600/g:sm/format:webp/plain/${sanitizedThumbnail}`;
