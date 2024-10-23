@@ -1,6 +1,4 @@
-// ReaderView.js
-
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import SlSpinner from '@shoelace-style/shoelace/dist/react/spinner';
@@ -41,6 +39,9 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
   const [isSummarizing, setIsSummarizing] = useState(false);
   const [summarizeError, setSummarizeError] = useState(null);
 
+  // State for image loading
+  const [imageSrc, setImageSrc] = useState(null);
+
   useEffect(() => {
     // Check if item link is a YouTube video URL
     if (item.link && item.link.includes('youtube.com/watch')) {
@@ -52,6 +53,37 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
       }
     }
   }, [item.link]);
+
+  const isGifOrMp4 = (url) => {
+    const extension = url.split('.').pop().toLowerCase();
+    return extension === 'gif' || extension === 'mp4';
+  };
+
+  const lowResThumbnailUrl = useMemo(() => {
+    if (item.thumbnail && !isGifOrMp4(item.thumbnail)) {
+      return `https://www.digests.app/cdn-cgi/image/fit=scale-down,width=450,format=auto,metadata=copyright,onerror=redirect/${item.thumbnail}`;
+    }
+    return item.thumbnail;
+  }, [item.thumbnail]);
+
+  const highResThumbnailUrl = useMemo(() => {
+    if (item.thumbnail && !isGifOrMp4(item.thumbnail)) {
+      return `https://www.digests.app/cdn-cgi/image/fit=scale-down,width=750,format=auto,metadata=copyright,onerror=redirect/${item.thumbnail}`;
+    }
+    return item.thumbnail;
+  }, [item.thumbnail]);
+
+  useEffect(() => {
+    // Initially set the low resolution image
+    setImageSrc(lowResThumbnailUrl);
+
+    // Load the high resolution image
+    const img = new Image();
+    img.src = highResThumbnailUrl;
+    img.onload = () => {
+      setImageSrc(highResThumbnailUrl);
+    };
+  }, [lowResThumbnailUrl, highResThumbnailUrl]);
 
   function calculateHeaderHeight(scrollPosition) {
     return Math.max(500 - Math.pow(scrollPosition / 100, 1.5) * 50, 200);
@@ -310,7 +342,7 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
               ) : (
                 <div exit="exit" transition={{ duration: 0.125, ease: 'easeInOut' }} layoutId={`image-${item.id}`}>
                   <div className="image-container">
-                    <img src={item.thumbnail} alt={item.siteTitle} style={{ width: '100%', height: '100%' }} />
+                    <img src={imageSrc} alt={item.siteTitle} style={{ width: '100%', height: '100%' }} />
                   </div>
                 </div>
               )}
