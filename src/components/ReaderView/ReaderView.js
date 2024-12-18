@@ -68,7 +68,8 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
 
   const highResThumbnailUrl = useMemo(() => {
     if (item.thumbnail && !isGifOrMp4(item.thumbnail)) {
-      return `https://www.digests.app/cdn-cgi/image/fit=scale-down,width=750,format=auto,metadata=copyright,onerror=redirect/${item.thumbnail}`;
+      return item.thumbnail;
+      // return `https://www.digests.app/cdn-cgi/image/fit=scale-down,width=750,format=auto,metadata=copyright,onerror=redirect/${item.thumbnail}`;
     }
     return item.thumbnail;
   }, [item.thumbnail]);
