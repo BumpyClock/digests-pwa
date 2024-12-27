@@ -4,6 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+// In index.js
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // default: true
+    },
+  },
+});
 
 // Check user agent and set body background color to transparent if it matches any version of Digest-electron
 if (/Digest-electron\/\d+\.\d+\.\d+/.test(navigator.userAgent)) {
@@ -13,7 +24,9 @@ if (/Digest-electron\/\d+\.\d+\.\d+/.test(navigator.userAgent)) {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

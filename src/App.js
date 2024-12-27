@@ -1,6 +1,6 @@
 // App.js
 
-import React, { useState, useCallback, useEffect, memo } from "react"; 
+import React, { useState, useCallback, useEffect, memo } from "react";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import Feed from "./components/Feed/Feed.js";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
@@ -11,6 +11,7 @@ import ListView from "./components/ListView/ListView.js";
 import AppBar from "./components/AppBar/AppBar.js";
 import "./App.css";
 import { getConfig, defaultConfig } from './modules/indexedDB.js';
+import { useQuery, useQueryClient } from 'react-query';
 
 registerIconLibrary("iconoir", {
   resolver: name =>
@@ -22,17 +23,16 @@ setBasePath(
 );
 
 function App() {
-  const [feedItems, setFeedItems] = useState([]);
   const [isListView, setIsListView] = useState(false);
-  const [feedDetails, setFeedDetails] = useState([]);
   const [refreshInterval, setRefreshInterval] = useState(defaultConfig.refresh_interval);
   const [apiUrl, setApiUrl] = useState(defaultConfig.apiUrl);
-  const [isLoading, setIsLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const SettingsMemo = memo(Settings);
   const [showSettings, setShowSettings] = useState(false);
   const [filterType, setFilterType] = useState('all'); // 'all', 'podcast', or 'rss'
   const [openAIKey, setOpenAIKey] = useState("");
+
+  const queryClient = useQueryClient();
 
   // Initialize feedUrls from localStorage or default feeds
   const [feedUrls, setFeedUrls] = useState(() => {
@@ -67,7 +67,7 @@ function App() {
         setOpenAIKey('');
       }
     })();
-  }, []); // Added empty dependency array to prevent infinite loop
+  }, []);
 
   // Fetch saved refreshInterval
   useEffect(() => {
@@ -95,59 +95,56 @@ function App() {
     })();
   }, []);
 
-  // Function to refresh RSS data
-  const refreshRSSData = useCallback(() => {
-    console.log("[RefreshRSSDATA] Refreshing RSS data");
-
-    if (navigator.serviceWorker.controller) {
-      navigator.serviceWorker.ready.then((registration) => {
+  // Fetch RSS data using react-query
+  const { isLoading } = useQuery('rssData', () => {
+    console.log('[App] Fetching initial RSS data');
+    return new Promise((resolve, reject) => {
+      if (navigator.serviceWorker.controller) {
         const messageChannel = new MessageChannel();
         messageChannel.port1.onmessage = (event) => {
           if (event.data && event.data.type === "RSS_DATA") {
-            setFeedDetails(event.data.payload.feedDetails);
-            setFeedItems(event.data.payload.items);
-            setIsLoading(false);
+            resolve(event.data.payload);
+          } else {
+            reject(new Error('Failed to fetch RSS data'));
           }
         };
-        registration.active.postMessage(
-          {
-            type: "FETCH_RSS",
-            payload: { urls: feedUrls },
-          },
-          [messageChannel.port2]
-        );
-      });
-    } else {
-      console.log("Service worker not active yet; waiting for activation.");
-    }
-  }, [feedUrls]);
 
-  // Handle service worker controller change
+        navigator.serviceWorker.ready.then(registration => {
+          registration.active.postMessage(
+            {
+              type: "FETCH_RSS",
+              payload: { urls: feedUrls },
+            },
+            [messageChannel.port2]
+          );
+        });
+      } else {
+        reject(new Error('Service worker not active yet'));
+      }
+    });
+  }, [feedUrls]); // Refetch when feedUrls change
+
+  // Handle service worker messages to update cache
   useEffect(() => {
-    const onControllerChange = () => {
-      console.log("Service worker has taken control; refreshing RSS data.");
-      refreshRSSData();
+    const handleMessage = event => {
+      if (event.data && event.data.type === "RSS_DATA") {
+        console.log('[App] Received RSS_DATA message, updating cache');
+        queryClient.setQueryData('rssData', event.data.payload); // Update the 'rssData' query cache
+      }
     };
 
-    if (navigator.serviceWorker.controller) {
-      console.log("Service worker already controlling the page; fetching RSS data.");
-      refreshRSSData();
-    } else {
-      console.log("Service worker not active yet. Waiting for activation...");
-      navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
-    }
+    navigator.serviceWorker.addEventListener("message", handleMessage);
 
     return () => {
-      navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+      navigator.serviceWorker.removeEventListener("message", handleMessage);
     };
-  }, [refreshRSSData]);
+  }, [queryClient]);
 
   // Function to manually refresh feed
   const refreshFeed = useCallback(() => {
-    setIsLoading(true);
     console.log("Refreshing feed");
-    refreshRSSData();
-  }, [refreshRSSData]);
+    queryClient.invalidateQueries('rssData'); // Invalidate the 'rssData' query to trigger a refetch
+  }, [queryClient]);
 
   // Persist feedUrls to localStorage whenever they change
   useEffect(() => {
@@ -159,43 +156,18 @@ function App() {
     setShowSettings(prev => !prev);
   }, []);
 
-  // Fetch RSS data on feedUrls change
-  useEffect(() => {
-    refreshRSSData();
-  }, [feedUrls, refreshRSSData]);
-
   // Set up automatic refresh based on refreshInterval
   useEffect(() => {
     console.log(`Setting refresh interval to ${refreshInterval} minutes`);
     const intervalId = setInterval(() => {
       console.log("🚀 ~ RefreshTimer triggered ~ Refreshing RSS data");
-      refreshRSSData();
+      refreshFeed();
     }, refreshInterval * 60 * 1000);
 
     localStorage.setItem("refreshInterval", refreshInterval.toString());
 
     return () => clearInterval(intervalId);
-  }, [refreshInterval, refreshRSSData]);
-
-  // Listen for messages from the service worker
-  useEffect(() => {
-    const handleMessage = event => {
-      if (event.data && event.data.type === "RSS_DATA") {
-        setFeedDetails(event.data.payload.feedDetails);
-        setFeedItems(event.data.payload.items);
-        console.log(`Received ${event.data.payload.items.length} feed items`);
-        console.log(
-          `Received ${event.data.payload.feedDetails.length} feed details`
-        );
-      }
-    };
-
-    navigator.serviceWorker.addEventListener("message", handleMessage);
-
-    return () => {
-      navigator.serviceWorker.removeEventListener("message", handleMessage);
-    };
-  }, []);
+  }, [refreshInterval, refreshFeed]);
 
   // Check if the window is scrolled
   useEffect(() => {
@@ -213,6 +185,11 @@ function App() {
       window.removeEventListener("scroll", checkScroll);
     };
   }, []);
+
+  // Get data from query cache
+  const rssData = queryClient.getQueryData('rssData');
+  const feedDetails = rssData?.feedDetails || [];
+  const feedItems = rssData?.items || [];
 
   return (
     <div className="App">

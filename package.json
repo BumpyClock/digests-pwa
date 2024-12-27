@@ -24,6 +24,7 @@
     "react-lazy-load-image-component": "^1.6.0",
     "react-markdown": "^9.0.1",
     "react-pull-to-refresh": "^2.0.1",
+    "react-query": "^3.39.3",
     "react-responsive-masonry": "^2.1.7",
     "react-virtualized": "^9.22.5",
     "stream-http": "^3.2.0",

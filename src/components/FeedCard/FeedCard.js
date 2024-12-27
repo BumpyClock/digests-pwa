@@ -102,7 +102,7 @@ const FeedCard = ({ item, apiUrl, openAIKey }) => {
   }, [mouseDown, hover]);
 
   return (
-    <div
+    <motion.div // Use motion.div here
       style={{ position: "relative" }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => {
@@ -125,7 +125,7 @@ const FeedCard = ({ item, apiUrl, openAIKey }) => {
         {!isLoaded ? (
           <motion.div
             key="loader"
-            layoutId={`card-${item.id}`}
+            layoutId={`card-${item.id}`} // layoutId is okay on motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -147,22 +147,22 @@ const FeedCard = ({ item, apiUrl, openAIKey }) => {
 
               <SlCard
                 className="card"
-                layoutId={`card-${item.id}`}
+                // layoutId={`card-${item.id}`} // Remove layoutId from SlCard
                 id={item.id}
-                style={{
-                  opacity: showReaderView ? 1 : 1, // Keep the original item visible
-                }}
               >
-                <div className="card-bg">
+                <motion.div // Use motion.div for the card background
+                  className="card-bg"
+                  layoutId={`card-bg-${item.id}`} // Add a unique layoutId for the background
+                >
                   <div className="noise"></div>
                   {loadedImage && (
                     <img src={loadedImage.src} alt={item.siteTitle} />
                   )}
-                </div>
+                </motion.div>
 
                 {loadedImage && !isError && (
                   <>
-                    <div layoutId={`image-${item.id}`}>
+                    <motion.div layoutId={`image-${item.id}`}>
                       <div className="image-container">
                         <img
                           src={loadedImage.src}
@@ -170,7 +170,7 @@ const FeedCard = ({ item, apiUrl, openAIKey }) => {
                           style={{ width: "100%", height: "100%" }}
                         />
                       </div>
-                    </div>
+                    </motion.div>
                   </>
                 )}
 
@@ -211,7 +211,7 @@ const FeedCard = ({ item, apiUrl, openAIKey }) => {
           />
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };
 
