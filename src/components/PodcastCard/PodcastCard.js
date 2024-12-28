@@ -4,12 +4,12 @@ import './PodcastCard.css';
 import DropShadow from '../DropShadow/DropShadow.js'; // Import DropShadow
 import PodcastDetails from '../PodcastDetails/PodcastDetails.js'; // Import PodcastDetails
 import WebsiteInfo from '../website-info/website-info.js'; // Import WebsiteInfo
-
+import { useNavigate } from 'react-router-dom';
 
 const PodcastCard = ({ item }) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
-  const [showPodcastDetails, setShowPodcastDetails] = useState(false);
+  const navigate = useNavigate();
 
   const elevation = useMemo(() => {
     if (mouseDown) return 8;
@@ -17,6 +17,10 @@ const PodcastCard = ({ item }) => {
     return 16;
   }, [mouseDown, hover]);
 
+  const handlePodcastDetailsToggle = (item) => {
+      const encodedLink = encodeURIComponent(item.link);
+      navigate(`/readerview/${encodedLink}`);
+  };
 
   return (
     <div
@@ -28,15 +32,7 @@ const PodcastCard = ({ item }) => {
     }}
     onMouseDown={() => setMouseDown(true)}
     onMouseUp={() => setMouseDown(false)}
-    onClick={() => {
-      if (!showPodcastDetails) {
-        setTimeout(() => {
-          if (!showPodcastDetails) {
-            setShowPodcastDetails(true);
-          }
-        }, 500);
-      }
-    }}
+    onClick={() => handlePodcastDetailsToggle(item)}
   >
     <DropShadow color={item.thumbnailColor || {r:0,g:0,b:0}} elevation={elevation}/> 
     <SlCard className="card podcast-card" id={item.id}>
@@ -69,7 +65,6 @@ const PodcastCard = ({ item }) => {
         <h3 className="podcast-title">{item.title}</h3>
         <div className="date"><SlRelativeTime date={new Date(item.published)} /></div>
 
-
         {/* Description */}
         <p className="description">{item.description}</p>
 
@@ -86,12 +81,8 @@ const PodcastCard = ({ item }) => {
    
      
     </SlCard>
-    {showPodcastDetails&& <PodcastDetails url={item.link} item={item} onClose={() => {
-      setShowPodcastDetails(false);
-    }} />}
     </div>
   );
 };
 
 export default React.memo(PodcastCard);
-

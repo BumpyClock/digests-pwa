@@ -7,6 +7,7 @@ import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
 import DropShadow from "../DropShadow/DropShadow.js";
 import ReaderView from "../ReaderView/ReaderView.js";
 import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
+import { useNavigate } from 'react-router-dom';
 
 // Optimized: Create textarea element outside the component to avoid recreating it on each render
 const textArea = document.createElement('textarea');
@@ -103,14 +104,12 @@ const isGifOrMp4 = (url) => {
  * @param {object} props.item - The feed item data.
  * @param {string} props.apiUrl - The API URL.
  * @param {string} props.openAIKey - The OpenAI API key.
- * @param {function} props.onReaderViewOpen - Callback function to open the reader view.
- * @param {function} props.onReaderViewClose - Callback function to close the reader view.
  * @description Renders a card for a feed item, with an image, website info, title, date, and description.
  */
-const FeedCard = ({ item, apiUrl, openAIKey, onReaderViewOpen, onReaderViewClose }) => {
+const FeedCard = ({ item, apiUrl, openAIKey }) => {
   const [hover, setHover] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
-  const [showReaderView, setShowReaderView] = useState(false);
+  const navigate = useNavigate();
 
   // Modify the thumbnail URL if it is not a GIF or MP4
   const thumbnailUrl = useMemo(() => {
@@ -128,6 +127,11 @@ const FeedCard = ({ item, apiUrl, openAIKey, onReaderViewOpen, onReaderViewClose
     return 16;
   }, [mouseDown, hover]);
 
+  const handleReaderviewOpen = (item) => {
+    const encodedLink = encodeURIComponent(item.link);
+    navigate(`/readerview/${encodedLink}`);
+  };
+
   return (
     <motion.div
       style={{ position: "relative" }}
@@ -138,16 +142,7 @@ const FeedCard = ({ item, apiUrl, openAIKey, onReaderViewOpen, onReaderViewClose
       }}
       onMouseDown={() => setMouseDown(true)}
       onMouseUp={() => setMouseDown(false)}
-      onClick={() => {
-        if (!showReaderView) {
-          onReaderViewOpen();
-          setTimeout(() => {
-            if (!showReaderView) {
-              setShowReaderView(true);
-            }
-          }, 500);
-        }
-      }}
+      onClick={() => handleReaderviewOpen(item)}
     >
       <AnimatePresence>
         {!isLoaded && (
@@ -224,23 +219,8 @@ const FeedCard = ({ item, apiUrl, openAIKey, onReaderViewOpen, onReaderViewClose
             </div>
           </motion.div>
         )}
-  
-        <AnimatePresence>
-          {showReaderView && (
-            <ReaderView
-              url={item.link}
-              item={item}
-              apiUrl={apiUrl}
-              openAIKey={openAIKey}
-              onRequestClose={() => {
-                setShowReaderView(false);
-                onReaderViewClose();
-              }}
-            />
-          )}
-        </AnimatePresence>
-      </motion.div>
-    );
-  };
-  
-  export default React.memo(FeedCard);
+    </motion.div>
+  );
+};
+
+export default React.memo(FeedCard);

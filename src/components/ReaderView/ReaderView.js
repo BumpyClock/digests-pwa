@@ -287,7 +287,7 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onRequestClose }) => {
       >
         <SlCard
           className="reader-card"
-          layoutId={`card-${item.id}`}
+          layoutid={`card-${item.id}`}
           variants={modalVariants}
           ref={contentcontainerRef}
           transition={{ duration: 0.125, ease: 'easeInOut' }}

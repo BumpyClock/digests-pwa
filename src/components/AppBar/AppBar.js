@@ -1,9 +1,9 @@
 // AppBar.js
-import React from 'react';
-import { Link } from 'react-router-dom';
-import SlIconButton from '@shoelace-style/shoelace/dist/react/icon-button';
-import './AppBar.css';
-import useAppStore from '../../data/store';
+import React from "react";
+import { Link } from "react-router-dom";
+import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
+import "./AppBar.css";
+import useAppStore from "../../data/store";
 
 const AppBar = ({ refreshFeed }) => {
   const { showSettings, toggleSettings } = useAppStore();
@@ -19,7 +19,7 @@ const AppBar = ({ refreshFeed }) => {
             id="homeButton"
             size="large"
             library="iconoir"
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           />
         </Link>
 
@@ -30,7 +30,7 @@ const AppBar = ({ refreshFeed }) => {
           id="refreshButton"
           size="large"
           library="iconoir"
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: "pointer" }}
           onClick={refreshFeed}
         />
 
@@ -38,11 +38,11 @@ const AppBar = ({ refreshFeed }) => {
         <Link to="/settings">
           <SlIconButton
             className="icon-button"
-            name={showSettings ? 'xmark' : 'settings'}
+            name={showSettings ? "xmark" : "settings"}
             size="large"
             library="iconoir"
             id="settingsButton"
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
             onClick={(event) => {
               toggleSettings();
             }}
