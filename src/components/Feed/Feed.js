@@ -28,7 +28,6 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isReaderViewOpen, setIsReaderViewOpen] = useState(false);
   const [allowFetchMore, setAllowFetchMore] = useState(false); // Control when fetching more is allowed
-  const [initialLoadComplete, setInitialLoadComplete] = useState(false); // Track initial load
 
   const itemsPerPage = 20;
   const scrollRef = useRef(null);
@@ -75,21 +74,18 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
 
   // Fetch initial set of items - simplified logic
   useEffect(() => {
-    if (!isReaderViewOpen) {
-      itemsRef.current = filteredFeedItems.slice(0, itemsPerPage);
-      setHasMore(filteredFeedItems.length > itemsPerPage);
-      if (scrollRef.current) {
+    itemsRef.current = filteredFeedItems.slice(0, itemsPerPage);
+    setHasMore(filteredFeedItems.length > itemsPerPage);
+    if (scrollRef.current) {
         scrollRef.current.scrollTop = 0; // Reset scroll on filter change
-      }
-
-      // Delay enabling fetchMore and initial load complete
-      const timer = setTimeout(() => {
-        setAllowFetchMore(true);
-        setInitialLoadComplete(true);
-      }, 500); // Delay to prevent premature fetching
-      return () => clearTimeout(timer);
     }
-  }, [filterType, filteredFeedItems, isReaderViewOpen]);
+    
+    // Delay enabling fetchMore and initial load complete
+    const timer = setTimeout(() => {
+      setAllowFetchMore(true);
+    }, 500); // Delay to prevent premature fetching
+    return () => clearTimeout(timer);
+}, [filterType, filteredFeedItems]);
 
   // useQuery for fetching more data - simplified
   const { isFetching: isFetchingMore } = useQuery(
@@ -110,7 +106,7 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
       });
     },
     {
-      enabled: hasMore && !isReaderViewOpen && allowFetchMore, // Only fetch when allowed
+      enabled: hasMore && allowFetchMore, // Only fetch when allowed
       keepPreviousData: true,
       onSuccess: (data) => {
         setHasMore(filteredFeedItems.length > data.length); // Update hasMore
@@ -128,11 +124,11 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
     const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
     // Trigger fetchMore when scrolled to 60% and conditions are met
-    if (scrollPercentage >= 60 && hasMore && !isFetchingMore && !isReaderViewOpen) {
+    if (scrollPercentage >= 60 && hasMore && !isFetchingMore) {
       console.log('Scroll reached 60%, triggering fetchMoreData...');
       // No need to call fetchMoreData directly, react-query will handle it
     }
-  }, 200), [hasMore, isFetchingMore, isReaderViewOpen]);
+  }, 200), [hasMore, isFetchingMore]);
 
   const handleScrollFrame = useCallback((values) => {
     debouncedHandleScrollFrame(values);
@@ -151,7 +147,6 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
 
   return (
     <>
-      {initialLoadComplete && (
         <CustomScrollbar onScrollFrame={handleScrollFrame} ref={scrollRef}>
           <div className="feed">
             <ResponsiveMasonry
@@ -189,7 +184,6 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
             )}
           </div>
         </CustomScrollbar>
-      )}
     </>
   );
 };

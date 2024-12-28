@@ -58,20 +58,20 @@ async function openDB() {
   async function getConfig(key) {
     // Check if the config is already in IndexedDB
     const cachedConfig = await getConfigFromIndexedDB(key);
-    if (cachedConfig) {
+    if (cachedConfig !== undefined) { // Check for undefined, not just truthiness
       console.log(`Config for ${key} from IndexedDB: `, cachedConfig);
       return cachedConfig;
     }
-
-    var tempDefaultConfig = defaultConfig[key];
-    if (tempDefaultConfig) {
+  
+    const tempDefaultConfig = defaultConfig[key];
+    if (tempDefaultConfig !== undefined) {
       console.log(`Config for ${key} not found in cache. Using default value: `, tempDefaultConfig);
       await setConfig(key, tempDefaultConfig);
       return tempDefaultConfig;
     } else {
       console.log('No default config found for key: ', key);
-      await setConfig(key, '');
-      return '';
+      await setConfig(key, ''); // Or a more appropriate default, like null
+      return ''; // Or null
     }
   }
 
