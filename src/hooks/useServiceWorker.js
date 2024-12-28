@@ -1,6 +1,6 @@
 // src/hooks/useServiceWorker.js
 import { useState, useEffect, useRef } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import useAppStore from '../data/store';
 
 /**
@@ -10,7 +10,6 @@ import useAppStore from '../data/store';
 const useServiceWorker = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const queryClient = useQueryClient();
   const { feedUrls, refreshInterval } = useAppStore();
   const isFetchingRef = useRef(false); // Ref to track fetching status
 

@@ -1,3 +1,4 @@
+// src/index.js
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -5,7 +6,14 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { BrowserRouter } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
+import Settings from "./pages/settings";
+import Feed from "./components/Feed/Feed";
+import ReaderViewWrapper from "./components/ReaderView/ReaderViewWrapper";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,6 +23,27 @@ const queryClient = new QueryClient({
   },
 });
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        index: true, // Index route (for /)
+        element: <Feed />
+      },
+      {
+        path: "/settings",
+        element: <Settings />,
+      },
+      {
+        path: "/readerview/:encodedLink",
+        element: <ReaderViewWrapper />,
+      },
+    ]
+  },
+]);
+
 if (/Digest-electron\/\d+\.\d+\.\d+/.test(navigator.userAgent)) {
   document.body.style.backgroundColor = "transparent !important";
 }
@@ -23,9 +52,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+        <RouterProvider router={router} />
     </QueryClientProvider>
   </React.StrictMode>
 );

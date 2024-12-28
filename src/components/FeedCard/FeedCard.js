@@ -5,7 +5,6 @@ import WebsiteInfo from "../website-info/website-info.js";
 import "./FeedCard.css";
 import FeedCardLoader from "../FeedCardLoader/FeedCardLoader.js";
 import DropShadow from "../DropShadow/DropShadow.js";
-import ReaderView from "../ReaderView/ReaderView.js";
 import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
 import { useNavigate } from 'react-router-dom';
 

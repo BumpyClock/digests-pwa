@@ -2,7 +2,6 @@ import React,{useMemo,useState} from 'react';
 import { SlIcon, SlCard , SlRelativeTime} from '@shoelace-style/shoelace/dist/react';
 import './PodcastCard.css';
 import DropShadow from '../DropShadow/DropShadow.js'; // Import DropShadow
-import PodcastDetails from '../PodcastDetails/PodcastDetails.js'; // Import PodcastDetails
 import WebsiteInfo from '../website-info/website-info.js'; // Import WebsiteInfo
 import { useNavigate } from 'react-router-dom';
 
