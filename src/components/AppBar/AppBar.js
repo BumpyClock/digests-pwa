@@ -1,29 +1,27 @@
 // AppBar.js
-
 import React from 'react';
-import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
-import "./AppBar.css";
+import SlIconButton from '@shoelace-style/shoelace/dist/react/icon-button';
+import './AppBar.css';
+import useAppStore from '../../data/store';
 
-const AppBar = ({
-  isScrolled,
-  refreshFeed,
-  isListView,
-  setIsListView,
-  showSettings,
-  toggleSettings,
-  filterType,
-  setFilterType
-}) => {
+const AppBar = ({ isScrolled, refreshFeed }) => {
+  const {
+   
+    showSettings,
+    toggleSettings,
+    setFilterType,
+  } = useAppStore();
+
   return (
     <div className="top-bar">
       <div className="button-container">
         {/* Home Button */}
-        <SlIconButton 
-          className='icon-button'
-          name='home'
-          id='homeButton'
-          size='large'
-          library='iconoir'
+        <SlIconButton
+          className="icon-button"
+          name="home"
+          id="homeButton"
+          size="large"
+          library="iconoir"
           style={{ cursor: 'pointer' }}
           onClick={() => setFilterType('all')} // Set filter to 'all'
         />
@@ -35,7 +33,7 @@ const AppBar = ({
           id="podcastButton"
           size="large"
           library="iconoir"
-          style={{ cursor: "pointer" }}
+          style={{ cursor: 'pointer' }}
           onClick={() => setFilterType('podcast')} // Set filter to 'podcast'
         />
 
@@ -46,7 +44,7 @@ const AppBar = ({
           id="rssFeedButton"
           size="large"
           library="iconoir"
-          style={{ cursor: "pointer" }}
+          style={{ cursor: 'pointer' }}
           onClick={() => setFilterType('rss')} // Set filter to 'rss'
         />
 
@@ -57,7 +55,7 @@ const AppBar = ({
           id="bookmarkButton"
           size="large"
           library="iconoir"
-          style={{ cursor: "pointer" }}
+          style={{ cursor: 'pointer' }}
           onClick={refreshFeed} // Update as needed
         />
 
@@ -68,18 +66,18 @@ const AppBar = ({
           id="refreshButton"
           size="large"
           library="iconoir"
-          style={{ cursor: "pointer" }}
+          style={{ cursor: 'pointer' }}
           onClick={refreshFeed}
         />
 
         {/* Settings Button */}
         <SlIconButton
           className="icon-button"
-          name={showSettings ? "xmark" : "settings"}
+          name={showSettings ? 'xmark' : 'settings'}
           size="large"
           library="iconoir"
           id="settingsButton"
-          style={{ cursor: "pointer" }}
+          style={{ cursor: 'pointer' }}
           onClick={(event) => {
             toggleSettings();
             event.currentTarget.blur();

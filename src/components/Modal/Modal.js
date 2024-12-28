@@ -1,21 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import SlAnimation from "@shoelace-style/shoelace/dist/react/animation";
 import "./Modal.css"; // Your CSS file for Modal styling
 
-const Modal = ({ children, visible, onClose }) => {
-  const modalRef = useRef(null);
+/**
+ * @component
+ * @param {object} props - The component props.
+ * @param {JSX.Element} props.children - The content to be displayed inside the modal.
+ * @param {boolean} props.visible - Whether the modal is visible or not.
+ * @param {function} props.onRequestClose - The function to be called when the modal is requested to be closed.
+ * @param {React.RefObject} props.modalRef - A ref to the modal container element.
+ * @returns {JSX.Element} The ModalDialog component.
+ * @description A modal dialog component that can be used to display content in an overlay.
+ */
+const ModalDialog = ({ children, visible, onRequestClose, modalRef }) => {
   const childRef = useRef(null);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  useEffect(() => {
-    setIsAnimating(visible);
-  }, [visible]);
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (childRef.current && !childRef.current.contains(event.target)) {
-        setIsAnimating(false);
-        setTimeout(onClose, 125); // Delay onClose until the animation finishes
+        onRequestClose();
       }
     }
 
@@ -23,29 +26,19 @@ const Modal = ({ children, visible, onClose }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [onClose]);
-
-  //Handle escape key event
-  useEffect(() => {
-  function handleKeyDown(event) {
-    if (event.key === 'Escape') {
-      setIsAnimating(false);
-      setTimeout(onClose, 125); // Delay onClose until the animation finishes
-    }
-  }
-
-  // Bind the event listener
-  document.addEventListener('keydown', handleKeyDown);
-  return () => {
-    // Unbind the event listener on clean up
-    document.removeEventListener('keydown', handleKeyDown);
-  };
-}, [onClose]);
+  }, [onRequestClose]);
 
   return (
-    <SlAnimation name={visible ? "fade-in" : "fade-out"} duration={125} play={isAnimating}>
-      <div className="modal-container visible" ref={modalRef}>
-        <div className="modal-container-content" ref={childRef}>
+    <SlAnimation name={visible ? "fade-in" : "fade-out"} duration={125} play={visible}>
+      <div
+        className={`modal-container ${visible ? 'visible' : ''}`}
+        role="dialog"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-content"
+        tabIndex="-1"
+        ref={modalRef}
+      >
+        <div className="modal-container-content" ref={childRef} id="modal-content">
           {children}
         </div>
       </div>
@@ -53,4 +46,4 @@ const Modal = ({ children, visible, onClose }) => {
   );
 };
 
-export default Modal;
+export default ModalDialog;

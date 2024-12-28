@@ -18,7 +18,7 @@ function estimateReadingTime(text) {
   return readingTimeInMinutes;
 }
 
-const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
+const ReaderView = ({ url, item, apiUrl, openAIKey, onRequestClose }) => {
   const [article, setArticle] = useState(null);
   const isLoading = useRef(true);
   const requestSent = useRef(true);
@@ -109,12 +109,12 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
   const handleClickOutside = useCallback(
     (event) => {
       if (modalRef.current && !contentcontainerRef.current.contains(event.target)) {
-        onClose();
+        onRequestClose();
         document.body.style.overflow = '';
         articleRef.current = null;
       }
     },
-    [onClose]
+    [onRequestClose]
   );
 
   useEffect(() => {
@@ -192,7 +192,7 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
-        onClose();
+        onRequestClose();
         document.body.style.overflow = '';
         articleRef.current = null;
       }
@@ -202,7 +202,7 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onClose]);
+  }, [onRequestClose]);
 
   // Animation variants
   const modalVariants = {
@@ -321,7 +321,7 @@ const ReaderView = ({ url, item, apiUrl, openAIKey, onClose }) => {
               library="iconoir"
               name="xmark"
               class="reader-view-header-button"
-              onClick={onClose}
+              onClick={onRequestClose}
               aria-label="Close Reader View"
             />
           </div>

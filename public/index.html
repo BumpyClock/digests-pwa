@@ -1,140 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-  
-  <head>
-    <meta name="theme-color" content="#ffffff" id="theme-color" charset="utf-8" />
+<head>
+  <meta name="theme-color" content="#ffffff" id="theme-color" charset="utf-8" />
 
-  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3MZ9S7SN4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Y3MZ9S7SN4');
+  </script>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3MZ9S7SN4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script type="text/javascript">
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+      t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, "clarity", "script", "krfqdt3kug");
+  </script>
 
-  gtag('config', 'G-Y3MZ9S7SN4');
-</script>
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <link rel="favicon" href="%PUBLIC_URL%/favicon.ico" />
 
-<script type="text/javascript">
-  (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-  })(window, document, "clarity", "script", "krfqdt3kug");
-</script>
-  
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <link rel="favicon" href="%PUBLIC_URL%/favicon.ico" />
-
-    
-    <link
-    rel="preload"
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap"
-    as="style"
-    onload="this.onload=null;this.rel='stylesheet'"
-  />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" as="style"
+    onload="this.onload=null;this.rel='stylesheet'" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
 
-    
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    />
-    <link
-    rel="preload"
-    href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css"
-    as="style"
-    onload="this.onload=null;this.rel='stylesheet'"
-  />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css" as="style"
+    onload="this.onload=null;this.rel='stylesheet'" />
   <noscript>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css" />
   </noscript>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- <meta name="theme-color" content="#000000" /> -->
-    <meta
-      name="Digests"
-      content="Get your daily dose of news with Digests."
-    />
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/serviceWorker.js')
-            .then(function(registration) {
-              // Registration was successful
-              console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            }, function(err) {
-              // registration failed :(
-              console.log('ServiceWorker registration failed: ', err);
-            });
-        });
-      }
-    </script>
-   
-    <script defer src="
-https://cdn.jsdelivr.net/npm/@mozilla/readability@0.5.0/Readability.min.js
-"></script>
-   
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Digests</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        function updateThemeColor() {
-          const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
-          const style = getComputedStyle(document.documentElement);
-  
-          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            // Dark mode
-            const darkThemeColor = style.getPropertyValue('--dark-new-tab-background-color').trim();
-            themeColorMetaTag.setAttribute('content', darkThemeColor);
-          } else {
-            // Light mode or no preference
-            const lightThemeColor = style.getPropertyValue('--light-new-tab-background-color').trim();
-            themeColorMetaTag.setAttribute('content', lightThemeColor);
-          }
-        }
-  
-        // Initial theme color setup
-        updateThemeColor();
-  
-        // Listen for changes in the color scheme preference
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeColor);
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="Digests" content="Get your daily dose of news with Digests." />
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/serviceWorker.js')
+          .then(function (registration) {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }, function (err) {
+            console.log('ServiceWorker registration failed: ', err);
+          });
       });
-    </script>
-  </body>
+    }
+  </script>
+
+  <script defer
+    src="https://cdn.jsdelivr.net/npm/@mozilla/readability@0.5.0/Readability.min.js"></script>
+
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <title>Digests</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://www.clarity.ms">
+  <!-- Add critical CSS here -->
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Sans", "Segoe UI Variable Small Light", "Roboto", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+  <!-- rest of the styles can be loaded asynchronously using link with media="print" and onload -->
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      function updateThemeColor() {
+        const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
+        const style = getComputedStyle(document.documentElement);
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          const darkThemeColor = style.getPropertyValue('--dark-new-tab-background-color').trim();
+          themeColorMetaTag.setAttribute('content', darkThemeColor);
+        } else {
+          const lightThemeColor = style.getPropertyValue('--light-new-tab-background-color').trim();
+          themeColorMetaTag.setAttribute('content', lightThemeColor);
+        }
+      }
+      updateThemeColor();
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeColor);
+    });
+  </script>
+</body>
+
 </html>
