@@ -171,7 +171,7 @@ const Feed = ({ feedItems, apiUrl, filterType, openAIKey }) => {
     [debouncedHandleScrollFrame]
   );
 
-  const visibleItems = useMemo(() => itemsRef.current);
+  const visibleItems = useMemo(() => itemsRef.current, [itemsRef.current]);
 
   return (
     <>

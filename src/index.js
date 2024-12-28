@@ -37,7 +37,7 @@ const router = createBrowserRouter([
         element: <Settings />,
       },
       {
-        path: "/readerview/:encodedLink",
+        path: "/readerview/*",
         element: <ReaderViewWrapper />,
       },
     ]
